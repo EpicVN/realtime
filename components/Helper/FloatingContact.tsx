@@ -73,7 +73,7 @@ const FloatingContact = () => {
         className="pointer-events-auto relative group"
       >
         <Link
-          href="https://facebook.com/trang-cua-ban"
+          href="https://facebook.com/le.hoang.giang.580171"
           target="_blank"
           className="flex items-center justify-center w-11 h-11 rounded-full bg-[#1877F2] text-white shadow-lg hover:scale-110 transition-transform relative overflow-hidden"
         >

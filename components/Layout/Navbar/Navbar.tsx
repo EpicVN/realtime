@@ -18,7 +18,6 @@ import {
 import { HiBars3BottomRight } from "react-icons/hi2";
 import { RiFileMusicFill } from "react-icons/ri";
 
-// --- 1. DỮ LIỆU MENU MỚI (Thay thế NAVLINKS cũ để có submenu) ---
 const NAV_DATA = [
   { id: 1, label: "Trang chủ", url: "/" },
   {
@@ -33,14 +32,32 @@ const NAV_DATA = [
         url: "/products/cx",
       },
       {
-        title: "Autodialer",
+        title: "RealtimeAutoDialer",
         desc: "Hệ thống gọi tự động hàng loạt",
         icon: <FaRobot />,
         url: "/products/autodialer",
       },
       {
-        title: "Text to Speech",
+        title: "RealtimeAI (Text To Speech)",
         desc: "Chuyển văn bản thành giọng nói",
+        icon: <RiFileMusicFill />,
+        url: "/products/texttospeech",
+      },
+      {
+        title: "RealtimeBPO",
+        desc: "Thuê nhân sự trực Hotline, Telesales & CSKH",
+        icon: <RiFileMusicFill />,
+        url: "/products/texttospeech",
+      },
+      {
+        title: "Voice VAS",
+        desc: "Đầu số bàn, đầu số di động, sms, ZNS",
+        icon: <RiFileMusicFill />,
+        url: "/products/texttospeech",
+      },
+      {
+        title: "RealtimeCLOUD",
+        desc: "Cho thuê máy chủ ảo, server ảo",
         icon: <RiFileMusicFill />,
         url: "/products/texttospeech",
       },
