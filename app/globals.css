@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+@tailwind utilities;
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-primary: #0F62FE;
+  --color-primary-dark: #001D6C;
+  --color-primary-light: #A6C8FF;
+}
+
+html { scroll-behavior: smooth; }
