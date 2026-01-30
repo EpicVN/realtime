@@ -6,7 +6,15 @@ import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { FaChevronDown, FaHeadset, FaPhone, FaRobot } from "react-icons/fa6";
+import {
+  FaChevronDown,
+  FaCloud,
+  FaHeadset,
+  FaPhone,
+  FaRobot,
+  FaSimCard,
+  FaUsersGear,
+} from "react-icons/fa6";
 import { HiBars3BottomRight } from "react-icons/hi2";
 import { RiFileMusicFill } from "react-icons/ri";
 
@@ -45,7 +53,7 @@ const NAV_DATA: NavLink[] = [
       {
         title: "RealtimeCX",
         desc: "Nền tảng chăm sóc khách hàng đa kênh",
-        icon: <FaHeadset />,
+        icon: <FaUsersGear />,
         url: "/products/cx",
       },
       {
@@ -63,23 +71,23 @@ const NAV_DATA: NavLink[] = [
       {
         title: "RealtimeBPO",
         desc: "Thuê nhân sự trực Hotline, Telesales & CSKH",
-        icon: <RiFileMusicFill />,
-        url: "/products/texttospeech",
+        icon: <FaHeadset />,
+        url: "/products/bpo",
       },
       {
         title: "Voice VAS",
-        desc: "Đầu số bàn, đầu số di động, sms, ZNS",
-        icon: <RiFileMusicFill />,
-        url: "/products/texttospeech",
+        desc: "Đầu số Telesale, bàn, di động, SMS, ZNS...",
+        icon: <FaSimCard />,
+        url: "/products/voicevas",
       },
       {
         title: "RealtimeCLOUD",
         desc: "Cho thuê máy chủ ảo, server ảo",
-        icon: <RiFileMusicFill />,
-        url: "/products/texttospeech",
+        icon: <FaCloud />,
+        url: "/products/cloud",
       },
       {
-        title: "Realtime PBX",
+        title: "RealtimePBX",
         desc: "Tổng đài ảo thông minh đa kênh",
         icon: <FaPhone />,
         url: "/products/pbx",
@@ -210,53 +218,63 @@ const Navbar = ({ openNav }: Props) => {
                         {/* CASE 1: MEGA MENU (Dịch vụ) */}
                         {link.layout === "grid" ? (
                           <div className="grid grid-cols-2 gap-8 p-6">
-                            {(link.submenu as GridColumn[]).map((column: GridColumn, colIdx: number) => (
-                              <div key={colIdx} className="flex flex-col gap-3">
-                                {/* Tiêu đề cột */}
-                                <h4 className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1 border-b border-gray-100 dark:border-gray-700 pb-2">
-                                  {column.heading}
-                                </h4>
-                                {/* List items trong cột */}
-                                <div className="flex flex-col gap-1">
-                                  {column.items.map(
-                                    (item: { title: string; url: string }, itemIdx: number) => (
-                                      <Link
-                                        key={itemIdx}
-                                        href={item.url}
-                                        className="text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 py-1.5 transition-colors flex items-center gap-2 hover:translate-x-1 transform duration-200"
-                                      >
-                                        {/* Dấu chấm nhỏ trang trí */}
-                                        <span className="w-1.5 h-1.5 rounded-full bg-gray-300 group-hover:bg-blue-500 transition-colors"></span>
-                                        {item.title}
-                                      </Link>
-                                    ),
-                                  )}
+                            {(link.submenu as GridColumn[]).map(
+                              (column: GridColumn, colIdx: number) => (
+                                <div
+                                  key={colIdx}
+                                  className="flex flex-col gap-3"
+                                >
+                                  {/* Tiêu đề cột */}
+                                  <h4 className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1 border-b border-gray-100 dark:border-gray-700 pb-2">
+                                    {column.heading}
+                                  </h4>
+                                  {/* List items trong cột */}
+                                  <div className="flex flex-col gap-1">
+                                    {column.items.map(
+                                      (
+                                        item: { title: string; url: string },
+                                        itemIdx: number,
+                                      ) => (
+                                        <Link
+                                          key={itemIdx}
+                                          href={item.url}
+                                          className="text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 py-1.5 transition-colors flex items-center gap-2 hover:translate-x-1 transform duration-200"
+                                        >
+                                          {/* Dấu chấm nhỏ trang trí */}
+                                          <span className="w-1.5 h-1.5 rounded-full bg-gray-300 group-hover:bg-blue-500 transition-colors"></span>
+                                          {item.title}
+                                        </Link>
+                                      ),
+                                    )}
+                                  </div>
                                 </div>
-                              </div>
-                            ))}
+                              ),
+                            )}
                           </div>
                         ) : (
                           /* CASE 2: SIMPLE MENU (Sản phẩm - Giữ nguyên như cũ) */
                           <div className="p-2 flex flex-col gap-1 relative z-10">
-                            {(link.submenu as SimpleMenuItem[]).map((subItem: SimpleMenuItem, idx: number) => (
-                              <Link
-                                key={idx}
-                                href={subItem.url}
-                                className="flex items-start gap-4 p-3 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors group/item"
-                              >
-                                <div className="mt-1 p-2.5 bg-blue-100 dark:bg-blue-900/30 text-blue-600 rounded-lg group-hover/item:bg-blue-600 group-hover/item:text-white transition-all shadow-sm">
-                                  {subItem.icon}
-                                </div>
-                                <div>
-                                  <h4 className="font-bold text-gray-800 dark:text-gray-100 text-[15px] group-hover/item:text-blue-600 transition-colors">
-                                    {subItem.title}
-                                  </h4>
-                                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-1">
-                                    {subItem.desc}
-                                  </p>
-                                </div>
-                              </Link>
-                            ))}
+                            {(link.submenu as SimpleMenuItem[]).map(
+                              (subItem: SimpleMenuItem, idx: number) => (
+                                <Link
+                                  key={idx}
+                                  href={subItem.url}
+                                  className="flex items-start gap-4 p-3 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors group/item"
+                                >
+                                  <div className="mt-1 p-2.5 bg-blue-100 dark:bg-blue-900/30 text-blue-600 rounded-lg group-hover/item:bg-blue-600 group-hover/item:text-white transition-all shadow-sm">
+                                    {subItem.icon}
+                                  </div>
+                                  <div>
+                                    <h4 className="font-bold text-gray-800 dark:text-gray-100 text-[15px] group-hover/item:text-blue-600 transition-colors">
+                                      {subItem.title}
+                                    </h4>
+                                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-1">
+                                      {subItem.desc}
+                                    </p>
+                                  </div>
+                                </Link>
+                              ),
+                            )}
                           </div>
                         )}
                       </div>
