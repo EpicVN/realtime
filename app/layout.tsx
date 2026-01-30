@@ -5,6 +5,7 @@ import Provider from "@/components/Hoc/Provider";
 import ResponsiveNav from "@/components/Layout/Navbar/ResponsiveNav";
 import Footer from "@/components/Layout/Footer/Footer";
 import FloatingContact from "@/components/Helper/FloatingContact";
+import { Toaster } from "sonner";
 
 const font = Roboto({
   weight: ["100", "300", "400", "500", "700", "900"],
@@ -28,6 +29,7 @@ export default function RootLayout({
           <FloatingContact />
           <ResponsiveNav />
           {children}
+          <Toaster position="top-center" richColors />
           <Footer />
         </Provider>
       </body>
