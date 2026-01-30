@@ -75,12 +75,6 @@ const NAV_DATA: NavLink[] = [
         url: "/products/bpo",
       },
       {
-        title: "Voice VAS",
-        desc: "Đầu số Telesale, bàn, di động, SMS, ZNS...",
-        icon: <FaSimCard />,
-        url: "/products/voicevas",
-      },
-      {
         title: "RealtimeCLOUD",
         desc: "Cho thuê máy chủ ảo, server ảo",
         icon: <FaCloud />,
@@ -91,6 +85,12 @@ const NAV_DATA: NavLink[] = [
         desc: "Tổng đài ảo thông minh đa kênh",
         icon: <FaPhone />,
         url: "/products/pbx",
+      },
+      {
+        title: "Voice VAS",
+        desc: "Đầu số Telesale, bàn, di động, SMS, ZNS...",
+        icon: <FaSimCard />,
+        url: "/products/voicevas",
       },
     ],
   },
@@ -238,7 +238,7 @@ const Navbar = ({ openNav }: Props) => {
                                         <Link
                                           key={itemIdx}
                                           href={item.url}
-                                          className="text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 py-1.5 transition-colors flex items-center gap-2 hover:translate-x-1 transform duration-200"
+                                          className="text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-blue-400 py-1.5 transition-colors flex items-center gap-2 hover:translate-x-1 transform duration-200"
                                         >
                                           {/* Dấu chấm nhỏ trang trí */}
                                           <span className="w-1.5 h-1.5 rounded-full bg-gray-300 group-hover:bg-blue-500 transition-colors"></span>
@@ -261,11 +261,11 @@ const Navbar = ({ openNav }: Props) => {
                                   href={subItem.url}
                                   className="flex items-start gap-4 p-3 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors group/item"
                                 >
-                                  <div className="mt-1 p-2.5 bg-blue-100 dark:bg-blue-900/30 text-blue-600 rounded-lg group-hover/item:bg-blue-600 group-hover/item:text-white transition-all shadow-sm">
+                                  <div className="mt-1 p-2.5 bg-blue-100 dark:bg-blue-900/30 text-primary dark:text-primary-light rounded-lg group-hover/item:bg-blue-600 group-hover/item:text-white transition-all shadow-sm">
                                     {subItem.icon}
                                   </div>
                                   <div>
-                                    <h4 className="font-bold text-gray-800 dark:text-gray-100 text-[15px] group-hover/item:text-blue-600 transition-colors">
+                                    <h4 className="font-bold text-gray-800 dark:text-gray-100 text-[15px] group-hover/item:text-primary transition-colors">
                                       {subItem.title}
                                     </h4>
                                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-1">
