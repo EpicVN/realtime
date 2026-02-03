@@ -9,9 +9,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ==============================
-// 1. Model cho Contact Form (Lead)
-// ==============================
+// 1. Định nghĩa quyền hạn (Role) rõ ràng
+// Dùng Enum giúp code không bao giờ bị lỗi chính tả kiểu "admin" vs "Admin"
+enum Role {
+  SUPER_ADMIN // Tài khoản trùm (không được đổi pass)
+  ADMIN       // Tài khoản thường
+}
+
+// 2. Model cho Contact Form (Khách hàng từ Web)
 model Contact {
   id        String   @id @default(cuid())
   name      String
@@ -20,56 +25,18 @@ model Contact {
   company   String?
   interest  String?  // VD: VoIP, CRM, AutoDialer
   message   String
-  status    String   @default("PENDING") // PENDING (Chờ), CONTACTED (Đã gọi), CLOSED (Đóng)
+  status    String   @default("PENDING") // PENDING, CALLED, CLOSED
   createdAt DateTime @default(now())
 }
 
-// ==============================
-// 2. Models cho Auth.js (NextAuth)
-// (Cần thiết cho chức năng Đăng nhập/Admin sau này)
-// ==============================
-model Account {
-  id                String  @id @default(cuid())
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String? @db.Text
-  session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
-}
-
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
+// 3. Model User (Dùng để Admin đăng nhập)
+// Đã lược bỏ các bảng Account/Session vì ta dùng JWT Credentials
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  role          String    @default("USER") // ADMIN hoặc USER
-  accounts      Account[]
-  sessions      Session[]
-}
-
-model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
-
-  @@unique([identifier, token])
+  id        String   @id @default(cuid())
+  name      String?
+  email     String   @unique
+  password  String   // BẮT BUỘC PHẢI CÓ để lưu mật khẩu mã hóa
+  role      Role     @default(ADMIN)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

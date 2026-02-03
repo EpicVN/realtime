@@ -1,17 +1,16 @@
 "use client";
 
+import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import React, { useState } from "react";
 import { CgClose } from "react-icons/cg";
-import { FaChevronDown } from "react-icons/fa6";
-import { motion, AnimatePresence } from "framer-motion";
 import {
-  FaCloud,
+  FaChevronDown, FaCloud,
   FaHeadset,
   FaPhone,
   FaRobot,
   FaSimCard,
-  FaUsersGear,
+  FaUsersGear
 } from "react-icons/fa6";
 import { RiFileMusicFill } from "react-icons/ri";
 
@@ -124,9 +123,14 @@ const NAV_DATA: NavLink[] = [
 type Props = {
   showNav: boolean;
   closeNav: () => void;
+  currentUser?: {
+    name?: string | null;
+    email?: string | null;
+    role?: string;
+  } | null;
 };
 
-const MobileNav = ({ closeNav, showNav }: Props) => {
+const MobileNav = ({ closeNav, showNav, currentUser }: Props) => {
   const navOpen = showNav ? "translate-x-0" : "translate-x-[-100%]";
   const [activeSubmenu, setActiveSubmenu] = useState<number | null>(null);
 
@@ -265,13 +269,23 @@ const MobileNav = ({ closeNav, showNav }: Props) => {
 
           {/* Button Đăng nhập */}
           <div className="mt-8 px-2">
-            <Link
-              href="/login"
-              onClick={closeNav}
-              className="flex items-center justify-center w-full py-3 bg-white text-blue-900 font-bold rounded-lg shadow-lg active:scale-95 transition-transform"
-            >
-              Đăng nhập
-            </Link>
+            {currentUser ? (
+              <Link
+                href="/admin"
+                onClick={closeNav}
+                className="flex items-center justify-center gap-2 w-full bg-green-600 text-white py-3 rounded-lg font-bold shadow-md active:scale-95 transition-transform"
+              >
+                Dashboard
+              </Link>
+            ) : (
+              <Link
+                href="/login"
+                onClick={closeNav}
+                className="flex items-center justify-center w-full py-3 bg-white text-blue-900 font-bold rounded-lg shadow-lg active:scale-95 transition-transform"
+              >
+                Đăng nhập
+              </Link>
+            )}
           </div>
         </div>
       </div>

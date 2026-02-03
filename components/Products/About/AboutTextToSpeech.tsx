@@ -13,28 +13,28 @@ const TEXTS = [
     title: "Realtime TTS - Giọng đọc AI tự nhiên",
     description:
       "Công nghệ tổng hợp tiếng nói (Speech Synthesis) tiên tiến nhất hiện nay. Chuyển đổi văn bản thành giọng nói tiếng Việt mượt mà, cảm xúc như người thật nhờ Deep Learning.",
-    image: "/images/screen/TextToSpeech.png", // Thay bằng ảnh minh họa sóng âm hoặc giao diện TTS
+    image: "/images/products/texttospeech/img1.png",
   },
   {
     shortTitle: "Vùng miền",
     title: "Đa dạng giọng đọc Vùng miền",
     description:
       "Hỗ trợ đầy đủ các chất giọng Bắc - Trung - Nam với cả giọng Nam và Nữ. Phù hợp để cá nhân hóa trải nghiệm khách hàng theo từng khu vực địa lý.",
-    image: "/images/screen/TextToSpeech.png",
+    image: "/images/products/texttospeech/img2.png",
   },
   {
     shortTitle: "Tùy chỉnh",
     title: "Kiểm soát Ngữ điệu & Tốc độ",
     description:
       "Dễ dàng điều chỉnh tốc độ đọc (nhanh/chậm), ngắt nghỉ theo dấu câu và cao độ (pitch) để tạo ra các file âm thanh tự nhiên nhất cho Video, Podcast hoặc Tổng đài.",
-    image: "/images/screen/TextToSpeech.png",
+    image: "/images/products/texttospeech/img3.png",
   },
   {
     shortTitle: "API",
     title: "Tích hợp API Real-time",
     description:
       "Cung cấp API Streaming với độ trễ cực thấp (Low Latency). Dễ dàng tích hợp vào hệ thống Auto Call, Trợ lý ảo, Smarthome hoặc ứng dụng đọc báo.",
-    image: "/images/screen/TextToSpeech.png",
+    image: "/images/products/texttospeech/img4.png",
   },
 ];
 
@@ -152,30 +152,34 @@ const AboutCX = () => {
         </div>
 
         {/* --- CỘT PHẢI: ẢNH --- */}
-        <div className="w-full order-1 lg:order-2 flex items-center justify-center">
-          <TechFrame title={TEXTS[activeIndex].title}>
-            <div className="relative w-full h-full min-h-75 lg:min-h-112.5">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeIndex}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 1.05 }} // Zoom nhẹ khi biến mất
-                  transition={{ duration: 0.5 }}
-                  className="absolute inset-0 w-full h-full"
-                >
-                  <Image
-                    src={TEXTS[activeIndex].image}
-                    alt={TEXTS[activeIndex].title}
-                    fill
-                    className="object-contain p-4"
-                    priority
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
-                </motion.div>
-              </AnimatePresence>
-            </div>
-          </TechFrame>
+        <div className="w-full order-1 lg:order-2">
+          {/* Wrapper để căn chỉnh vị trí khung TechFrame */}
+          <div className="flex justify-center lg:justify-end items-center h-full">
+            <TechFrame title={TEXTS[activeIndex].title}>
+              <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-50 dark:bg-gray-900/50 flex items-center justify-center p-1">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeIndex}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 1.05 }}
+                    transition={{ duration: 0.5 }}
+                    // Đặt padding nhẹ để ảnh không dính sát viền khung
+                    className="absolute inset-0 w-full h-full p-2 sm:p-3"
+                  >
+                    <Image
+                      src={TEXTS[activeIndex].image}
+                      alt={TEXTS[activeIndex].title}
+                      fill
+                      className="object-contain object-center rounded shadow-sm"
+                      priority
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </TechFrame>
+          </div>
         </div>
       </div>
     </div>

@@ -13,28 +13,28 @@ const TEXTS = [
     title: "Realtime Autodialer - Gọi tự động thông minh",
     description:
       "Giải pháp thực hiện hàng ngàn cuộc gọi mỗi giờ hoàn toàn tự động. Tối ưu cho các chiến dịch Telesales, Nhắc nợ, Khảo sát thị trường hoặc Thông báo mã OTP.",
-    image: "/images/screen/Autocall.png",
+    image: "/images/products/autodialer/img1.png",
   },
   {
     shortTitle: "Predictive",
     title: "Thuật toán Predictive Dialing",
     description:
       "Hệ thống tự động quay số trước và chỉ chuyển cuộc gọi cho nhân viên khi có khách hàng nhấc máy. Loại bỏ hoàn toàn thời gian chờ tiếng tút, số máy bận hoặc thuê bao.",
-    image: "/images/screen/Autocall.png",
+    image: "/images/products/autodialer/img2.png",
   },
   {
     shortTitle: "AI Voice",
     title: "Tích hợp Text-To-Speech (TTS)",
     description:
       "Chuyển đổi văn bản thành giọng nói AI tiếng Việt tự nhiên (Bắc/Nam) theo thời gian thực. Cá nhân hóa lời chào: 'Chào anh Nam', 'Chào chị Lan' tự động.",
-    image: "/images/screen/Autocall.png",
+    image: "/images/products/autodialer/img3.png",
   },
   {
     shortTitle: "Lọc số",
     title: "Lọc số thông minh",
     description:
       "Tự động phát hiện và loại bỏ các số điện thoại sai định dạng, số ảo, hoặc các số nằm trong danh sách không làm phiền (DNC - Do Not Call).",
-    image: "/images/screen/Autocall.png",
+    image: "/images/products/autodialer/img4.png",
   },
 ];
 
@@ -152,30 +152,34 @@ const AboutCX = () => {
         </div>
 
         {/* --- CỘT PHẢI: ẢNH --- */}
-        <div className="w-full order-1 lg:order-2 flex items-center justify-center">
-          <TechFrame title={TEXTS[activeIndex].title}>
-            <div className="relative w-full h-full min-h-75 lg:min-h-112.5">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeIndex}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 1.05 }} // Zoom nhẹ khi biến mất
-                  transition={{ duration: 0.5 }}
-                  className="absolute inset-0 w-full h-full"
-                >
-                  <Image
-                    src={TEXTS[activeIndex].image}
-                    alt={TEXTS[activeIndex].title}
-                    fill
-                    className="object-contain p-4"
-                    priority
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
-                </motion.div>
-              </AnimatePresence>
-            </div>
-          </TechFrame>
+        <div className="w-full order-1 lg:order-2">
+          {/* Wrapper để căn chỉnh vị trí khung TechFrame */}
+          <div className="flex justify-center lg:justify-end items-center h-full">
+            <TechFrame title={TEXTS[activeIndex].title}>
+              <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-50 dark:bg-gray-900/50 flex items-center justify-center p-1">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeIndex}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 1.05 }}
+                    transition={{ duration: 0.5 }}
+                    // Đặt padding nhẹ để ảnh không dính sát viền khung
+                    className="absolute inset-0 w-full h-full p-2 sm:p-3"
+                  >
+                    <Image
+                      src={TEXTS[activeIndex].image}
+                      alt={TEXTS[activeIndex].title}
+                      fill
+                      className="object-contain object-center rounded shadow-sm"
+                      priority
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </TechFrame>
+          </div>
         </div>
       </div>
     </div>

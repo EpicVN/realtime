@@ -13,28 +13,28 @@ const TEXTS = [
     title: "RealtimeCX - CRM Tích hợp Tổng đài",
     description:
       "Nền tảng quản trị trải nghiệm khách hàng toàn diện. Tự động nhận diện khách hàng khi có cuộc gọi (Popup), quản lý lịch sử tương tác và chăm sóc khách hàng đa kênh trên một màn hình duy nhất.",
-    image: "/images/screen/CX.png",
+    image: "/images/products/cx/img1.png",
   },
   {
     shortTitle: "Customer 360",
     title: "Góc nhìn khách hàng 360 độ",
     description:
       "Lưu trữ tập trung mọi thông tin: Thông tin cá nhân, lịch sử mua hàng, lịch sử cuộc gọi, ghi chú và các phiếu hỗ trợ (Ticket) liên quan. Giúp nhân viên thấu hiểu khách hàng ngay lập tức.",
-    image: "/images/screen/CX.png",
+    image: "/images/products/cx/img2.png",
   },
   {
     shortTitle: "Ticket System",
     title: "Quản lý Ticket & SLA",
     description:
       "Tự động tạo phiếu hỗ trợ (Ticket) từ cuộc gọi nhỡ hoặc email. Phân công tự động cho nhân viên và theo dõi tiến độ xử lý cam kết (SLA) để không bỏ sót yêu cầu nào.",
-    image: "/images/screen/CX.png",
+    image: "/images/products/cx/img3.png",
   },
   {
     shortTitle: "Automation",
     title: "Tự động hóa quy trình",
     description:
       "Thiết lập các kịch bản chăm sóc tự động: Gửi SMS/Zalo chúc mừng sinh nhật, nhắc lịch hẹn, hoặc khảo sát hài lòng sau cuộc gọi (CSAT) hoàn toàn tự động.",
-    image: "/images/screen/CX.png",
+    image: "/images/products/cx/img4.png",
   },
 ];
 
@@ -152,30 +152,34 @@ const AboutCX = () => {
         </div>
 
         {/* --- CỘT PHẢI: ẢNH --- */}
-        <div className="w-full order-1 lg:order-2 flex items-center justify-center">
-          <TechFrame title={TEXTS[activeIndex].title}>
-            <div className="relative w-full h-full min-h-75 lg:min-h-112.5">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeIndex}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 1.05 }} // Zoom nhẹ khi biến mất
-                  transition={{ duration: 0.5 }}
-                  className="absolute inset-0 w-full h-full"
-                >
-                  <Image
-                    src={TEXTS[activeIndex].image}
-                    alt={TEXTS[activeIndex].title}
-                    fill
-                    className="object-contain p-4"
-                    priority
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
-                </motion.div>
-              </AnimatePresence>
-            </div>
-          </TechFrame>
+        <div className="w-full order-1 lg:order-2">
+          {/* Wrapper để căn chỉnh vị trí khung TechFrame */}
+          <div className="flex justify-center lg:justify-end items-center h-full">
+            <TechFrame title={TEXTS[activeIndex].title}>
+              <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-50 dark:bg-gray-900/50 flex items-center justify-center p-1">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeIndex}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 1.05 }}
+                    transition={{ duration: 0.5 }}
+                    // Đặt padding nhẹ để ảnh không dính sát viền khung
+                    className="absolute inset-0 w-full h-full p-2 sm:p-3"
+                  >
+                    <Image
+                      src={TEXTS[activeIndex].image}
+                      alt={TEXTS[activeIndex].title}
+                      fill
+                      className="object-contain object-center rounded shadow-sm"
+                      priority
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </TechFrame>
+          </div>
         </div>
       </div>
     </div>

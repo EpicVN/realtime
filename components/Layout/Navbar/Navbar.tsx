@@ -13,7 +13,7 @@ import {
   FaPhone,
   FaRobot,
   FaSimCard,
-  FaUsersGear,
+  FaUsersGear
 } from "react-icons/fa6";
 import { HiBars3BottomRight } from "react-icons/hi2";
 import { RiFileMusicFill } from "react-icons/ri";
@@ -103,19 +103,19 @@ const NAV_DATA: NavLink[] = [
       {
         heading: "THEO LĨNH VỰC KINH DOANH",
         items: [
-          { title: "Giải pháp Thu nhắc nợ / Collection", url: "#" },
-          { title: "Giải pháp tổng đài cho CSKH", url: "#" },
-          { title: "Giải pháp tổng đài cho Tuyển Dụng", url: "#" },
-          { title: "Giải pháp tổng đài cho BĐS", url: "#" },
-          { title: "Giải pháp tổng đài cho Giáo Dục", url: "#" },
+          { title: "Giải pháp Thu nhắc nợ / Collection", url: "/solutions/collection" },
+          { title: "Giải pháp tổng đài cho CSKH", url: "/solutions/cskh" },
+          { title: "Giải pháp tổng đài cho Tuyển Dụng", url: "/solutions/recruitment" },
+          { title: "Giải pháp tổng đài cho BĐS", url: "/solutions/realestate" },
+          { title: "Giải pháp tổng đài cho Giáo Dục", url: "/solutions/education" },
         ],
       },
       {
         heading: "THEO QUY MÔ DOANH NGHIỆP",
         items: [
-          { title: "Giải pháp STARTUP", url: "#" },
-          { title: "Giải pháp Doanh nghiệp SME", url: "#" },
-          { title: "Giải pháp Doanh nghiệp Lớn", url: "#" },
+          { title: "Giải pháp STARTUP", url: "/solutions/startup" },
+          { title: "Giải pháp Doanh nghiệp SME", url: "/solutions/sme" },
+          { title: "Giải pháp Doanh nghiệp Lớn", url: "/solutions/enterprise" },
         ],
       },
     ],
@@ -126,9 +126,15 @@ const NAV_DATA: NavLink[] = [
 
 type Props = {
   openNav: () => void;
+  currentUser?: {
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
+    role?: string;
+  } | null;
 };
 
-const Navbar = ({ openNav }: Props) => {
+const Navbar = ({ openNav, currentUser }: Props) => {
   const [navBar, setNavBar] = useState(false);
   const pathname = usePathname();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -156,7 +162,7 @@ const Navbar = ({ openNav }: Props) => {
       <div className="flex items-center h-full justify-between w-[90%] xl:w-[80%] mx-auto">
         {/* Logo */}
         <Link href="/">
-          <Logo />
+          <Logo type="white" />
         </Link>
 
         {/* --- NAVLINKS (DESKTOP) --- */}
@@ -288,14 +294,25 @@ const Navbar = ({ openNav }: Props) => {
 
         {/* Buttons & Toggler */}
         <div className="flex items-center space-x-6">
-          <a
-            href="#_"
-            className="box-border relative z-20 items-center justify-center w-auto px-4 py-2 sm:px-6 sm:py-2.5 overflow-hidden font-bold text-gray-900 transition-all duration-300 bg-white rounded-md cursor-pointer hover:bg-primary-dark hover:text-white hover:shadow-lg ease focus:outline-none dark:bg-white dark:text-gray-900 dark:hover:bg-primary-dark dark:hover:shadow-lg dark:focus:ring-0 dark:focus:outline-none dark:hover:text-white hidden sm:inline-flex"
-          >
-            <span className="relative z-20 flex items-center text-center text-sm">
-              Đăng nhập
-            </span>
-          </a>
+          {currentUser ? (
+            <Link
+              href="/admin"
+              className="box-border relative z-20 items-center justify-center w-auto px-4 py-2 sm:px-6 sm:py-2.5 overflow-hidden font-bold text-white transition-all duration-300 bg-linear-to-r from-green-500 to-emerald-600 rounded-md cursor-pointer hover:shadow-lg hover:scale-105 ease focus:outline-none hidden sm:inline-flex gap-2"
+            >
+              <span className="relative z-20 flex items-center text-center text-sm">
+                Dashboard
+              </span>
+            </Link>
+          ) : (
+            <Link
+              href="/login"
+              className="box-border relative z-20 items-center justify-center w-auto px-4 py-2 sm:px-6 sm:py-2.5 overflow-hidden font-bold text-gray-900 transition-all duration-300 bg-white rounded-md cursor-pointer hover:bg-primary-dark hover:text-white hover:shadow-lg ease focus:outline-none dark:bg-white dark:text-gray-900 dark:hover:bg-primary-dark dark:hover:shadow-lg dark:focus:ring-0 dark:focus:outline-none dark:hover:text-white hidden sm:inline-flex"
+            >
+              <span className="relative z-20 flex items-center text-center text-sm">
+                Đăng nhập
+              </span>
+            </Link>
+          )}
           <ThemeToggler />
           <HiBars3BottomRight
             onClick={openNav}

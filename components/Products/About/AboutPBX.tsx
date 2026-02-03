@@ -13,28 +13,28 @@ const TEXTS = [
     title: "Realtime PBX - Tổng đài thông minh",
     description:
       "Giải pháp tổng đài IP thế hệ mới giúp doanh nghiệp thiết lập hệ thống liên lạc chuyên nghiệp chỉ trong 15 phút. Không cần kéo cáp, không cần mua máy chủ, hoạt động ổn định trên nền tảng Cloud.",
-    image: "/images/screen/PBX.png",
+    image: "/images/products/pbx/img1.png",
   },
   {
     shortTitle: "Tính năng",
     title: "Đầy đủ tính năng cao cấp",
     description:
       "Tích hợp sẵn lời chào tự động (IVR), ghi âm cuộc gọi không giới hạn, phân phối cuộc gọi thông minh (ACD) và báo cáo chi tiết theo thời gian thực.",
-    image: "/images/screen/PBX.png",
+    image: "/images/products/pbx/img2.png",
   },
   {
     shortTitle: "Lợi ích",
     title: "Tiết kiệm 50% chi phí",
     description:
       "Miễn phí gọi nội bộ giữa các chi nhánh. Cước gọi ra rẻ hơn 40% so với viễn thông truyền thống. Không tốn phí bảo trì, vận hành phần cứng.",
-    image: "/images/screen/PBX.png",
+    image: "/images/products/pbx/img3.png",
   },
   {
     shortTitle: "Kết nối",
     title: "Làm việc mọi lúc mọi nơi",
     description:
       "Sử dụng linh hoạt trên IP Phone, Smartphone App (iOS/Android) hoặc trực tiếp trên trình duyệt Web. Nhân viên có thể nghe gọi ngay cả khi đang di chuyển.",
-    image: "/images/screen/PBX.png",
+    image: "/images/products/pbx/img4.png",
   },
 ];
 
@@ -152,30 +152,34 @@ const AboutPBX = () => {
         </div>
 
         {/* --- CỘT PHẢI: ẢNH --- */}
-        <div className="w-full order-1 lg:order-2 flex items-center justify-center">
-          <TechFrame title={TEXTS[activeIndex].title}>
-            <div className="relative w-full h-full min-h-75 lg:min-h-112.5">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeIndex}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 1.05 }} // Zoom nhẹ khi biến mất
-                  transition={{ duration: 0.5 }}
-                  className="absolute inset-0 w-full h-full"
-                >
-                  <Image
-                    src={TEXTS[activeIndex].image}
-                    alt={TEXTS[activeIndex].title}
-                    fill
-                    className="object-contain p-4"
-                    priority
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
-                </motion.div>
-              </AnimatePresence>
-            </div>
-          </TechFrame>
+        <div className="w-full order-1 lg:order-2">
+          {/* Wrapper để căn chỉnh vị trí khung TechFrame */}
+          <div className="flex justify-center lg:justify-end items-center h-full">
+            <TechFrame title={TEXTS[activeIndex].title}>
+              <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-50 dark:bg-gray-900/50 flex items-center justify-center p-1">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeIndex}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 1.05 }}
+                    transition={{ duration: 0.5 }}
+                    // Đặt padding nhẹ để ảnh không dính sát viền khung
+                    className="absolute inset-0 w-full h-full p-2 sm:p-3"
+                  >
+                    <Image
+                      src={TEXTS[activeIndex].image}
+                      alt={TEXTS[activeIndex].title}
+                      fill
+                      className="object-contain object-center rounded shadow-sm"
+                      priority
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </TechFrame>
+          </div>
         </div>
       </div>
     </div>

@@ -1,11 +1,9 @@
+import Provider from "@/components/Hoc/Provider";
+import Footer from "@/components/Layout/Footer/Footer";
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
-import "./globals.css";
-import Provider from "@/components/Hoc/Provider";
-import ResponsiveNav from "@/components/Layout/Navbar/ResponsiveNav";
-import Footer from "@/components/Layout/Footer/Footer";
-import FloatingContact from "@/components/Helper/FloatingContact";
 import { Toaster } from "sonner";
+import "./globals.css";
 
 const font = Roboto({
   weight: ["100", "300", "400", "500", "700", "900"],
@@ -26,11 +24,8 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${font.className} antialiased`}>
         <Provider>
-          <FloatingContact />
-          <ResponsiveNav />
           {children}
           <Toaster position="top-center" richColors />
-          <Footer />
         </Provider>
       </body>
     </html>
