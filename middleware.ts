@@ -1,9 +1,10 @@
 // middleware.ts
+import NextAuth from "next-auth";
+import { authConfig } from "./auth.config"; // <--- CHỈ IMPORT FILE CONFIG NHẸ
 
-// Cách đơn giản nhất cho Next.js 15 + Auth v5:
-export { auth as middleware } from "@/auth"
+export default NextAuth(authConfig).auth;
 
 export const config = {
-  // Chặn tất cả route /admin/...
-  matcher: ["/admin/:path*"],
-}
+  // Matcher để middleware chạy trên các route cần thiết
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+};
