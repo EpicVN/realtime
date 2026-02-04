@@ -132,7 +132,7 @@ const Footer = () => {
             <div className="flex gap-4">
               {/* Facebook */}
               <a
-                href="#"
+                href="https://facebook.com/Realtime.vn?_rdc=1&_rdr#"
                 className="h-10 w-10 bg-white/10 hover:bg-white/20 flex items-center justify-center rounded-full transition-all"
                 aria-label="Facebook"
               >
@@ -141,7 +141,7 @@ const Footer = () => {
 
               {/* Zalo (Dùng icon Zalo hoặc placeholder) */}
               <a
-                href="#"
+                href="https://zalo.me/0933119056"
                 className="h-10 w-10 bg-white/10 hover:bg-white/20 flex items-center justify-center rounded-full transition-all font-bold"
                 aria-label="Zalo"
               >
@@ -150,7 +150,7 @@ const Footer = () => {
 
               {/* Telegram */}
               <a
-                href="#"
+                href="https://t.me/chau2026"
                 className="h-10 w-10 bg-white/10 hover:bg-white/20 flex items-center justify-center rounded-full transition-all"
                 aria-label="Telegram"
               >
