@@ -6,6 +6,7 @@ import FAQ from "@/components/Common/FAQ/FAQ";
 import FeatureGrid, { FeatureItem } from "@/components/Common/FeatureGrid";
 import Pricing from "@/components/Common/Pricing/Pricing";
 import StatsSection, { StatItem } from "@/components/Common/StatsSection";
+import TextToSpeechTool from "@/components/Common/TextToSpeechTool";
 // Import component riêng của TTS
 import AboutTextToSpeech from "@/components/Products/About/AboutTextToSpeech";
 
@@ -92,6 +93,8 @@ const TextToSpeechPage = () => {
     <div className="bg-white dark:bg-gray-950 pt-20 overflow-hidden">
       {/* --- 1. HERO / ABOUT SECTION --- */}
       <AboutTextToSpeech />
+
+      <TextToSpeechTool />
 
       {/* --- 2. KEY FEATURES GRID --- */}
       <FeatureGrid
