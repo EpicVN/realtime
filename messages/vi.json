@@ -1,0 +1,13 @@
+{
+  "TTS": {
+    "title": "Realtime AI Studio",
+    "desc": "Chuyển đổi văn bản thành giọng nói tự nhiên",
+    "voice_label": "Chọn giọng đọc",
+    "text_label": "Nội dung kịch bản",
+    "placeholder": "Nhập nội dung cần chuyển đổi...",
+    "button_loading": "Đang xử lý...",
+    "button_create": "Tạo giọng đọc",
+    "result_label": "Kết quả hiển thị tại đây",
+    "download": "Tải về"
+  }
+}

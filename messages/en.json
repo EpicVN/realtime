@@ -1,0 +1,13 @@
+{
+  "TTS": {
+    "title": "Realtime AI Studio",
+    "desc": "Convert text to natural sounding speech",
+    "voice_label": "Select Voice",
+    "text_label": "Script Content",
+    "placeholder": "Enter text to convert...",
+    "button_loading": "Processing...",
+    "button_create": "Generate Speech",
+    "result_label": "Result appears here",
+    "download": "Download"
+  }
+}

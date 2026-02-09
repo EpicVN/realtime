@@ -10,10 +10,10 @@ import {
   FaUserAstronaut,
   FaUserTie,
   FaWandMagicSparkles,
-  FaFileLines, // Thêm icon này
+  FaFileLines,
 } from "react-icons/fa6";
 
-// 1. ĐỊNH NGHĨA VĂN BẢN MẪU Ở ĐÂY
+// 1. ĐỊNH NGHĨA VĂN BẢN MẪU
 const SAMPLE_TEXT = `Chào ông bà, hợp đồng tín dụng của ông bà Đặng Châu đang vi phạm với Công ty tài chính shb, đã được chuyển sang công ty Luật Hoàng Kim để giải quyết. Số tiền nợ quá hạn tính đến ngày 1 tháng 8 năm 2026 là 12500000 đồng, yêu cầu ông bà thanh toán khoản vay trước ngày 1 tháng 8 năm 2026, để tránh phát sinh lãi phạt. Để được tư vấn giải quyết ông bà liên hệ với luật sư Hoàng Kim theo số điện thoại 0 3 8 6 9 2 3 9 0 1, xin nhắc lại số điện thoại liên hệ 0 3 8 6 9 2 3 9 0 1. Xin cảm ơn.`;
 
 export default function TextToSpeech() {
@@ -23,26 +23,38 @@ export default function TextToSpeech() {
   const [text, setText] = useState("");
   const [selectedVoice, setSelectedVoice] = useState("ngochuyen");
 
-  async function handleSubmit(formData: FormData) {
-    setLoading(true);
+  // 🔴 LOGIC CHUẨN: Dùng onSubmit để chặn spam click tuyệt đối
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault(); // Chặn reload trang
+    
+    if (loading) return; // Nếu đang xử lý thì chặn click
+
+    setLoading(true); // Cập nhật UI ngay lập tức (ẩn nút)
     setError(null);
     setAudioUrl(null);
 
-    const result = await createSpeech(formData);
+    const formData = new FormData(e.currentTarget);
 
-    if (result.error) {
-      setError(result.error);
-    } else if (result.filename) {
-      const cleanUrl = `/api/audio/${result.filename}?t=${Date.now()}`;
-      setAudioUrl(cleanUrl);
+    try {
+      const result = await createSpeech(formData);
+
+      if (result.error) {
+        setError(result.error);
+      } else if (result.filename) {
+        const cleanUrl = `/api/audio/${result.filename}?t=${Date.now()}`;
+        setAudioUrl(cleanUrl);
+      }
+    } catch (err) {
+      setError("Có lỗi xảy ra, vui lòng thử lại.");
+    } finally {
+      setLoading(false); // Hiện lại nút khi xong
     }
-
-    setLoading(false);
   }
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-6 px-4">
       <div className="w-full max-w-5xl mx-auto">
+        
         <div className="flex items-center justify-center gap-3 mb-6">
           <div className="p-2 bg-blue-100 text-blue-600 rounded-xl">
             <FaMicrophoneLines size={20} />
@@ -54,8 +66,11 @@ export default function TextToSpeech() {
 
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
           <div className="grid md:grid-cols-12">
+            
             <div className="md:col-span-7 p-6 border-b md:border-b-0 md:border-r border-slate-100">
-              <form action={handleSubmit} className="space-y-5">
+              {/* 🔴 SỬA TẠI ĐÂY: Dùng onSubmit */}
+              <form onSubmit={handleSubmit} className="space-y-5">
+                
                 <input type="hidden" name="voice" value={selectedVoice} />
 
                 <div>
@@ -115,17 +130,15 @@ export default function TextToSpeech() {
                   </div>
                 </div>
 
-                {/* PHẦN NHẬP VĂN BẢN (Đã thêm nút Mẫu thử) */}
                 <div className="flex-1">
                   <div className="flex justify-between items-end mb-2">
                     <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">
                       Nội dung kịch bản
                     </label>
 
-                    {/* 👇 NÚT DÙNG MẪU THỬ Ở ĐÂY 👇 */}
                     <div className="flex items-center gap-2">
                       <button
-                        type="button" // Quan trọng: type button để không submit form
+                        type="button"
                         onClick={() => setText(SAMPLE_TEXT)}
                         className="text-[10px] flex items-center gap-1 bg-blue-50 text-blue-600 px-2 py-1 rounded hover:bg-blue-100 transition-colors font-semibold"
                       >
@@ -139,7 +152,7 @@ export default function TextToSpeech() {
 
                   <textarea
                     name="text"
-                    rows={6} // Tăng chiều cao lên chút cho dễ nhìn
+                    rows={6}
                     value={text}
                     onChange={(e) => setText(e.target.value)}
                     className="w-full p-3 text-sm text-slate-700 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-100 focus:border-blue-500 outline-none resize-none transition-all placeholder:text-slate-300 leading-relaxed"
@@ -148,23 +161,27 @@ export default function TextToSpeech() {
                   ></textarea>
                 </div>
 
-                <button
-                  disabled={loading || !text}
-                  className="w-full group relative bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-3 rounded-xl shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden"
-                >
-                  <div className="absolute inset-0 w-full h-full bg-white/20 group-hover:translate-x-full transition-transform duration-500 -skew-x-12 -translate-x-full"></div>
-                  <div className="relative flex items-center justify-center gap-2 text-sm uppercase tracking-wide">
-                    {loading ? (
-                      <>
-                        <FaSpinner className="animate-spin" /> Đang xử lý...
-                      </>
-                    ) : (
-                      <>
-                        <FaWandMagicSparkles /> Tạo giọng đọc
-                      </>
-                    )}
+                {/* 🔴 SỬA TẠI ĐÂY: Logic ẩn hiện nút bấm */}
+                {loading ? (
+                  <div className="w-full py-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-center gap-3 cursor-wait shadow-inner">
+                    <FaSpinner className="animate-spin text-blue-600" size={20} />
+                    <span className="text-sm font-bold text-slate-500 animate-pulse">
+                      Đang khởi tạo âm thanh...
+                    </span>
                   </div>
-                </button>
+                ) : (
+                  <button
+                    type="submit"
+                    disabled={!text}
+                    className="w-full group relative bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-3 rounded-xl shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden"
+                  >
+                    <div className="absolute inset-0 w-full h-full bg-white/20 group-hover:translate-x-full transition-transform duration-500 -skew-x-12 -translate-x-full"></div>
+                    <div className="relative flex items-center justify-center gap-2 text-sm uppercase tracking-wide">
+                      <FaWandMagicSparkles /> Tạo giọng đọc
+                    </div>
+                  </button>
+                )}
+
               </form>
             </div>
 
