@@ -6,6 +6,8 @@ export async function createSpeech(formData: FormData) {
 
   if (!text) return { error: "Vui lòng nhập nội dung" };
 
+  const uniqueId = `realtime_sound_${Date.now()}_${Math.floor(Math.random() * 1000000)}`;
+
   // 1. Tạo chuỗi JSON đúng chuẩn mẫu yêu cầu
   const payload = {
     company_id: 12,
@@ -14,13 +16,13 @@ export async function createSpeech(formData: FormData) {
     debug: "false", // Set false cho gọn response
     voice: "sam", // Tham số phụ bắt buộc
     data: {
-      speech_01: text, // Key này đặt là gì cũng được, lát API trả về key tương ứng
+      [uniqueId]: text,
     },
   };
 
   try {
     // 2. Cấu hình gửi POST
-    // const apiUrl = "http://127.0.0.1:8086/api/tts-create-speak.php";
+    //const apiUrl = "http://127.0.0.1:8086/api/tts-create-speak.php";
     const apiUrl = "http://109.237.69.136:8086/api/tts-create-speak.php";
 
     console.log("🚀 Đang gửi POST tới:", apiUrl);
@@ -53,16 +55,11 @@ export async function createSpeech(formData: FormData) {
 
         if (Array.isArray(parsedInner) && parsedInner.length > 0) {
           const item = parsedInner[0];
-          const keys = Object.keys(item);
 
-          if (keys.length > 0) {
-            const fullUrl = item[keys[0]]; // Đang là: http://109.../files/speech_01.wav
-
-            // 🔥 BƯỚC QUAN TRỌNG NHẤT: CẮT LINK 🔥
-            // Lấy mỗi cái tên "speech_01.wav" cuối cùng thôi
+          if (item[uniqueId]) {
+            const fullUrl = item[uniqueId];
+            // Cắt lấy tên file: "realtime_sound_177060888.wav"
             const filename = fullUrl.split("/").pop();
-
-            // Trả về filename, TUYỆT ĐỐI KHÔNG trả về fullUrl nữa
             return { success: true, filename: filename };
           }
         }
