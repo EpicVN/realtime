@@ -1,6 +1,8 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation"; // 1. Link chuẩn
 import {
   FaPhone,
   FaEnvelope,
@@ -8,16 +10,18 @@ import {
   FaFacebookF,
   FaTelegram,
 } from "react-icons/fa6";
-import { SiZalo } from "react-icons/si"; // Icon Zalo từ bộ Simple Icons
+import { SiZalo } from "react-icons/si";
+import { useTranslations } from "next-intl"; // 2. Import hook
 
 const Footer = () => {
+  const t = useTranslations("Footer"); // 3. Namespace
+
   return (
     <footer className="bg-primary dark:bg-gray-950 dark:border-t dark:border-blue-400/50 text-white pt-16 pb-8">
       <div className="container mx-auto px-6 lg:px-12">
         {/* --- PHẦN LOGO --- */}
         <div className="mb-8">
           <div className="bg-white inline-block p-4 rounded-sm">
-            {/* Thay src bằng đường dẫn logo thực tế của bạn */}
             <Image
               src="/images/logo_bg_white.png"
               alt="Realtime Solutions Logo"
@@ -33,48 +37,52 @@ const Footer = () => {
 
         {/* --- PHẦN NỘI DUNG CHÍNH (GRID 3 CỘT) --- */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-8 mb-12">
-          {/* CỘT 1: LIÊN KẾT NHANH (Chiếm 3 phần) */}
+          {/* CỘT 1: LIÊN KẾT NHANH */}
           <div className="md:col-span-4 lg:col-span-3">
-            <h3 className="text-lg font-bold mb-6">Liên kết nhanh</h3>
+            <h3 className="text-lg font-bold mb-6">
+              {t("quick_links")} {/* Liên kết nhanh */}
+            </h3>
             <ul className="space-y-3 text-sm lg:text-base font-light">
               <li>
                 <Link
-                  href="#"
+                  href="/contact"
                   className="hover:underline hover:text-blue-100 transition-colors"
                 >
-                  Về chúng tôi
+                  {t("about_us")}
                 </Link>
               </li>
               <li>
                 <Link
-                  href="#"
+                  href="/products/cx"
                   className="hover:underline hover:text-blue-100 transition-colors"
                 >
-                  Giải pháp RealtimeCX
+                  {t("sol_cx")}
                 </Link>
               </li>
               <li>
                 <Link
-                  href="#"
+                  href="/products/pbx"
                   className="hover:underline hover:text-blue-100 transition-colors"
                 >
-                  Giải pháp RealtimePBX
+                  {t("sol_pbx")}
                 </Link>
               </li>
               <li>
                 <Link
-                  href="#"
+                  href="/products/autodialer"
                   className="hover:underline hover:text-blue-100 transition-colors"
                 >
-                  Giải pháp Realtime Autodialer
+                  {t("sol_autodialer")}
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* CỘT 2: LIÊN HỆ (Chiếm 5 phần - Rộng hơn chút để chứa địa chỉ) */}
+          {/* CỘT 2: LIÊN HỆ */}
           <div className="md:col-span-5 lg:col-span-5">
-            <h3 className="text-lg font-bold mb-6">Liên hệ</h3>
+            <h3 className="text-lg font-bold mb-6">
+              {t("contact")} {/* Liên hệ */}
+            </h3>
             <div className="space-y-4 text-sm lg:text-base font-light">
               {/* Hotline */}
               <div className="flex items-start gap-3">
@@ -115,35 +123,43 @@ const Footer = () => {
               <div className="flex items-start gap-3">
                 <FaLocationDot className="mt-1 shrink-0" />
                 <div>
-                  <span className="font-semibold mr-1">Địa chỉ:</span>
+                  <span className="font-semibold mr-1">
+                    {t("address_label")}:
+                  </span>
                   <span>
                     108/15/18 Đ. Số 1, Phường 16, Gò Vấp,{" "}
                     <br className="hidden lg:block" />
-                    Thành phố Hồ Chí Minh, Việt Nam
+                    {t("address_city")} {/* Thành phố Hồ Chí Minh, Việt Nam */}
                   </span>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* CỘT 3: MẠNG XÃ HỘI (Chiếm 4 phần còn lại) */}
+          {/* CỘT 3: MẠNG XÃ HỘI */}
           <div className="md:col-span-3 lg:col-span-4 lg:pl-10">
-            <h3 className="text-lg font-bold mb-6">Mạng xã hội</h3>
+            <h3 className="text-lg font-bold mb-6">
+              {t("social")} {/* Mạng xã hội */}
+            </h3>
             <div className="flex gap-4">
               {/* Facebook */}
               <a
                 href="https://facebook.com/Realtime.vn?_rdc=1&_rdr#"
                 className="h-10 w-10 bg-white/10 hover:bg-white/20 flex items-center justify-center rounded-full transition-all"
                 aria-label="Facebook"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 <FaFacebookF className="text-xl" />
               </a>
 
-              {/* Zalo (Dùng icon Zalo hoặc placeholder) */}
+              {/* Zalo */}
               <a
                 href="https://zalo.me/0933119056"
                 className="h-10 w-10 bg-white/10 hover:bg-white/20 flex items-center justify-center rounded-full transition-all font-bold"
                 aria-label="Zalo"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 <SiZalo className="text-xl" />
               </a>
@@ -153,6 +169,8 @@ const Footer = () => {
                 href="https://t.me/chau2026"
                 className="h-10 w-10 bg-white/10 hover:bg-white/20 flex items-center justify-center rounded-full transition-all"
                 aria-label="Telegram"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 <FaTelegram className="text-xl" />
               </a>

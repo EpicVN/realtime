@@ -1,45 +1,42 @@
 "use client";
 
-import Link from "next/link";
-import { FaArrowRight } from "react-icons/fa6";
-import { motion, AnimatePresence } from "framer-motion";
+import TechFrame from "@/components/Common/TechFrame";
+import { AnimatePresence, motion } from "framer-motion";
+import { useTranslations } from "next-intl"; // 2. Import hook
 import Image from "next/image";
 import { useState } from "react";
-import TechFrame from "@/components/Common/TechFrame";
-
-const TEXTS = [
-  {
-    shortTitle: "Tổng quan",
-    title: "RealtimeCX - CRM Tích hợp Tổng đài",
-    description:
-      "Nền tảng quản trị trải nghiệm khách hàng toàn diện. Tự động nhận diện khách hàng khi có cuộc gọi (Popup), quản lý lịch sử tương tác và chăm sóc khách hàng đa kênh trên một màn hình duy nhất.",
-    image: "/images/products/cx/img1.png",
-  },
-  {
-    shortTitle: "Customer 360",
-    title: "Góc nhìn khách hàng 360 độ",
-    description:
-      "Lưu trữ tập trung mọi thông tin: Thông tin cá nhân, lịch sử mua hàng, lịch sử cuộc gọi, ghi chú và các phiếu hỗ trợ (Ticket) liên quan. Giúp nhân viên thấu hiểu khách hàng ngay lập tức.",
-    image: "/images/products/cx/img2.png",
-  },
-  {
-    shortTitle: "Ticket System",
-    title: "Quản lý Ticket & SLA",
-    description:
-      "Tự động tạo phiếu hỗ trợ (Ticket) từ cuộc gọi nhỡ hoặc email. Phân công tự động cho nhân viên và theo dõi tiến độ xử lý cam kết (SLA) để không bỏ sót yêu cầu nào.",
-    image: "/images/products/cx/img3.png",
-  },
-  {
-    shortTitle: "Automation",
-    title: "Tự động hóa quy trình",
-    description:
-      "Thiết lập các kịch bản chăm sóc tự động: Gửi SMS/Zalo chúc mừng sinh nhật, nhắc lịch hẹn, hoặc khảo sát hài lòng sau cuộc gọi (CSAT) hoàn toàn tự động.",
-    image: "/images/products/cx/img4.png",
-  },
-];
 
 const AboutCX = () => {
+  const t = useTranslations("Products.CX.About"); // 3. Namespace
   const [activeIndex, setActiveIndex] = useState(0);
+
+  // 4. Dữ liệu Slide dùng t()
+  const TEXTS = [
+    {
+      shortTitle: t("tab_overview"),
+      title: t("slide1_title"),
+      description: t("slide1_desc"),
+      image: "/images/products/cx/img1.png",
+    },
+    {
+      shortTitle: t("tab_360"),
+      title: t("slide2_title"),
+      description: t("slide2_desc"),
+      image: "/images/products/cx/img2.png",
+    },
+    {
+      shortTitle: t("tab_ticket"),
+      title: t("slide3_title"),
+      description: t("slide3_desc"),
+      image: "/images/products/cx/img3.png",
+    },
+    {
+      shortTitle: t("tab_automation"),
+      title: t("slide4_title"),
+      description: t("slide4_desc"),
+      image: "/images/products/cx/img4.png",
+    },
+  ];
 
   const handleNext = () => {
     setActiveIndex((prev) => (prev + 1) % TEXTS.length);
@@ -58,11 +55,12 @@ const AboutCX = () => {
   return (
     <div className="py-24 min-h-screen bg-white dark:bg-gray-950 overflow-hidden">
       <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 items-center gap-16">
+        
         {/* --- CỘT TRÁI: NỘI DUNG --- */}
         <div className="flex flex-col justify-center items-start order-2 lg:order-1 relative z-10 w-full">
           <div className="mb-6 flex items-center gap-2">
             <span className="px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs font-bold uppercase tracking-wider">
-              Tại sao chọn RealtimeCX?
+              {t("badge")} {/* Tại sao chọn RealtimeCX? */}
             </span>
           </div>
 
@@ -115,7 +113,7 @@ const AboutCX = () => {
                         animate={{ width: "100%" }}
                         transition={{ duration: 5, ease: "linear" }}
                         onAnimationComplete={handleNext}
-                        layoutId="activeProgressPBX"
+                        layoutId="activeProgressCX"
                       />
                     ) : (
                       <div
@@ -131,29 +129,10 @@ const AboutCX = () => {
               );
             })}
           </div>
-
-          {/* BUTTONS */}
-          <div className="flex flex-wrap gap-4">
-            <Link
-              href="/contact"
-              className="group inline-flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 font-bold rounded-lg shadow-lg hover:shadow-blue-500/30 transition-all transform hover:-translate-y-1"
-            >
-              <span>Đăng ký ngay</span>
-              <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
-            </Link>
-
-            <Link
-              href="#features" // Link tới phần tính năng chi tiết bên dưới (nếu có)
-              className="inline-flex items-center justify-center space-x-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-white px-8 py-4 font-bold rounded-lg transition-all"
-            >
-              <span>Xem chi tiết</span>
-            </Link>
-          </div>
         </div>
 
         {/* --- CỘT PHẢI: ẢNH --- */}
         <div className="w-full order-1 lg:order-2">
-          {/* Wrapper để căn chỉnh vị trí khung TechFrame */}
           <div className="flex justify-center lg:justify-end items-center h-full">
             <TechFrame title={TEXTS[activeIndex].title}>
               <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-50 dark:bg-gray-900/50 flex items-center justify-center p-1">
@@ -164,7 +143,6 @@ const AboutCX = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 1.05 }}
                     transition={{ duration: 0.5 }}
-                    // Đặt padding nhẹ để ảnh không dính sát viền khung
                     className="absolute inset-0 w-full h-full p-2 sm:p-3"
                   >
                     <Image

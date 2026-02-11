@@ -8,38 +8,40 @@ import {
   FaArrowRight,
 } from "react-icons/fa6";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl"; // 1. Import hook
 
 const ContactInfo = () => {
+  const t = useTranslations("Home.ContactInfo"); // 2. Namespace
+
+  // 3. Đưa dữ liệu vào trong component
   const contactData = [
     {
       id: 1,
       icon: <FaLocationDot />,
-      title: "Văn phòng chính",
-      description:
-        "Hãy ghé thăm văn phòng của chúng tôi để được tư vấn trực tiếp.",
-      info: "108/15/18 Đ. Số 1, Phường 16, Gò Vấp, TP. Hồ Chí Minh",
-      btnText: "Xem bản đồ",
+      title: t("office_title"),
+      description: t("office_desc"),
+      info: "108/15/18 Đ. Số 1, Phường 16, Gò Vấp, TP. Hồ Chí Minh", // Địa chỉ cụ thể có thể giữ nguyên hoặc đưa vào json nếu muốn dịch tên TP
+      btnText: t("btn_map"),
       link: "https://maps.google.com/?q=108/15/18+Đ.+Số+1,+Phường+16,+Gò+Vấp,+Thành+phố+Hồ+Chí+Minh,+Việt+Nam",
       color: "blue",
     },
     {
       id: 2,
       icon: <FaPhoneVolume />,
-      title: "Hotline hỗ trợ",
-      description: "Đội ngũ tư vấn viên luôn sẵn sàng hỗ trợ bạn 24/7.",
+      title: t("hotline_title"),
+      description: t("hotline_desc"),
       info: "+84 28 7303 3888\n0933 119 056",
-      btnText: "Gọi ngay",
+      btnText: t("btn_call"),
       link: "tel:+842873033888",
       color: "green",
     },
     {
       id: 3,
       icon: <FaEnvelope />,
-      title: "Gửi Email",
-      description:
-        "Gửi yêu cầu hợp tác hoặc thắc mắc, chúng tôi sẽ phản hồi sớm nhất.",
+      title: t("email_title"),
+      description: t("email_desc"),
       info: "sales@realtime.vn",
-      btnText: "Gửi Email",
+      btnText: t("btn_email"),
       link: "mailto:sales@realtime.vn",
       color: "purple",
     },
@@ -50,10 +52,10 @@ const ContactInfo = () => {
       <div className="container mx-auto px-6">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-            Thông tin liên hệ chi tiết
+            {t("title")} {/* Thông tin liên hệ chi tiết */}
           </h2>
           <p className="text-gray-500 dark:text-gray-400">
-            Kết nối với chúng tôi qua các kênh chính thức dưới đây
+            {t("subtitle")} {/* Kết nối với chúng tôi... */}
           </p>
         </div>
 
@@ -61,11 +63,7 @@ const ContactInfo = () => {
           {contactData.map((item, index) => (
             <motion.div
               key={item.id}
-              // --- ÁP DỤNG CẤU TRÚC ANIMATION TỪ CODE CŨ ---
-
-              // 1. Trạng thái ban đầu
               initial={{ opacity: 0, y: 50 }}
-              // 2. Entrance: Delay được đặt RIÊNG ở đây
               whileInView={{
                 opacity: 1,
                 y: 0,
@@ -73,22 +71,18 @@ const ContactInfo = () => {
                   type: "spring",
                   stiffness: 100,
                   damping: 10,
-                  delay: index * 0.1, // Chỉ delay khi xuất hiện
+                  delay: index * 0.1,
                 },
               }}
-              // 3. Global Transition: Dùng cho Hover/Tap (KHÔNG có delay)
               transition={{
                 type: "spring",
                 stiffness: 100,
                 damping: 10,
                 duration: 0.5,
               }}
-              // 4. Hover: Sẽ dùng transition ở trên (tức thì)
               whileHover={{ y: -10 }}
               whileTap={{ scale: 0.98 }}
               viewport={{ once: true, margin: "-50px" }}
-              // ---------------------------------------------
-
               className="group relative flex flex-col h-full bg-white dark:bg-gray-900 rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-2xl transition-all duration-300 cursor-pointer"
             >
               {/* Dải màu trang trí */}

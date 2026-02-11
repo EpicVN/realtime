@@ -3,8 +3,7 @@
 import Logo from "@/components/Helper/Logo";
 import ThemeToggler from "@/components/Helper/ThemeToggler";
 import { AnimatePresence, motion } from "framer-motion";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link, usePathname } from "@/i18n/navigation"; // 1. Link chuẩn
 import { useEffect, useState } from "react";
 import {
   FaChevronDown,
@@ -13,10 +12,12 @@ import {
   FaPhone,
   FaRobot,
   FaSimCard,
-  FaUsersGear
+  FaUsersGear,
 } from "react-icons/fa6";
 import { HiBars3BottomRight } from "react-icons/hi2";
 import { RiFileMusicFill } from "react-icons/ri";
+import LangSwitcher from "@/components/Helper/LangSwitcher";
+import { useTranslations } from "next-intl"; // 2. Import hook
 
 // --- TYPE DEFINITIONS ---
 interface GridColumn {
@@ -41,89 +42,6 @@ interface NavLink {
   submenu?: NavSubmenu[];
 }
 
-// --- 1. CẬP NHẬT DỮ LIỆU NAV_DATA ---
-const NAV_DATA: NavLink[] = [
-  { id: 1, label: "Trang chủ", url: "/" },
-  {
-    id: 2,
-    label: "Sản phẩm",
-    url: "#",
-    layout: "simple", // Dạng danh sách dọc đơn giản (như cũ)
-    submenu: [
-      {
-        title: "RealtimeCX",
-        desc: "Nền tảng chăm sóc khách hàng đa kênh",
-        icon: <FaUsersGear />,
-        url: "/products/cx",
-      },
-      {
-        title: "RealtimeAutoDialer",
-        desc: "Hệ thống gọi tự động hàng loạt",
-        icon: <FaRobot />,
-        url: "/products/autodialer",
-      },
-      {
-        title: "RealtimeAI (Text To Speech)",
-        desc: "Chuyển văn bản thành giọng nói",
-        icon: <RiFileMusicFill />,
-        url: "/products/texttospeech",
-      },
-      {
-        title: "RealtimeBPO",
-        desc: "Thuê nhân sự trực Hotline, Telesales & CSKH",
-        icon: <FaHeadset />,
-        url: "/products/bpo",
-      },
-      {
-        title: "RealtimeCLOUD",
-        desc: "Cho thuê máy chủ ảo, server ảo",
-        icon: <FaCloud />,
-        url: "/products/cloud",
-      },
-      {
-        title: "RealtimePBX",
-        desc: "Tổng đài ảo thông minh đa kênh",
-        icon: <FaPhone />,
-        url: "/products/pbx",
-      },
-      {
-        title: "Voice VAS",
-        desc: "Đầu số Telesale, bàn, di động, SMS, ZNS...",
-        icon: <FaSimCard />,
-        url: "/products/voicevas",
-      },
-    ],
-  },
-  {
-    id: 3,
-    label: "Giải pháp", // Dạng lưới 2 cột (Mega Menu)
-    url: "#",
-    layout: "grid",
-    submenu: [
-      {
-        heading: "THEO LĨNH VỰC KINH DOANH",
-        items: [
-          { title: "Giải pháp Thu nhắc nợ / Collection", url: "/solutions/collection" },
-          { title: "Giải pháp tổng đài cho CSKH", url: "/solutions/cskh" },
-          { title: "Giải pháp tổng đài cho Tuyển Dụng", url: "/solutions/recruitment" },
-          { title: "Giải pháp tổng đài cho BĐS", url: "/solutions/realestate" },
-          { title: "Giải pháp tổng đài cho Giáo Dục", url: "/solutions/education" },
-        ],
-      },
-      {
-        heading: "THEO QUY MÔ DOANH NGHIỆP",
-        items: [
-          { title: "Giải pháp STARTUP", url: "/solutions/startup" },
-          { title: "Giải pháp Doanh nghiệp SME", url: "/solutions/sme" },
-          { title: "Giải pháp Doanh nghiệp Lớn", url: "/solutions/enterprise" },
-        ],
-      },
-    ],
-  },
-  { id: 4, label: "Đối tác", url: "/partners" },
-  { id: 5, label: "Liên hệ", url: "/contact" },
-];
-
 type Props = {
   openNav: () => void;
   currentUser?: {
@@ -135,6 +53,7 @@ type Props = {
 };
 
 const Navbar = ({ openNav, currentUser }: Props) => {
+  const t = useTranslations("Navbar"); // 3. Namespace
   const [navBar, setNavBar] = useState(false);
   const pathname = usePathname();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -151,6 +70,89 @@ const Navbar = ({ openNav, currentUser }: Props) => {
 
   const showBackground = navBar || pathname !== "/";
 
+  // 4. DỮ LIỆU NAV_DATA DÙNG t()
+  const NAV_DATA: NavLink[] = [
+    { id: 1, label: t("home"), url: "/" },
+    {
+      id: 2,
+      label: t("products"),
+      url: "#",
+      layout: "simple",
+      submenu: [
+        {
+          title: "RealtimeCX",
+          desc: t("prod_cx_desc"),
+          icon: <FaUsersGear />,
+          url: "/products/cx",
+        },
+        {
+          title: "RealtimeAutoDialer",
+          desc: t("prod_autodialer_desc"),
+          icon: <FaRobot />,
+          url: "/products/autodialer",
+        },
+        {
+          title: "RealtimeAI (Text To Speech)",
+          desc: t("prod_tts_desc"),
+          icon: <RiFileMusicFill />,
+          url: "/products/texttospeech",
+        },
+        {
+          title: "RealtimeBPO",
+          desc: t("prod_bpo_desc"),
+          icon: <FaHeadset />,
+          url: "/products/bpo",
+        },
+        {
+          title: "RealtimeCLOUD",
+          desc: t("prod_cloud_desc"),
+          icon: <FaCloud />,
+          url: "/products/cloud",
+        },
+        {
+          title: "RealtimePBX",
+          desc: t("prod_pbx_desc"),
+          icon: <FaPhone />,
+          url: "/products/pbx",
+        },
+        {
+          title: "Voice VAS",
+          desc: t("prod_vas_desc"),
+          icon: <FaSimCard />,
+          url: "/products/voicevas",
+        },
+      ],
+    },
+    {
+      id: 3,
+      label: t("solutions"),
+      url: "#",
+      layout: "grid",
+      submenu: [
+        {
+          heading: t("sol_heading_industry"),
+          items: [
+            { title: t("sol_collection"), url: "/solutions/collection" },
+            { title: t("sol_cskh"), url: "/solutions/cskh" },
+            { title: t("sol_recruitment"), url: "/solutions/recruitment" },
+            { title: t("sol_realestate"), url: "/solutions/realestate" },
+            { title: t("sol_education"), url: "/solutions/education" },
+          ],
+        },
+        {
+          heading: t("sol_heading_scale"),
+          items: [
+            { title: t("sol_startup"), url: "/solutions/startup" },
+            { title: t("sol_sme"), url: "/solutions/sme" },
+            { title: t("sol_enterprise"), url: "/solutions/enterprise" },
+          ],
+        },
+      ],
+    },
+    { id: 4, label: t("partners"), url: "/partners" },
+    { id: 5, label: t("contact"), url: "/contact" },
+  ];
+
   return (
     <div
       className={`transition-all duration-200 h-25 z-100 fixed w-full ${
@@ -159,14 +161,14 @@ const Navbar = ({ openNav, currentUser }: Props) => {
           : "bg-transparent"
       }`}
     >
-      <div className="flex items-center h-full justify-between w-[90%] xl:w-[80%] mx-auto">
+      <div className="flex items-center h-full justify-between w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <Link href="/">
           <Logo type="white" />
         </Link>
 
         {/* --- NAVLINKS (DESKTOP) --- */}
-        <div className="hidden lg:flex items-center gap-8 h-full">
+        <div className="hidden lg:flex items-center gap-6 h-full">
           {NAV_DATA.map((link) => {
             return (
               <div
@@ -210,7 +212,6 @@ const Navbar = ({ openNav, currentUser }: Props) => {
                         clipPath: "inset(0% 0% 100% 0%)",
                       }}
                       transition={{ duration: 0.3, ease: "easeOut" }}
-                      // LOGIC CHIỀU RỘNG: Nếu là grid (Dịch vụ) thì rộng hơn (600px), còn simple (Sản phẩm) thì hẹp (340px)
                       className={`absolute top-15 left-1/2 -translate-x-1/2 pt-4 ${
                         link.layout === "grid" ? "w-150" : "w-85"
                       }`}
@@ -246,7 +247,6 @@ const Navbar = ({ openNav, currentUser }: Props) => {
                                           href={item.url}
                                           className="text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-blue-400 py-1.5 transition-colors flex items-center gap-2 hover:translate-x-1 transform duration-200"
                                         >
-                                          {/* Dấu chấm nhỏ trang trí */}
                                           <span className="w-1.5 h-1.5 rounded-full bg-gray-300 group-hover:bg-blue-500 transition-colors"></span>
                                           {item.title}
                                         </Link>
@@ -258,7 +258,7 @@ const Navbar = ({ openNav, currentUser }: Props) => {
                             )}
                           </div>
                         ) : (
-                          /* CASE 2: SIMPLE MENU (Sản phẩm - Giữ nguyên như cũ) */
+                          /* CASE 2: SIMPLE MENU (Sản phẩm) */
                           <div className="p-2 flex flex-col gap-1 relative z-10">
                             {(link.submenu as SimpleMenuItem[]).map(
                               (subItem: SimpleMenuItem, idx: number) => (
@@ -309,10 +309,11 @@ const Navbar = ({ openNav, currentUser }: Props) => {
               className="box-border relative z-20 items-center justify-center w-auto px-4 py-2 sm:px-6 sm:py-2.5 overflow-hidden font-bold text-gray-900 transition-all duration-300 bg-white rounded-md cursor-pointer hover:bg-primary-dark hover:text-white hover:shadow-lg ease focus:outline-none dark:bg-white dark:text-gray-900 dark:hover:bg-primary-dark dark:hover:shadow-lg dark:focus:ring-0 dark:focus:outline-none dark:hover:text-white hidden sm:inline-flex"
             >
               <span className="relative z-20 flex items-center text-center text-sm">
-                Đăng nhập
+                {t("login")} {/* Đăng nhập */}
               </span>
             </Link>
           )}
+          <LangSwitcher />
           <ThemeToggler />
           <HiBars3BottomRight
             onClick={openNav}

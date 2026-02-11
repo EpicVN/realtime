@@ -9,7 +9,10 @@ export const authConfig = {
     // Logic bảo vệ route (Middleware sẽ dùng cái này)
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
-      const isOnAdmin = nextUrl.pathname.startsWith("/admin");
+
+      const pathname = nextUrl.pathname.replace(/^\/(vi|en)/, "");
+
+      const isOnAdmin = pathname.startsWith("/admin");
 
       if (isOnAdmin) {
         if (isLoggedIn) return true;

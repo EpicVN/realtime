@@ -2,9 +2,9 @@
 
 import { submitContactForm } from "@/app/actions/submit-contact";
 import { motion } from "framer-motion";
-import { useActionState, useEffect } from "react"; // Thêm useEffect
+import { useActionState, useEffect } from "react";
 import { useFormStatus } from "react-dom";
-import { toast } from "sonner"; // Import toast
+import { toast } from "sonner";
 import {
   FaCommentDots,
   FaEnvelope,
@@ -13,11 +13,13 @@ import {
   FaUser,
   FaUsers,
 } from "react-icons/fa6";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation"; // 1. Link chuẩn
+import { useTranslations } from "next-intl"; // 2. Import hook
 
-// Component nút Submit (Giữ nguyên)
+// Component nút Submit
 function SubmitButton() {
   const { pending } = useFormStatus();
+  const t = useTranslations("Home.ContactForm"); // Namespace cho nút
 
   return (
     <button
@@ -32,7 +34,7 @@ function SubmitButton() {
         transition-all duration-300 w-full md:w-auto disabled:opacity-70 disabled:cursor-not-allowed
       "
     >
-      <span>{pending ? "Đang xử lý..." : "Đăng ký tư vấn ngay"}</span>
+      <span>{pending ? t("btn_sending") : t("btn_submit")}</span>
       {!pending && (
         <FaPaperPlane className="text-sm transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
       )}
@@ -41,6 +43,7 @@ function SubmitButton() {
 }
 
 const ContactForm = () => {
+  const t = useTranslations("Home.ContactForm"); // 3. Namespace chính
   const [state, formAction] = useActionState(submitContactForm, {
     success: false,
     message: "",
@@ -48,23 +51,18 @@ const ContactForm = () => {
 
   const router = useRouter();
 
-  // --- LOGIC SONNER TOAST ---
   useEffect(() => {
     if (state.message) {
       if (state.success) {
-        // 1. Hiện popup xanh thành công
         toast.success(state.message, {
-          duration: 5000, // Tự tắt sau 5s
+          duration: 5000,
         });
-
-        // 2. Chuyển hướng sang trang cảm ơn
         router.push("/thank-you");
       } else {
-        // Hiện popup đỏ báo lỗi
         toast.error(state.message);
       }
     }
-  }, [state, router]); // Chạy lại mỗi khi state thay đổi
+  }, [state, router]);
 
   return (
     <section className="flex flex-col items-center justify-center py-20 bg-white dark:bg-gray-900">
@@ -78,15 +76,15 @@ const ContactForm = () => {
           className="text-center mb-10 space-y-4"
         >
           <p className="text-gray-500 font-bold uppercase tracking-wider text-xs md:text-sm">
-            THÔNG TIN LIÊN HỆ
+            {t("badge")} {/* THÔNG TIN LIÊN HỆ */}
           </p>
           <h2 className="text-3xl lg:text-4xl font-bold text-blue-600 dark:text-white leading-tight">
-            Sẵn sàng bứt phá hiệu suất <br className="hidden md:block" />
-            cùng hệ sinh thái Realtime?
+            {t.rich("title", {
+              br: () => <br className="hidden md:block" />,
+            })}
           </h2>
           <p className="text-gray-600 dark:text-gray-400 text-sm md:text-base max-w-xl mx-auto leading-relaxed mt-4">
-            Đội ngũ chuyên gia của chúng tôi luôn sẵn sàng hỗ trợ bạn thiết lập
-            giải pháp tối ưu nhất.
+            {t("subtitle")}
           </p>
         </motion.div>
 
@@ -109,7 +107,7 @@ const ContactForm = () => {
                 type="text"
                 required
                 className="w-full pl-11 pr-4 py-3.5 bg-gray-50 dark:bg-gray-800 border border-transparent focus:border-blue-200 dark:focus:border-blue-900 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all placeholder-gray-400 text-sm md:text-base"
-                placeholder="Nhập họ tên của bạn..."
+                placeholder={t("ph_name")} // Nhập họ tên...
               />
             </div>
 
@@ -122,7 +120,7 @@ const ContactForm = () => {
                 name="phone"
                 type="tel"
                 className="w-full pl-11 pr-4 py-3.5 bg-gray-50 dark:bg-gray-800 border border-transparent focus:border-blue-200 dark:focus:border-blue-900 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all placeholder-gray-400 text-sm md:text-base"
-                placeholder="Nhập số điện thoại của bạn..."
+                placeholder={t("ph_phone")} // Nhập số điện thoại...
               />
             </div>
 
@@ -136,7 +134,7 @@ const ContactForm = () => {
                 type="email"
                 required
                 className="w-full pl-11 pr-4 py-3.5 bg-gray-50 dark:bg-gray-800 border border-transparent focus:border-blue-200 dark:focus:border-blue-900 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all placeholder-gray-400 text-sm md:text-base"
-                placeholder="Nhập địa chỉ email của bạn..."
+                placeholder={t("ph_email")} // Nhập email...
               />
             </div>
 
@@ -149,7 +147,7 @@ const ContactForm = () => {
                 name="interest"
                 type="text"
                 className="w-full pl-11 pr-4 py-3.5 bg-gray-50 dark:bg-gray-800 border border-transparent focus:border-blue-200 dark:focus:border-blue-900 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all placeholder-gray-400 text-sm md:text-base"
-                placeholder="Số lượng user dự kiến (VD: 10, 50...)"
+                placeholder={t("ph_users")} // Số lượng user dự kiến...
               />
             </div>
 
@@ -162,7 +160,7 @@ const ContactForm = () => {
                 name="message"
                 rows={3}
                 className="w-full pl-11 pr-4 py-3.5 bg-gray-50 dark:bg-gray-800 border border-transparent focus:border-blue-200 dark:focus:border-blue-900 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all placeholder-gray-400 text-sm md:text-base resize-none"
-                placeholder="Nội dung cần tư vấn thêm..."
+                placeholder={t("ph_message")} // Nội dung cần tư vấn...
               ></textarea>
             </div>
 

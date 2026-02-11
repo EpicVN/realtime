@@ -1,46 +1,44 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation"; // 1. Link chuẩn
 import { FaArrowRight } from "react-icons/fa6";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { useState } from "react";
 import TechFrame from "@/components/Common/TechFrame";
-
-// --- DỮ LIỆU CONTENT CHO ENTERPRISE ---
-const TEXTS = [
-  {
-    shortTitle: "Thách thức",
-    title: "Yêu cầu khắt khe về Bảo mật & Ổn định?",
-    description:
-      "Doanh nghiệp cần hệ thống chịu tải hàng nghìn cuộc gọi đồng thời? Dữ liệu khách hàng phải được lưu trữ trên server riêng để đảm bảo bảo mật? Cần tích hợp sâu vào Core Banking hay ERP phức tạp?",
-    image: "/images/solutions/enterprise/img1.png", // Bạn nhớ tạo folder và ảnh nhé
-  },
-  {
-    shortTitle: "Triển khai",
-    title: "On-premise & Private Cloud",
-    description:
-      "Tùy chọn triển khai hệ thống máy chủ vật lý đặt tại Data Center của doanh nghiệp (On-premise) hoặc Private Cloud. Đảm bảo toàn quyền kiểm soát dữ liệu và đường truyền.",
-    image: "/images/solutions/enterprise/img2.png",
-  },
-  {
-    shortTitle: "Vận hành",
-    title: "High Availability (HA) & Backup",
-    description:
-      "Hệ thống được thiết kế theo mô hình Cluster dự phòng (HA). Nếu một server gặp sự cố, server khác sẽ tự động thay thế ngay lập tức, đảm bảo Uptime 99.99%.",
-    image: "/images/solutions/enterprise/img3.png",
-  },
-  {
-    shortTitle: "Tùy biến",
-    title: "May đo tính năng theo yêu cầu",
-    description:
-      "Đội ngũ R&D sẵn sàng phát triển các tính năng chuyên biệt (Customization) để phù hợp với quy trình nghiệp vụ đặc thù của Ngân hàng, Bảo hiểm hay Tập đoàn đa quốc gia.",
-    image: "/images/solutions/enterprise/img4.png",
-  },
-];
+import { useTranslations } from "next-intl"; // 2. Import hook
 
 const AboutEnterprise = () => {
+  const t = useTranslations("Solutions.Enterprise.About"); // 3. Namespace
   const [activeIndex, setActiveIndex] = useState(0);
+
+  // 4. Dữ liệu Slide dùng t()
+  const TEXTS = [
+    {
+      shortTitle: t("tab_challenge"),
+      title: t("slide1_title"),
+      description: t("slide1_desc"),
+      image: "/images/solutions/enterprise/img1.png",
+    },
+    {
+      shortTitle: t("tab_deployment"),
+      title: t("slide2_title"),
+      description: t("slide2_desc"),
+      image: "/images/solutions/enterprise/img2.png",
+    },
+    {
+      shortTitle: t("tab_operation"),
+      title: t("slide3_title"),
+      description: t("slide3_desc"),
+      image: "/images/solutions/enterprise/img3.png",
+    },
+    {
+      shortTitle: t("tab_customization"),
+      title: t("slide4_title"),
+      description: t("slide4_desc"),
+      image: "/images/solutions/enterprise/img4.png",
+    },
+  ];
 
   const handleNext = () => {
     setActiveIndex((prev) => (prev + 1) % TEXTS.length);
@@ -59,12 +57,11 @@ const AboutEnterprise = () => {
   return (
     <div className="py-24 min-h-screen bg-white dark:bg-gray-950 overflow-hidden">
       <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 items-center gap-16">
-        
         {/* --- CỘT TRÁI --- */}
         <div className="flex flex-col justify-center items-start order-2 lg:order-1 relative z-10 w-full">
           <div className="mb-6 flex items-center gap-2">
             <span className="px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs font-bold uppercase tracking-wider">
-              Giải pháp Tổng đài Enterprise
+              {t("badge")} {/* Giải pháp Tổng đài Enterprise */}
             </span>
           </div>
 
@@ -100,7 +97,9 @@ const AboutEnterprise = () => {
                 >
                   <span
                     className={`text-xs font-bold uppercase tracking-wider transition-colors duration-300 truncate ${
-                      isActive ? "text-blue-600 dark:text-white" : "text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-400"
+                      isActive
+                        ? "text-blue-600 dark:text-white"
+                        : "text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-400"
                     }`}
                   >
                     {item.shortTitle}
@@ -116,7 +115,13 @@ const AboutEnterprise = () => {
                         layoutId="activeProgressEnterprise"
                       />
                     ) : (
-                      <div className={`h-full w-full ${index < activeIndex ? "bg-gray-300 dark:bg-gray-700" : "bg-transparent"}`} />
+                      <div
+                        className={`h-full w-full ${
+                          index < activeIndex
+                            ? "bg-gray-300 dark:bg-gray-700"
+                            : "bg-transparent"
+                        }`}
+                      />
                     )}
                   </div>
                 </div>
@@ -129,13 +134,13 @@ const AboutEnterprise = () => {
               href="/contact"
               className="group inline-flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 font-bold rounded-lg shadow-lg hover:shadow-blue-500/30 transition-all transform hover:-translate-y-1"
             >
-              <span>Liên hệ bộ phận Dự án</span>
+              <span>{t("btn_project")}</span>
               <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
         </div>
 
-        {/* --- CỘT PHẢI (Fix Aspect Ratio 16:9) --- */}
+        {/* --- CỘT PHẢI --- */}
         <div className="w-full order-1 lg:order-2">
           <div className="flex justify-center lg:justify-end items-center h-full">
             <TechFrame title={TEXTS[activeIndex].title}>
@@ -163,7 +168,6 @@ const AboutEnterprise = () => {
             </TechFrame>
           </div>
         </div>
-
       </div>
     </div>
   );

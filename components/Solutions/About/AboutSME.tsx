@@ -1,46 +1,44 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation"; // 1. Link chuẩn
 import { FaArrowRight } from "react-icons/fa6";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { useState } from "react";
 import TechFrame from "@/components/Common/TechFrame";
-
-// --- DỮ LIỆU CONTENT CHO SME ---
-const TEXTS = [
-  {
-    shortTitle: "Thách thức",
-    title: "Tăng trưởng nóng & Lỗ hổng quản trị?",
-    description:
-      "Khi nhân sự tăng lên 20-50 người, việc quản lý bằng Excel trở nên quá tải? Data khách hàng bị phân tán? Sếp không biết nhân viên Telesales gọi bao nhiêu cuộc mỗi ngày?",
-    image: "/images/solutions/sme/img1.png", // Bạn nhớ tạo folder và ảnh nhé
-  },
-  {
-    shortTitle: "Tích hợp",
-    title: "Tích hợp CRM/ERP sâu rộng",
-    description:
-      "Kết nối tổng đài với các phần mềm quản trị phổ biến (Salesforce, Zoho, Bitrix24, Odoo...) qua API. Click gọi ngay trên phần mềm và lưu file ghi âm tự động vào hồ sơ khách hàng.",
-    image: "/images/solutions/sme/img2.png",
-  },
-  {
-    shortTitle: "Giám sát",
-    title: "Giám sát Realtime & Ghi âm",
-    description:
-      "Trưởng phòng có thể xem màn hình Dashboard thời gian thực: Ai đang gọi, ai đang nghỉ. Nghe lại 100% cuộc gọi để đánh giá chất lượng và đào tạo nhân sự mới.",
-    image: "/images/solutions/sme/img3.png",
-  },
-  {
-    shortTitle: "Tối ưu",
-    title: "Kiểm soát Chi phí Viễn thông",
-    description:
-      "Phân hạn mức cước gọi cho từng phòng ban/nhân viên. Hệ thống tự động chọn nhà mạng có cước rẻ nhất để gọi ra (LCR), giúp giảm tới 40% hóa đơn điện thoại hàng tháng.",
-    image: "/images/solutions/sme/img4.png",
-  },
-];
+import { useTranslations } from "next-intl"; // 2. Import hook
 
 const AboutSME = () => {
+  const t = useTranslations("Solutions.SME.About"); // 3. Namespace
   const [activeIndex, setActiveIndex] = useState(0);
+
+  // 4. Dữ liệu dùng t() và giữ nguyên đường dẫn String
+  const TEXTS = [
+    {
+      shortTitle: t("tab_challenge"),
+      title: t("slide1_title"),
+      description: t("slide1_desc"),
+      image: "/images/solutions/sme/img1.png",
+    },
+    {
+      shortTitle: t("tab_integration"),
+      title: t("slide2_title"),
+      description: t("slide2_desc"),
+      image: "/images/solutions/sme/img2.png",
+    },
+    {
+      shortTitle: t("tab_monitoring"),
+      title: t("slide3_title"),
+      description: t("slide3_desc"),
+      image: "/images/solutions/sme/img3.png",
+    },
+    {
+      shortTitle: t("tab_optimize"),
+      title: t("slide4_title"),
+      description: t("slide4_desc"),
+      image: "/images/solutions/sme/img4.png",
+    },
+  ];
 
   const handleNext = () => {
     setActiveIndex((prev) => (prev + 1) % TEXTS.length);
@@ -59,12 +57,11 @@ const AboutSME = () => {
   return (
     <div className="py-24 min-h-screen bg-white dark:bg-gray-950 overflow-hidden">
       <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 items-center gap-16">
-        
         {/* --- CỘT TRÁI --- */}
         <div className="flex flex-col justify-center items-start order-2 lg:order-1 relative z-10 w-full">
           <div className="mb-6 flex items-center gap-2">
             <span className="px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs font-bold uppercase tracking-wider">
-              Giải pháp Doanh nghiệp SME
+              {t("badge")} {/* Giải pháp Doanh nghiệp SME */}
             </span>
           </div>
 
@@ -100,7 +97,9 @@ const AboutSME = () => {
                 >
                   <span
                     className={`text-xs font-bold uppercase tracking-wider transition-colors duration-300 truncate ${
-                      isActive ? "text-blue-600 dark:text-white" : "text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-400"
+                      isActive
+                        ? "text-blue-600 dark:text-white"
+                        : "text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-400"
                     }`}
                   >
                     {item.shortTitle}
@@ -116,7 +115,13 @@ const AboutSME = () => {
                         layoutId="activeProgressSME"
                       />
                     ) : (
-                      <div className={`h-full w-full ${index < activeIndex ? "bg-gray-300 dark:bg-gray-700" : "bg-transparent"}`} />
+                      <div
+                        className={`h-full w-full ${
+                          index < activeIndex
+                            ? "bg-gray-300 dark:bg-gray-700"
+                            : "bg-transparent"
+                        }`}
+                      />
                     )}
                   </div>
                 </div>
@@ -129,13 +134,13 @@ const AboutSME = () => {
               href="/contact"
               className="group inline-flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 font-bold rounded-lg shadow-lg hover:shadow-blue-500/30 transition-all transform hover:-translate-y-1"
             >
-              <span>Tối ưu vận hành ngay</span>
+              <span>{t("btn_optimize")}</span>
               <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
         </div>
 
-        {/* --- CỘT PHẢI (Fix Aspect Ratio 16:9) --- */}
+        {/* --- CỘT PHẢI --- */}
         <div className="w-full order-1 lg:order-2">
           <div className="flex justify-center lg:justify-end items-center h-full">
             <TechFrame title={TEXTS[activeIndex].title}>
@@ -163,7 +168,6 @@ const AboutSME = () => {
             </TechFrame>
           </div>
         </div>
-
       </div>
     </div>
   );

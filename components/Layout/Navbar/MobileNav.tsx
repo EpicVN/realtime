@@ -1,20 +1,22 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation"; // 1. Link chuẩn
 import React, { useState } from "react";
 import { CgClose } from "react-icons/cg";
 import {
-  FaChevronDown, FaCloud,
+  FaChevronDown,
+  FaCloud,
   FaHeadset,
   FaPhone,
   FaRobot,
   FaSimCard,
-  FaUsersGear
+  FaUsersGear,
 } from "react-icons/fa6";
 import { RiFileMusicFill } from "react-icons/ri";
+import { useTranslations } from "next-intl"; // 2. Import hook
 
-// --- TYPE DEFINITIONS (Đồng bộ với Navbar) ---
+// --- TYPE DEFINITIONS ---
 interface GridColumn {
   heading: string;
   items: Array<{ title: string; url: string }>;
@@ -37,89 +39,6 @@ interface NavLink {
   submenu?: NavSubmenu[];
 }
 
-// --- DỮ LIỆU MENU ---
-const NAV_DATA: NavLink[] = [
-  { id: 1, label: "Trang chủ", url: "/" },
-  {
-    id: 2,
-    label: "Sản phẩm",
-    url: "#",
-    layout: "simple",
-    submenu: [
-      {
-        title: "RealtimeCX",
-        desc: "Nền tảng chăm sóc khách hàng đa kênh",
-        icon: <FaUsersGear />,
-        url: "/products/cx",
-      },
-      {
-        title: "RealtimeAutoDialer",
-        desc: "Hệ thống gọi tự động hàng loạt",
-        icon: <FaRobot />,
-        url: "/products/autodialer",
-      },
-      {
-        title: "RealtimeAI (Text To Speech)",
-        desc: "Chuyển văn bản thành giọng nói",
-        icon: <RiFileMusicFill />,
-        url: "/products/texttospeech",
-      },
-      {
-        title: "RealtimeBPO",
-        desc: "Thuê nhân sự trực Hotline, Telesales & CSKH",
-        icon: <FaHeadset />,
-        url: "/products/bpo",
-      },
-      {
-        title: "RealtimeCLOUD",
-        desc: "Cho thuê máy chủ ảo, server ảo",
-        icon: <FaCloud />,
-        url: "/products/cloud",
-      },
-      {
-        title: "RealtimePBX",
-        desc: "Tổng đài ảo thông minh đa kênh",
-        icon: <FaPhone />,
-        url: "/products/pbx",
-      },
-      {
-        title: "Voice VAS",
-        desc: "Đầu số Telesale, bàn, di động, SMS, ZNS...",
-        icon: <FaSimCard />,
-        url: "/products/voicevas",
-      },
-    ],
-  },
-  {
-    id: 3,
-    label: "Giải pháp",
-    url: "#",
-    layout: "grid",
-    submenu: [
-      {
-        heading: "THEO LĨNH VỰC KINH DOANH",
-        items: [
-          { title: "Giải pháp Thu nhắc nợ / Collection", url: "#" },
-          { title: "Giải pháp tổng đài cho CSKH", url: "#" },
-          { title: "Giải pháp tổng đài cho Tuyển Dụng", url: "#" },
-          { title: "Giải pháp tổng đài cho BĐS", url: "#" },
-          { title: "Giải pháp tổng đài cho Giáo Dục", url: "#" },
-        ],
-      },
-      {
-        heading: "THEO QUY MÔ DOANH NGHIỆP",
-        items: [
-          { title: "Giải pháp STARTUP", url: "#" },
-          { title: "Giải pháp Doanh nghiệp SME", url: "#" },
-          { title: "Giải pháp Doanh nghiệp Lớn", url: "#" },
-        ],
-      },
-    ],
-  },
-  { id: 4, label: "Đối tác", url: "/partners" },
-  { id: 5, label: "Liên hệ", url: "/contact" },
-];
-
 type Props = {
   showNav: boolean;
   closeNav: () => void;
@@ -131,6 +50,7 @@ type Props = {
 };
 
 const MobileNav = ({ closeNav, showNav, currentUser }: Props) => {
+  const t = useTranslations("Navbar"); // 3. Namespace (Dùng chung với Navbar)
   const navOpen = showNav ? "translate-x-0" : "translate-x-[-100%]";
   const [activeSubmenu, setActiveSubmenu] = useState<number | null>(null);
 
@@ -141,6 +61,89 @@ const MobileNav = ({ closeNav, showNav, currentUser }: Props) => {
       setActiveSubmenu(id);
     }
   };
+
+  // 4. DỮ LIỆU NAV_DATA DÙNG t()
+  const NAV_DATA: NavLink[] = [
+    { id: 1, label: t("home"), url: "/" },
+    {
+      id: 2,
+      label: t("products"),
+      url: "#",
+      layout: "simple",
+      submenu: [
+        {
+          title: "RealtimeCX",
+          desc: t("prod_cx_desc"),
+          icon: <FaUsersGear />,
+          url: "/products/cx",
+        },
+        {
+          title: "RealtimeAutoDialer",
+          desc: t("prod_autodialer_desc"),
+          icon: <FaRobot />,
+          url: "/products/autodialer",
+        },
+        {
+          title: "RealtimeAI (Text To Speech)",
+          desc: t("prod_tts_desc"),
+          icon: <RiFileMusicFill />,
+          url: "/products/texttospeech",
+        },
+        {
+          title: "RealtimeBPO",
+          desc: t("prod_bpo_desc"),
+          icon: <FaHeadset />,
+          url: "/products/bpo",
+        },
+        {
+          title: "RealtimeCLOUD",
+          desc: t("prod_cloud_desc"),
+          icon: <FaCloud />,
+          url: "/products/cloud",
+        },
+        {
+          title: "RealtimePBX",
+          desc: t("prod_pbx_desc"),
+          icon: <FaPhone />,
+          url: "/products/pbx",
+        },
+        {
+          title: "Voice VAS",
+          desc: t("prod_vas_desc"),
+          icon: <FaSimCard />,
+          url: "/products/voicevas",
+        },
+      ],
+    },
+    {
+      id: 3,
+      label: t("solutions"),
+      url: "#",
+      layout: "grid",
+      submenu: [
+        {
+          heading: t("sol_heading_industry"),
+          items: [
+            { title: t("sol_collection"), url: "/solutions/collection" },
+            { title: t("sol_cskh"), url: "/solutions/cskh" },
+            { title: t("sol_recruitment"), url: "/solutions/recruitment" },
+            { title: t("sol_realestate"), url: "/solutions/realestate" },
+            { title: t("sol_education"), url: "/solutions/education" },
+          ],
+        },
+        {
+          heading: t("sol_heading_scale"),
+          items: [
+            { title: t("sol_startup"), url: "/solutions/startup" },
+            { title: t("sol_sme"), url: "/solutions/sme" },
+            { title: t("sol_enterprise"), url: "/solutions/enterprise" },
+          ],
+        },
+      ],
+    },
+    { id: 4, label: t("partners"), url: "/partners" },
+    { id: 5, label: t("contact"), url: "/contact" },
+  ];
 
   return (
     <div>
@@ -231,11 +234,11 @@ const MobileNav = ({ closeNav, showNav, currentUser }: Props) => {
                                 ))}
                               </div>
                             </div>
-                          ),
+                          )
                         )}
                       </div>
                     ) : (
-                      // 2. RENDER CHO SIMPLE (SẢN PHẨM) - CÓ ICON
+                      // 2. RENDER CHO SIMPLE (SẢN PHẨM)
                       <div className="flex flex-col p-2 space-y-1">
                         {(link.submenu as SimpleMenuItem[]).map(
                           (subItem, idx) => (
@@ -257,7 +260,7 @@ const MobileNav = ({ closeNav, showNav, currentUser }: Props) => {
                                 </div>
                               </div>
                             </Link>
-                          ),
+                          )
                         )}
                       </div>
                     )}
@@ -283,7 +286,7 @@ const MobileNav = ({ closeNav, showNav, currentUser }: Props) => {
                 onClick={closeNav}
                 className="flex items-center justify-center w-full py-3 bg-white text-blue-900 font-bold rounded-lg shadow-lg active:scale-95 transition-transform"
               >
-                Đăng nhập
+                {t("login")} {/* Đăng nhập */}
               </Link>
             )}
           </div>

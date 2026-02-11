@@ -1,45 +1,44 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation"; // 1. Link chuẩn
 import { FaArrowRight } from "react-icons/fa6";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { useState } from "react";
 import TechFrame from "@/components/Common/TechFrame";
-
-const TEXTS = [
-  {
-    shortTitle: "Tổng quan",
-    title: "RealtimeBPO - Thuê ngoài quy trình kinh doanh",
-    description:
-      "Cung cấp đội ngũ nhân sự trực tổng đài (Inbound) và Telesales (Outbound) chuyên nghiệp. Giúp doanh nghiệp cắt giảm 40% chi phí tuyển dụng, đào tạo và quản lý vận hành.",
-    image: "/images/products/bpo/img1.png",
-  },
-  {
-    shortTitle: "CSKH Inbound",
-    title: "Trực tổng đài & CSKH 24/7",
-    description:
-      "Đội ngũ tổng đài viên tiếp nhận cuộc gọi, giải đáp thắc mắc và xử lý khiếu nại của khách hàng 24/7/365. Đảm bảo tỷ lệ bắt máy (Pickup Rate) luôn trên 95%.",
-    image: "/images/products/bpo/img2.png",
-  },
-  {
-    shortTitle: "Telesales Outbound",
-    title: "Telesales & Khảo sát thị trường",
-    description:
-      "Triển khai các chiến dịch gọi ra để bán hàng, giới thiệu sản phẩm, nhắc nợ cước hoặc khảo sát mức độ hài lòng (CSAT) với kịch bản được may đo riêng biệt.",
-    image: "/images/products/bpo/img3.png",
-  },
-  {
-    shortTitle: "Chất lượng (QA)",
-    title: "Quy trình QA & Đào tạo",
-    description:
-      "Hệ thống giám sát chất lượng (QA) chặt chẽ. Nhân sự được đào tạo bài bản về kỹ năng giọng nói, xử lý tình huống và kiến thức sản phẩm trước khi tiếp nhận dự án.",
-    image: "/images/products/bpo/img4.png",
-  },
-];
+import { useTranslations } from "next-intl"; // 2. Import hook
 
 const AboutBPO = () => {
+  const t = useTranslations("Products.BPO.About"); // 3. Namespace
   const [activeIndex, setActiveIndex] = useState(0);
+
+  // 4. Dữ liệu Slide dùng t()
+  const TEXTS = [
+    {
+      shortTitle: t("tab_overview"),
+      title: t("slide1_title"),
+      description: t("slide1_desc"),
+      image: "/images/products/bpo/img1.png",
+    },
+    {
+      shortTitle: t("tab_inbound"),
+      title: t("slide2_title"),
+      description: t("slide2_desc"),
+      image: "/images/products/bpo/img2.png",
+    },
+    {
+      shortTitle: t("tab_outbound"),
+      title: t("slide3_title"),
+      description: t("slide3_desc"),
+      image: "/images/products/bpo/img3.png",
+    },
+    {
+      shortTitle: t("tab_qa"),
+      title: t("slide4_title"),
+      description: t("slide4_desc"),
+      image: "/images/products/bpo/img4.png",
+    },
+  ];
 
   const handleNext = () => {
     setActiveIndex((prev) => (prev + 1) % TEXTS.length);
@@ -62,7 +61,7 @@ const AboutBPO = () => {
         <div className="flex flex-col justify-center items-start order-2 lg:order-1 relative z-10 w-full">
           <div className="mb-6 flex items-center gap-2">
             <span className="px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs font-bold uppercase tracking-wider">
-              Dịch vụ thuê ngoài nhân sự
+              {t("badge")} {/* Dịch vụ thuê ngoài nhân sự */}
             </span>
           </div>
 
@@ -117,7 +116,11 @@ const AboutBPO = () => {
                       />
                     ) : (
                       <div
-                        className={`h-full w-full ${index < activeIndex ? "bg-gray-300 dark:bg-gray-700" : "bg-transparent"}`}
+                        className={`h-full w-full ${
+                          index < activeIndex
+                            ? "bg-gray-300 dark:bg-gray-700"
+                            : "bg-transparent"
+                        }`}
                       />
                     )}
                   </div>
@@ -131,21 +134,20 @@ const AboutBPO = () => {
               href="/contact"
               className="group inline-flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 font-bold rounded-lg shadow-lg hover:shadow-blue-500/30 transition-all transform hover:-translate-y-1"
             >
-              <span>Nhận báo giá BPO</span>
+              <span>{t("btn_quote")}</span>
               <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
             </Link>
             <Link
               href="#features"
               className="inline-flex items-center justify-center space-x-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-white px-8 py-4 font-bold rounded-lg transition-all"
             >
-              <span>Quy trình triển khai</span>
+              <span>{t("btn_process")}</span>
             </Link>
           </div>
         </div>
 
         {/* --- CỘT PHẢI --- */}
         <div className="w-full order-1 lg:order-2">
-          {/* Wrapper để căn chỉnh vị trí khung TechFrame */}
           <div className="flex justify-center lg:justify-end items-center h-full">
             <TechFrame title={TEXTS[activeIndex].title}>
               <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-50 dark:bg-gray-900/50 flex items-center justify-center p-1">
@@ -156,7 +158,6 @@ const AboutBPO = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 1.05 }}
                     transition={{ duration: 0.5 }}
-                    // Đặt padding nhẹ để ảnh không dính sát viền khung
                     className="absolute inset-0 w-full h-full p-2 sm:p-3"
                   >
                     <Image

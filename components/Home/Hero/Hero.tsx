@@ -1,12 +1,14 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { FaArrowRight } from "react-icons/fa6";
 import { GiSparkles } from "react-icons/gi";
 import { TypeAnimation } from "react-type-animation";
+import { useTranslations } from "next-intl"; // 1. Hook dịch
+import { Link } from "@/i18n/navigation";    // 2. Link điều hướng chuẩn đa ngôn ngữ
 
 const Hero = () => {
+  const t = useTranslations("Home.Hero"); // Khởi tạo namespace
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -49,7 +51,7 @@ const Hero = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       particles.forEach((p) => {
-        ctx.beginPath(); // QUAN TRỌNG: Bắt đầu đường vẽ mới
+        ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`;
         ctx.fill();
@@ -70,15 +72,13 @@ const Hero = () => {
     const handleResize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      // Có thể cần tạo lại hạt hoặc điều chỉnh vị trí nếu muốn
     };
 
     window.addEventListener("resize", handleResize);
 
-    // Cleanup function
     return () => {
       window.removeEventListener("resize", handleResize);
-      cancelAnimationFrame(animationFrameId); // Dừng animation khi unmount
+      cancelAnimationFrame(animationFrameId);
     };
   }, []);
 
@@ -86,16 +86,16 @@ const Hero = () => {
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 bg-linear-to-br from-primary via-blue-800 to-primary-dark dark:from-gray-950 dark:via-gray-900 dark:to-violet-950"
+        className="absolute inset-0 bg-linear-to-br from-blue-600 via-blue-800 to-indigo-900 dark:from-gray-950 dark:via-gray-900 dark:to-violet-950"
       />
 
-      {/* Nội dung Hero sẽ nằm đè lên Canvas ở đây */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg-px-8 text-center">
+      {/* Nội dung Hero */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div>
           <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md px-6 py-3 rounded-full mb-8">
             <GiSparkles className="h-5 w-5 text-yellow-400" />
             <span className="text-white font-medium">
-              Cần tìm giải pháp phù hợp với doanh nghiệp bạn?
+              {t("badge")} {/* Cần tìm giải pháp... */}
             </span>
           </div>
         </div>
@@ -104,20 +104,13 @@ const Hero = () => {
         <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-6">
           <TypeAnimation
             sequence={[
-              "Realtime Solutions",
-              2000,
-              "RealtimeCX",
-              2000,
-              "RealtimeBPO",
-              2000,
-              "RealtimeAutoDialer",
-              2000,
-              "RealtimeAI (Text to speech)",
-              2000,
-              "RealtimePBX",
-              2000,
-              "Voice VAS",
-              2000,
+              "Realtime Solutions", 2000,
+              "RealtimeCX", 2000,
+              "RealtimeBPO", 2000,
+              "RealtimeAutoDialer", 2000,
+              "RealtimeAI (Text to speech)", 2000,
+              "RealtimePBX", 2000,
+              "Voice VAS", 2000,
             ]}
             wrapper="span"
             speed={50}
@@ -127,27 +120,24 @@ const Hero = () => {
 
         {/* Description */}
         <p className="text-base sm:text-xl text-gray-200 mb-12 max-w-3xl mx-auto leading-relaxed">
-          Giải pháp công nghệ hàng đầu cho các doanh nghiệp hiện đại. Realtime
-          Solutions là đơn vị tiên phong trong lĩnh vực VoIP và Contact Center
-          tại Việt Nam.
+          {t("description")} {/* Giải pháp công nghệ hàng đầu... */}
         </p>
 
         {/* Button */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
-            href={"/contact"}
+            href="/contact"
             className="group inline-flex items-center justify-center space-x-2 bg-white dark:bg-white text-gray-900 dark:text-gray-900 px-8 py-4 rounded-full font-semibold hover:bg-blue-500 hover:text-white transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-2xl"
           >
-            <span>Bắt đầu ngay</span>
-
+            <span>{t("btn_start")}</span> {/* Bắt đầu ngay */}
             <FaArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
           </Link>
 
           <Link
-            href={"/contact"}
+            href="/contact"
             className="inline-flex items-center justify-center space-x-2 bg-transparent dark:bg-transparent text-gray-900 dark:text-gray-900 px-8 py-4 rounded-full font-semibold hover:bg-blue-500 hover:text-white transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-2xl border-2 border-white/30 hover:border-transparent"
           >
-            <span className="text-white">Liên hệ với chúng tôi</span>
+            <span className="text-white">{t("btn_contact")}</span> {/* Liên hệ với chúng tôi */}
           </Link>
         </div>
       </div>

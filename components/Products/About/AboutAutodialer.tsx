@@ -1,45 +1,44 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation"; // 1. Link chuẩn
 import { FaArrowRight } from "react-icons/fa6";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { useState } from "react";
 import TechFrame from "@/components/Common/TechFrame";
+import { useTranslations } from "next-intl"; // 2. Hook
 
-const TEXTS = [
-  {
-    shortTitle: "Tổng quan",
-    title: "Realtime Autodialer - Gọi tự động thông minh",
-    description:
-      "Giải pháp thực hiện hàng ngàn cuộc gọi mỗi giờ hoàn toàn tự động. Tối ưu cho các chiến dịch Telesales, Nhắc nợ, Khảo sát thị trường hoặc Thông báo mã OTP.",
-    image: "/images/products/autodialer/img1.png",
-  },
-  {
-    shortTitle: "Predictive",
-    title: "Thuật toán Predictive Dialing",
-    description:
-      "Hệ thống tự động quay số trước và chỉ chuyển cuộc gọi cho nhân viên khi có khách hàng nhấc máy. Loại bỏ hoàn toàn thời gian chờ tiếng tút, số máy bận hoặc thuê bao.",
-    image: "/images/products/autodialer/img2.png",
-  },
-  {
-    shortTitle: "AI Voice",
-    title: "Tích hợp Text-To-Speech (TTS)",
-    description:
-      "Chuyển đổi văn bản thành giọng nói AI tiếng Việt tự nhiên (Bắc/Nam) theo thời gian thực. Cá nhân hóa lời chào: 'Chào anh Nam', 'Chào chị Lan' tự động.",
-    image: "/images/products/autodialer/img3.png",
-  },
-  {
-    shortTitle: "Lọc số",
-    title: "Lọc số thông minh",
-    description:
-      "Tự động phát hiện và loại bỏ các số điện thoại sai định dạng, số ảo, hoặc các số nằm trong danh sách không làm phiền (DNC - Do Not Call).",
-    image: "/images/products/autodialer/img4.png",
-  },
-];
-
-const AboutCX = () => {
+const AboutAutodialer = () => {
+  const t = useTranslations("Products.Autodialer.About"); // 3. Namespace
   const [activeIndex, setActiveIndex] = useState(0);
+
+  // 4. DỮ LIỆU BÊN TRONG COMPONENT
+  const TEXTS = [
+    {
+      shortTitle: t("tab_overview"), // Tổng quan
+      title: t("slide1_title"), // Realtime Autodialer - Gọi tự động thông minh
+      description: t("slide1_desc"), // Giải pháp thực hiện...
+      image: "/images/products/autodialer/img1.png",
+    },
+    {
+      shortTitle: t("tab_predictive"), // Predictive
+      title: t("slide2_title"), // Thuật toán Predictive Dialing
+      description: t("slide2_desc"), // Hệ thống tự động quay số...
+      image: "/images/products/autodialer/img2.png",
+    },
+    {
+      shortTitle: t("tab_ai"), // AI Voice
+      title: t("slide3_title"), // Tích hợp Text-To-Speech (TTS)
+      description: t("slide3_desc"), // Chuyển đổi văn bản...
+      image: "/images/products/autodialer/img3.png",
+    },
+    {
+      shortTitle: t("tab_filter"), // Lọc số
+      title: t("slide4_title"), // Lọc số thông minh
+      description: t("slide4_desc"), // Tự động phát hiện...
+      image: "/images/products/autodialer/img4.png",
+    },
+  ];
 
   const handleNext = () => {
     setActiveIndex((prev) => (prev + 1) % TEXTS.length);
@@ -62,7 +61,7 @@ const AboutCX = () => {
         <div className="flex flex-col justify-center items-start order-2 lg:order-1 relative z-10 w-full">
           <div className="mb-6 flex items-center gap-2">
             <span className="px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs font-bold uppercase tracking-wider">
-              Tại sao chọn Realtime Autodialer?
+              {t("badge")} {/* Tại sao chọn Realtime Autodialer? */}
             </span>
           </div>
 
@@ -115,7 +114,7 @@ const AboutCX = () => {
                         animate={{ width: "100%" }}
                         transition={{ duration: 5, ease: "linear" }}
                         onAnimationComplete={handleNext}
-                        layoutId="activeProgressPBX"
+                        layoutId="activeProgressAutodialer" // Đổi ID để tránh trùng
                       />
                     ) : (
                       <div
@@ -138,22 +137,21 @@ const AboutCX = () => {
               href="/contact"
               className="group inline-flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 font-bold rounded-lg shadow-lg hover:shadow-blue-500/30 transition-all transform hover:-translate-y-1"
             >
-              <span>Đăng ký ngay</span>
+              <span>{t("btn_register")}</span>
               <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
             </Link>
 
             <Link
-              href="#features" // Link tới phần tính năng chi tiết bên dưới (nếu có)
+              href="#features"
               className="inline-flex items-center justify-center space-x-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-white px-8 py-4 font-bold rounded-lg transition-all"
             >
-              <span>Xem chi tiết</span>
+              <span>{t("btn_details")}</span>
             </Link>
           </div>
         </div>
 
         {/* --- CỘT PHẢI: ẢNH --- */}
         <div className="w-full order-1 lg:order-2">
-          {/* Wrapper để căn chỉnh vị trí khung TechFrame */}
           <div className="flex justify-center lg:justify-end items-center h-full">
             <TechFrame title={TEXTS[activeIndex].title}>
               <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-50 dark:bg-gray-900/50 flex items-center justify-center p-1">
@@ -164,7 +162,6 @@ const AboutCX = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 1.05 }}
                     transition={{ duration: 0.5 }}
-                    // Đặt padding nhẹ để ảnh không dính sát viền khung
                     className="absolute inset-0 w-full h-full p-2 sm:p-3"
                   >
                     <Image
@@ -186,4 +183,4 @@ const AboutCX = () => {
   );
 };
 
-export default AboutCX;
+export default AboutAutodialer;

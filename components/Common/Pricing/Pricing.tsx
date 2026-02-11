@@ -3,101 +3,94 @@
 import React from "react";
 import { FaCheck, FaXmark } from "react-icons/fa6";
 import { motion, Variants } from "framer-motion";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation"; // 1. Link chuẩn
+import { useTranslations } from "next-intl"; // 2. Import hook
 
 const Pricing = () => {
+  const t = useTranslations("Home.Pricing"); // 3. Namespace
+
+  // 4. Đưa dữ liệu vào trong component để dùng t()
   const plans = [
     {
       id: 1,
       name: "Realtime-PBX Block 3",
-      description: "Hỗ trợ tối đa 3 máy nhánh.",
+      description: t("plan_3_desc"), // Hỗ trợ tối đa 3 máy nhánh
       oldPrice: "150.000",
       price: "100.000",
       popular: false,
       features: [
-        { text: "Cuộc gọi/nhận đồng thời", included: true },
-        { text: "Trả lời tự động (IVR)", included: true },
-        { text: "Phát nhạc chờ", included: true },
-        { text: "Gọi đến, gọi đi, gọi nội bộ", included: true },
-        { text: "Chuyển cuộc gọi", included: true },
-        { text: "Định tuyến, phân bổ (ACD)", included: true },
-        { text: "Hiển thị số gọi đến", included: true },
-        { text: "Ghi âm cuộc gọi", included: true },
-        { text: "Nghe lại cuộc gọi", included: true },
-        { text: "Hỗ trợ đầu số hotline", included: true },
-        { text: "Quản lý Extensions qua web", included: true },
-        { text: "Tích hợp CRM", included: false },
+        { text: t("feat_concurrent"), included: true },
+        { text: t("feat_ivr"), included: true },
+        { text: t("feat_music"), included: true },
+        { text: t("feat_call_types"), included: true },
+        { text: t("feat_transfer"), included: true },
+        { text: t("feat_acd"), included: true },
+        { text: t("feat_caller_id"), included: true },
+        { text: t("feat_recording"), included: true },
+        { text: t("feat_playback"), included: true },
+        { text: t("feat_hotline"), included: true },
+        { text: t("feat_web_mgmt"), included: true },
+        { text: t("feat_crm"), included: false },
       ],
     },
     {
       id: 2,
       name: "Realtime-PBX Block 10",
-      description: "Hỗ trợ tối đa 10 máy nhánh.",
+      description: t("plan_10_desc"), // Hỗ trợ tối đa 10 máy nhánh
       oldPrice: "350.000",
       price: "299.000",
       popular: true,
       features: [
-        { text: "Cuộc gọi/nhận đồng thời", included: true },
-        { text: "Trả lời tự động (IVR)", included: true },
-        { text: "Phát nhạc chờ", included: true },
-        { text: "Gọi đến, gọi đi, gọi nội bộ", included: true },
-        { text: "Chuyển cuộc gọi", included: true },
-        { text: "Định tuyến, phân bổ (ACD)", included: true },
-        { text: "Hiển thị số gọi đến", included: true },
-        { text: "Ghi âm cuộc gọi", included: true },
-        { text: "Nghe lại cuộc gọi", included: true },
-        { text: "Hỗ trợ đầu số hotline", included: true },
-        { text: "Quản lý Extensions qua web", included: true },
-        { text: "Tích hợp CRM", included: false },
+        { text: t("feat_concurrent"), included: true },
+        { text: t("feat_ivr"), included: true },
+        { text: t("feat_music"), included: true },
+        { text: t("feat_call_types"), included: true },
+        { text: t("feat_transfer"), included: true },
+        { text: t("feat_acd"), included: true },
+        { text: t("feat_caller_id"), included: true },
+        { text: t("feat_recording"), included: true },
+        { text: t("feat_playback"), included: true },
+        { text: t("feat_hotline"), included: true },
+        { text: t("feat_web_mgmt"), included: true },
+        { text: t("feat_crm"), included: false },
       ],
     },
     {
       id: 3,
       name: "Realtime-PBX Block 20",
-      description: "Hỗ trợ tối đa 20 máy nhánh.",
+      description: t("plan_20_desc"), // Hỗ trợ tối đa 20 máy nhánh
       oldPrice: "650.000",
       price: "450.000",
       popular: false,
       features: [
-        { text: "Cuộc gọi/nhận đồng thời", included: true },
-        { text: "Trả lời tự động (IVR)", included: true },
-        { text: "Phát nhạc chờ", included: true },
-        { text: "Gọi đến, gọi đi, gọi nội bộ", included: true },
-        { text: "Chuyển cuộc gọi", included: true },
-        { text: "Định tuyến, phân bổ (ACD)", included: true },
-        { text: "Hiển thị số gọi đến", included: true },
-        { text: "Ghi âm cuộc gọi", included: true },
-        { text: "Nghe lại cuộc gọi", included: true },
-        { text: "Hỗ trợ đầu số hotline", included: true },
-        { text: "Quản lý Extensions qua web", included: true },
-        { text: "Tích hợp CRM", included: false },
+        { text: t("feat_concurrent"), included: true },
+        { text: t("feat_ivr"), included: true },
+        { text: t("feat_music"), included: true },
+        { text: t("feat_call_types"), included: true },
+        { text: t("feat_transfer"), included: true },
+        { text: t("feat_acd"), included: true },
+        { text: t("feat_caller_id"), included: true },
+        { text: t("feat_recording"), included: true },
+        { text: t("feat_playback"), included: true },
+        { text: t("feat_hotline"), included: true },
+        { text: t("feat_web_mgmt"), included: true },
+        { text: t("feat_crm"), included: false },
       ],
     },
   ];
 
-  // --- ANIMATION VARIANTS ---
-  // Variant cho container cha: Giúp điều khiển các con xuất hiện lần lượt
+  // --- ANIMATION VARIANTS (Giữ nguyên) ---
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15, // Mỗi thẻ hiện ra cách nhau 0.15s
-      },
-    },
+    visible: { opacity: 1, transition: { staggerChildren: 0.15 } },
   };
 
-  // Variant cho từng Card
   const cardVariants: Variants = {
     hidden: { opacity: 0, y: 50 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: {
-        type: "spring",
-        stiffness: 100,
-        damping: 15, // Damping cao hơn xíu để đỡ rung quá nhiều
-      },
+      transition: { type: "spring", stiffness: 100, damping: 15 },
     },
   };
 
@@ -112,20 +105,20 @@ const Pricing = () => {
           className="text-center mb-10 space-y-2"
         >
           <p className="text-blue-600 dark:text-blue-400 uppercase font-semibold tracking-wider text-sm">
-            Báo giá
+            {t("subtitle")} {/* Báo giá */}
           </p>
           <h2 className="text-2xl lg:text-4xl font-bold text-gray-900 dark:text-white uppercase">
-            Bảng giá dịch vụ tổng đài RealtimePBX
+            {t("title")} {/* Bảng giá dịch vụ tổng đài RealtimePBX */}
           </h2>
           <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto text-sm lg:text-base">
-            Hệ thống tổng đài ảo hiện đại, sẵn sàng mở rộng và tối ưu chi phí.
+            {t("description")} {/* Hệ thống tổng đài ảo hiện đại... */}
           </p>
         </motion.div>
 
         {/* --- Pricing Cards Grid --- */}
         <motion.div
           className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start py-4"
-          variants={containerVariants} // Áp dụng stagger
+          variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-50px" }}
@@ -133,17 +126,16 @@ const Pricing = () => {
           {plans.map((plan) => (
             <motion.div
               key={plan.id}
-              variants={cardVariants} // Nhận animation từ cha
-              // --- HOVER EFFECT ---
+              variants={cardVariants}
               whileHover={{
-                y: -15, // Nhấc lên cao hơn chút
-                scale: 1.02, // Phóng to nhẹ toàn bộ card
+                y: -15,
+                scale: 1.02,
                 transition: { type: "spring", stiffness: 300 },
               }}
               className={`relative flex flex-col bg-white dark:bg-gray-800 border rounded-xl p-6 shadow-md transition-colors duration-300 h-full
                 ${
                   plan.popular
-                    ? "border-blue-500 shadow-xl z-10 lg:scale-105" // Giữ scale tĩnh cho popular
+                    ? "border-blue-500 shadow-xl z-10 lg:scale-105"
                     : "border-gray-200 dark:border-gray-700"
                 }
               `}
@@ -156,7 +148,7 @@ const Pricing = () => {
                   className="absolute -top-4 left-1/2 transform -translate-x-1/2"
                 >
                   <div className="bg-linear-to-r from-blue-600 to-blue-400 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg uppercase tracking-wide whitespace-nowrap flex items-center gap-1">
-                    ★ Phổ biến nhất
+                    ★ {t("badge_popular")}
                   </div>
                 </motion.div>
               )}
@@ -183,7 +175,7 @@ const Pricing = () => {
                   </span>
                 </div>
                 <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-wide">
-                  / tháng / user
+                  {t("unit")} {/* / tháng / user */}
                 </p>
 
                 {/* ANIMATED BUTTON */}
@@ -199,7 +191,7 @@ const Pricing = () => {
                     }
                   `}
                   >
-                    Đăng ký ngay
+                    {t("btn_register")}
                   </motion.button>
                 </Link>
               </div>

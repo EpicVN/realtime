@@ -1,46 +1,44 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation"; // 1. Link chuẩn
 import { FaArrowRight } from "react-icons/fa6";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { useState } from "react";
 import TechFrame from "@/components/Common/TechFrame";
-
-// --- DỮ LIỆU CONTENT CHO CSKH ---
-const TEXTS = [
-  {
-    shortTitle: "Thách thức",
-    title: "Khách hàng của bạn đang thất vọng?",
-    description:
-      "Thời gian chờ gặp nhân viên quá lâu? Phải lặp lại vấn đề nhiều lần khi chuyển máy? Nhân viên không nắm được lịch sử mua hàng? Bỏ lỡ tin nhắn từ Zalo/Facebook?",
-    image: "/images/solutions/cskh/img1.png", // Bạn nhớ tạo folder và ảnh nhé
-  },
-  {
-    shortTitle: "Omnichannel",
-    title: "Hợp nhất mọi kênh tương tác",
-    description:
-      "Quản lý tập trung Cuộc gọi, Zalo OA, Facebook Messenger, Livechat và Email trên một giao diện duy nhất. Không còn tình trạng sót tin nhắn hay phải mở nhiều tab trình duyệt.",
-    image: "/images/solutions/cskh/img2.png",
-  },
-  {
-    shortTitle: "Cá nhân hóa",
-    title: "Nhận diện khách hàng ngay lập tức",
-    description:
-      "Khi khách gọi đến, hệ thống tự động hiển thị Popup thông tin (Tên, Hạng thành viên, Lịch sử giao dịch, Ticket cũ). Giúp nhân viên chào đúng tên và hỗ trợ đúng vấn đề.",
-    image: "/images/solutions/cskh/img3.png",
-  },
-  {
-    shortTitle: "ACD & IVR",
-    title: "Phân bổ cuộc gọi thông minh",
-    description:
-      "Tự động định tuyến khách VIP gặp nhân viên giỏi nhất, khách ở vùng miền nào gặp nhân viên vùng đó. Giảm thiểu thời gian chuyển máy lòng vòng.",
-    image: "/images/solutions/cskh/img4.png",
-  },
-];
+import { useTranslations } from "next-intl"; // 2. Import hook
 
 const AboutCSKH = () => {
+  const t = useTranslations("Solutions.CSKH.About"); // 3. Namespace
   const [activeIndex, setActiveIndex] = useState(0);
+
+  // 4. Dữ liệu Slide dùng t()
+  const TEXTS = [
+    {
+      shortTitle: t("tab_challenge"),
+      title: t("slide1_title"),
+      description: t("slide1_desc"),
+      image: "/images/solutions/cskh/img1.png",
+    },
+    {
+      shortTitle: t("tab_omni"),
+      title: t("slide2_title"),
+      description: t("slide2_desc"),
+      image: "/images/solutions/cskh/img2.png",
+    },
+    {
+      shortTitle: t("tab_personal"),
+      title: t("slide3_title"),
+      description: t("slide3_desc"),
+      image: "/images/solutions/cskh/img3.png",
+    },
+    {
+      shortTitle: t("tab_acd"),
+      title: t("slide4_title"),
+      description: t("slide4_desc"),
+      image: "/images/solutions/cskh/img4.png",
+    },
+  ];
 
   const handleNext = () => {
     setActiveIndex((prev) => (prev + 1) % TEXTS.length);
@@ -63,7 +61,7 @@ const AboutCSKH = () => {
         <div className="flex flex-col justify-center items-start order-2 lg:order-1 relative z-10 w-full">
           <div className="mb-6 flex items-center gap-2">
             <span className="px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs font-bold uppercase tracking-wider">
-              Giải pháp Chăm sóc khách hàng toàn diện
+              {t("badge")} {/* Giải pháp Chăm sóc khách hàng toàn diện */}
             </span>
           </div>
 
@@ -118,7 +116,11 @@ const AboutCSKH = () => {
                       />
                     ) : (
                       <div
-                        className={`h-full w-full ${index < activeIndex ? "bg-gray-300 dark:bg-gray-700" : "bg-transparent"}`}
+                        className={`h-full w-full ${
+                          index < activeIndex
+                            ? "bg-gray-300 dark:bg-gray-700"
+                            : "bg-transparent"
+                        }`}
                       />
                     )}
                   </div>
@@ -132,13 +134,13 @@ const AboutCSKH = () => {
               href="/contact"
               className="group inline-flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 font-bold rounded-lg shadow-lg hover:shadow-blue-500/30 transition-all transform hover:-translate-y-1"
             >
-              <span>Demo giải pháp CSKH</span>
+              <span>{t("btn_demo")}</span>
               <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
         </div>
 
-        {/* --- CỘT PHẢI (Sử dụng Fix Aspect Ratio) --- */}
+        {/* --- CỘT PHẢI --- */}
         <div className="w-full order-1 lg:order-2">
           <div className="flex justify-center lg:justify-end items-center h-full">
             <TechFrame title={TEXTS[activeIndex].title}>

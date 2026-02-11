@@ -1,46 +1,44 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation"; // 1. Link chuẩn
 import { FaArrowRight } from "react-icons/fa6";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { useState } from "react";
 import TechFrame from "@/components/Common/TechFrame";
-
-// --- DỮ LIỆU TÙY CHỈNH CHO VOICE VAS ---
-const TEXTS = [
-  {
-    shortTitle: "Tổng quan",
-    title: "Voice VAS - Viễn thông & Thương hiệu",
-    description:
-      "Bộ giải pháp định danh thương hiệu trên nền tảng viễn thông. Bao gồm Voice Brandname, SMS Brandname và các đầu số tổng đài chuyên nghiệp (1900/1800/Mobile SIP).",
-    image: "/images/products/vas/img1.png",
-  },
-  {
-    shortTitle: "Voice Brandname",
-    title: "Cuộc gọi hiển thị Tên Thương Hiệu",
-    description:
-      "Thay vì hiển thị số điện thoại lạ (09xxx), cuộc gọi đến khách hàng sẽ hiển thị tên Doanh nghiệp (Ví dụ: REALTIME). Giúp tăng uy tín và tỷ lệ bắt máy lên tới 90%.",
-    image: "/images/products/vas/img2.png",
-  },
-  {
-    shortTitle: "Mobile SIP",
-    title: "Mobile SIP Trunk - Sim số doanh nghiệp",
-    description:
-      "Giải pháp biến Sim di động thông thường thành đầu số tổng đài. Tích hợp vào hệ thống PBX để gọi ra/gọi vào, ghi âm và định tuyến như số cố định.",
-    image: "/images/products/vas/img3.png",
-  },
-  {
-    shortTitle: "SMS & ZNS",
-    title: "SMS Brandname & Zalo ZNS",
-    description:
-      "Gửi tin nhắn chăm sóc khách hàng, mã OTP hoặc thông báo đơn hàng tự động với tên thương hiệu hiển thị ở mục người gửi. Tiếp cận khách hàng ngay lập tức.",
-    image: "/images/products/vas/img4.png",
-  },
-];
+import { useTranslations } from "next-intl"; // 2. Import hook
 
 const AboutVAS = () => {
+  const t = useTranslations("Products.VAS.About"); // 3. Namespace
   const [activeIndex, setActiveIndex] = useState(0);
+
+  // 4. Dữ liệu Slide dùng t()
+  const TEXTS = [
+    {
+      shortTitle: t("tab_overview"),
+      title: t("slide1_title"),
+      description: t("slide1_desc"),
+      image: "/images/products/vas/img1.png",
+    },
+    {
+      shortTitle: t("tab_brandname"),
+      title: t("slide2_title"),
+      description: t("slide2_desc"),
+      image: "/images/products/vas/img2.png",
+    },
+    {
+      shortTitle: t("tab_sip"),
+      title: t("slide3_title"),
+      description: t("slide3_desc"),
+      image: "/images/products/vas/img3.png",
+    },
+    {
+      shortTitle: t("tab_sms"),
+      title: t("slide4_title"),
+      description: t("slide4_desc"),
+      image: "/images/products/vas/img4.png",
+    },
+  ];
 
   const handleNext = () => {
     setActiveIndex((prev) => (prev + 1) % TEXTS.length);
@@ -63,7 +61,7 @@ const AboutVAS = () => {
         <div className="flex flex-col justify-center items-start order-2 lg:order-1 relative z-10 w-full">
           <div className="mb-6 flex items-center gap-2">
             <span className="px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs font-bold uppercase tracking-wider">
-              Giải pháp thương hiệu số
+              {t("badge")} {/* Giải pháp thương hiệu số */}
             </span>
           </div>
 
@@ -118,7 +116,11 @@ const AboutVAS = () => {
                       />
                     ) : (
                       <div
-                        className={`h-full w-full ${index < activeIndex ? "bg-gray-300 dark:bg-gray-700" : "bg-transparent"}`}
+                        className={`h-full w-full ${
+                          index < activeIndex
+                            ? "bg-gray-300 dark:bg-gray-700"
+                            : "bg-transparent"
+                        }`}
                       />
                     )}
                   </div>
@@ -132,21 +134,20 @@ const AboutVAS = () => {
               href="/contact"
               className="group inline-flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 font-bold rounded-lg shadow-lg hover:shadow-blue-500/30 transition-all transform hover:-translate-y-1"
             >
-              <span>Đăng ký Brandname</span>
+              <span>{t("btn_register")}</span>
               <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
             </Link>
             <Link
               href="#features"
               className="inline-flex items-center justify-center space-x-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-white px-8 py-4 font-bold rounded-lg transition-all"
             >
-              <span>Kho số đẹp</span>
+              <span>{t("btn_numbers")}</span>
             </Link>
           </div>
         </div>
 
         {/* --- CỘT PHẢI --- */}
         <div className="w-full order-1 lg:order-2">
-          {/* Wrapper để căn chỉnh vị trí khung TechFrame */}
           <div className="flex justify-center lg:justify-end items-center h-full">
             <TechFrame title={TEXTS[activeIndex].title}>
               <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-50 dark:bg-gray-900/50 flex items-center justify-center p-1">
@@ -157,7 +158,6 @@ const AboutVAS = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 1.05 }}
                     transition={{ duration: 0.5 }}
-                    // Đặt padding nhẹ để ảnh không dính sát viền khung
                     className="absolute inset-0 w-full h-full p-2 sm:p-3"
                   >
                     <Image

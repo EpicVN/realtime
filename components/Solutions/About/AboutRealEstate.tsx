@@ -1,46 +1,44 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation"; // 1. Link chuẩn
 import { FaArrowRight } from "react-icons/fa6";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { useState } from "react";
 import TechFrame from "@/components/Common/TechFrame";
-
-// --- DỮ LIỆU CONTENT CHO BẤT ĐỘNG SẢN ---
-const TEXTS = [
-  {
-    shortTitle: "Thách thức",
-    title: "Sale BĐS gặp khó khi Telesales?",
-    description:
-      "Gọi hàng trăm cuộc mỗi ngày nhưng tỷ lệ bắt máy thấp do bị chặn spam? Dữ liệu khách hàng bị trùng lặp hoặc mất mát khi nhân viên nghỉ việc? Khó quản lý nhân viên khi đi thị trường?",
-    image: "/images/solutions/realestate/img1.png", // Bạn nhớ tạo folder và ảnh nhé
-  },
-  {
-    shortTitle: "Thương hiệu",
-    title: "Voice Brandname - Chuyên nghiệp hóa",
-    description:
-      "Cuộc gọi hiển thị tên Sàn BĐS (Ví dụ: DATXANH, CENLAND...) giúp khách hàng an tâm bắt máy. Tăng tỷ lệ kết nối thành công lên 90% và khẳng định vị thế chủ đầu tư.",
-    image: "/images/solutions/realestate/img2.png",
-  },
-  {
-    shortTitle: "Di động",
-    title: "App Mobile - Văn phòng di động",
-    description:
-      "Nhân viên Sale có thể nghe/gọi và xem thông tin khách hàng ngay trên App điện thoại (iOS/Android) khi đang đi dẫn khách xem nhà. Không bỏ lỡ bất kỳ cơ hội nào.",
-    image: "/images/solutions/realestate/img3.png",
-  },
-  {
-    shortTitle: "Quản lý",
-    title: "Bảo mật Data & Giám sát Sale",
-    description:
-      "Mọi dữ liệu khách hàng và lịch sử cuộc gọi được lưu trữ tập trung trên CRM. Sale không thể tự ý xóa hoặc mang data đi nơi khác. Quản lý nghe lại file ghi âm để training.",
-    image: "/images/solutions/realestate/img4.png",
-  },
-];
+import { useTranslations } from "next-intl"; // 2. Import hook
 
 const AboutRealEstate = () => {
+  const t = useTranslations("Solutions.RealEstate.About"); // 4. Namespace
   const [activeIndex, setActiveIndex] = useState(0);
+
+  // 5. Dữ liệu Slide dùng t() & Biến ảnh
+  const TEXTS = [
+    {
+      shortTitle: t("tab_challenge"),
+      title: t("slide1_title"),
+      description: t("slide1_desc"),
+      image: "/images/solutions/realestate/img1.png",
+    },
+    {
+      shortTitle: t("tab_brand"),
+      title: t("slide2_title"),
+      description: t("slide2_desc"),
+      image: "/images/solutions/realestate/img2.png",
+    },
+    {
+      shortTitle: t("tab_mobile"),
+      title: t("slide3_title"),
+      description: t("slide3_desc"),
+      image: "/images/solutions/realestate/img3.png",
+    },
+    {
+      shortTitle: t("tab_manage"),
+      title: t("slide4_title"),
+      description: t("slide4_desc"),
+      image: "/images/solutions/realestate/img4.png",
+    },
+  ];
 
   const handleNext = () => {
     setActiveIndex((prev) => (prev + 1) % TEXTS.length);
@@ -63,7 +61,7 @@ const AboutRealEstate = () => {
         <div className="flex flex-col justify-center items-start order-2 lg:order-1 relative z-10 w-full">
           <div className="mb-6 flex items-center gap-2">
             <span className="px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs font-bold uppercase tracking-wider">
-              Giải pháp Tổng đài Bất động sản
+              {t("badge")} {/* Giải pháp Tổng đài Bất động sản */}
             </span>
           </div>
 
@@ -132,13 +130,13 @@ const AboutRealEstate = () => {
               href="/contact"
               className="group inline-flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 font-bold rounded-lg shadow-lg hover:shadow-blue-500/30 transition-all transform hover:-translate-y-1"
             >
-              <span>Demo cho Sàn BĐS</span>
+              <span>{t("btn_demo")}</span>
               <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
         </div>
 
-        {/* --- CỘT PHẢI (Fix Aspect Ratio 16:9) --- */}
+        {/* --- CỘT PHẢI --- */}
         <div className="w-full order-1 lg:order-2">
           <div className="flex justify-center lg:justify-end items-center h-full">
             <TechFrame title={TEXTS[activeIndex].title}>
@@ -155,6 +153,7 @@ const AboutRealEstate = () => {
                     <Image
                       src={TEXTS[activeIndex].image}
                       alt={TEXTS[activeIndex].title}
+                      // Không cần width/height vì là static import
                       fill
                       className="object-contain object-center rounded shadow-sm"
                       priority

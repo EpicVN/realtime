@@ -1,46 +1,44 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation"; // 1. Link chuẩn
 import { FaArrowRight } from "react-icons/fa6";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { useState } from "react";
 import TechFrame from "@/components/Common/TechFrame";
-
-// --- DỮ LIỆU CONTENT CHO THU HỒI NỢ ---
-const TEXTS = [
-  {
-    shortTitle: "Vấn đề",
-    title: "Khó khăn trong Thu hồi nợ?",
-    description:
-      "Chi phí nhân sự gọi nhắc nợ quá cao? Nhân viên quên lịch gọi lại? Khó kiểm soát thái độ nhân viên khi làm việc với khách nợ? Dữ liệu nợ bị phân tán, khó quản lý?",
-    image: "/images/solutions/collection/img1.png", // Thay ảnh minh họa
-  },
-  {
-    shortTitle: "Giải pháp",
-    title: "Tự động hóa quy trình Nhắc nợ",
-    description:
-      "Sử dụng Autocall (Gọi tự động) và Voice Brandname để nhắc lịch thanh toán hàng loạt. Chỉ chuyển cuộc gọi cho nhân viên khi khách hàng có nhu cầu trao đổi trực tiếp.",
-    image: "/images/solutions/collection/img2.png",
-  },
-  {
-    shortTitle: "Đa kênh",
-    title: "Tiếp cận Đa kênh (Omnichannel)",
-    description:
-      "Kết hợp gọi điện, gửi SMS Brandname và tin nhắn Zalo ZNS để đảm bảo thông điệp nhắc nợ đến được với khách hàng qua kênh họ thường dùng nhất.",
-    image: "/images/solutions/collection/img3.png",
-  },
-  {
-    shortTitle: "Hiệu quả",
-    title: "Tối ưu chi phí & Nhân sự",
-    description:
-      "Giảm 70% khối lượng công việc thủ công. Một nhân viên có thể quản lý lượng hồ sơ nợ gấp 5 lần so với phương pháp truyền thống nhờ công cụ hỗ trợ.",
-    image: "/images/solutions/collection/img4.png",
-  },
-];
+import { useTranslations } from "next-intl"; // 2. Import hook
 
 const AboutCollection = () => {
+  const t = useTranslations("Solutions.Collection.About"); // 3. Namespace
   const [activeIndex, setActiveIndex] = useState(0);
+
+  // 4. Dữ liệu Slide dùng t()
+  const TEXTS = [
+    {
+      shortTitle: t("tab_problem"),
+      title: t("slide1_title"),
+      description: t("slide1_desc"),
+      image: "/images/solutions/collection/img1.png",
+    },
+    {
+      shortTitle: t("tab_solution"),
+      title: t("slide2_title"),
+      description: t("slide2_desc"),
+      image: "/images/solutions/collection/img2.png",
+    },
+    {
+      shortTitle: t("tab_omni"),
+      title: t("slide3_title"),
+      description: t("slide3_desc"),
+      image: "/images/solutions/collection/img3.png",
+    },
+    {
+      shortTitle: t("tab_efficiency"),
+      title: t("slide4_title"),
+      description: t("slide4_desc"),
+      image: "/images/solutions/collection/img4.png",
+    },
+  ];
 
   const handleNext = () => {
     setActiveIndex((prev) => (prev + 1) % TEXTS.length);
@@ -62,9 +60,8 @@ const AboutCollection = () => {
         {/* --- CỘT TRÁI --- */}
         <div className="flex flex-col justify-center items-start order-2 lg:order-1 relative z-10 w-full">
           <div className="mb-6 flex items-center gap-2">
-            {/* Đã đổi màu từ red sang blue */}
             <span className="px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs font-bold uppercase tracking-wider">
-              Giải pháp Tài chính - Thu hồi nợ
+              {t("badge")} {/* Giải pháp Tài chính - Thu hồi nợ */}
             </span>
           </div>
 
@@ -100,7 +97,6 @@ const AboutCollection = () => {
                 >
                   <span
                     className={`text-xs font-bold uppercase tracking-wider transition-colors duration-300 truncate ${
-                      // Đã đổi màu từ red sang blue
                       isActive
                         ? "text-blue-600 dark:text-white"
                         : "text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-400"
@@ -111,7 +107,6 @@ const AboutCollection = () => {
                   <div className="h-1 w-full bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden relative">
                     {isActive ? (
                       <motion.div
-                        // Đã đổi màu từ red sang blue
                         className="h-full bg-blue-600 dark:bg-white"
                         initial={{ width: "0%" }}
                         animate={{ width: "100%" }}
@@ -121,7 +116,11 @@ const AboutCollection = () => {
                       />
                     ) : (
                       <div
-                        className={`h-full w-full ${index < activeIndex ? "bg-gray-300 dark:bg-gray-700" : "bg-transparent"}`}
+                        className={`h-full w-full ${
+                          index < activeIndex
+                            ? "bg-gray-300 dark:bg-gray-700"
+                            : "bg-transparent"
+                        }`}
                       />
                     )}
                   </div>
@@ -133,10 +132,9 @@ const AboutCollection = () => {
           <div className="flex flex-wrap gap-4">
             <Link
               href="/contact"
-              // Đã đổi màu từ red sang blue và hover shadow
               className="group inline-flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 font-bold rounded-lg shadow-lg hover:shadow-blue-500/30 transition-all transform hover:-translate-y-1"
             >
-              <span>Tư vấn giải pháp</span>
+              <span>{t("btn_consult")}</span>
               <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
@@ -144,7 +142,6 @@ const AboutCollection = () => {
 
         {/* --- CỘT PHẢI --- */}
         <div className="w-full order-1 lg:order-2">
-          {/* Wrapper để căn chỉnh vị trí khung TechFrame */}
           <div className="flex justify-center lg:justify-end items-center h-full">
             <TechFrame title={TEXTS[activeIndex].title}>
               <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-50 dark:bg-gray-900/50 flex items-center justify-center p-1">
@@ -155,7 +152,6 @@ const AboutCollection = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 1.05 }}
                     transition={{ duration: 0.5 }}
-                    // Đặt padding nhẹ để ảnh không dính sát viền khung
                     className="absolute inset-0 w-full h-full p-2 sm:p-3"
                   >
                     <Image

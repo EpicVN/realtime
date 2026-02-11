@@ -1,43 +1,36 @@
 "use client";
 
 import React, { useState } from "react";
+import { Link } from "@/i18n/navigation"; // 1. Link chuẩn
 import { motion, AnimatePresence } from "framer-motion";
-import { FaPlus } from "react-icons/fa6"; // Chỉ cần icon Plus là đủ
+import { FaPlus } from "react-icons/fa6";
+import { useTranslations } from "next-intl"; // 2. Import hook
 
 const FAQ = () => {
-  // Mặc định null (đóng hết) để giao diện gọn gàng lúc đầu, hoặc 0 nếu muốn mở cái đầu
+  const t = useTranslations("Home.FAQ"); // 3. Namespace
   const [activeIndex, setActiveIndex] = useState<number | null>(0);
 
+  // 4. Dữ liệu FAQ dùng t()
   const faqs = [
     {
-      question:
-        "Tôi có cần đầu tư máy chủ vật lý tại văn phòng để sử dụng hệ thống không?",
-      answer:
-        "Không. Hệ thống Realtime được xây dựng theo mô hình điện toán tập trung (Cloud), giúp doanh nghiệp tối ưu chi phí đầu tư ban đầu. Bạn chỉ cần kết nối Internet và sử dụng các thiết bị linh hoạt như IP Phone, Softphone trên máy tính hoặc điện thoại analog qua IP Gateway.",
+      question: t("q1"),
+      answer: t("a1"),
     },
     {
-      question:
-        "Nếu công ty tôi mở rộng quy mô nhân sự, việc nâng cấp có phức tạp không?",
-      answer:
-        'Hoàn toàn đơn giản. Kiến trúc hệ thống được thiết kế để sẵn sàng mở rộng bất cứ lúc nào. Bạn chỉ cần nâng cấp gói dịch vụ theo các "Block" người dùng (như Block 10, Block 20...) để tăng số lượng máy nhánh mà không cần thay đổi hạ tầng kỹ thuật hiện có.',
+      question: t("q2"),
+      answer: t("a2"),
     },
     {
-      question:
-        "Nếu nhân viên làm việc từ xa hoặc đi công tác thì có sử dụng được tổng đài không?",
-      answer:
-        "Có. Hệ thống hỗ trợ đa nền tảng (Web, App Mobile, Softphone). Nhân viên có thể đăng nhập và nghe gọi, chăm sóc khách hàng ở bất cứ đâu miễn là có kết nối Internet.",
+      question: t("q3"),
+      answer: t("a3"),
     },
     {
-      question:
-        "Việc nghe lại các cuộc gọi cũ để kiểm tra chất lượng dịch vụ có dễ dàng không?",
-      answer:
-        "Rất dễ dàng. Hệ thống tự động ghi âm và lưu trữ lịch sử cuộc gọi. Quản lý có thể tìm kiếm, nghe lại hoặc tải xuống file ghi âm ngay trên trình duyệt web quản trị.",
+      question: t("q4"),
+      answer: t("a4"),
     },
     {
-      question:
-        "Hệ thống có hỗ trợ tự động đọc mã OTP hoặc nhắc nợ bằng giọng nói không?",
-      answer:
-        "Có. Với giải pháp Text-To-Speech và Auto Call tích hợp, hệ thống có thể tự động gọi ra để đọc mã OTP, thông báo số dư, nhắc lịch hẹn hoặc nhắc nợ hoàn toàn tự động với giọng đọc AI tự nhiên.",
+      question: t("q5"),
+      answer: t("a5"),
     },
   ];
 
@@ -51,14 +44,13 @@ const FAQ = () => {
         {/* --- Header --- */}
         <div className="text-center mb-16">
           <span className="inline-block py-1 px-3 rounded-full bg-blue-100 dark:bg-blue-900/30 text-primary dark:text-blue-400 text-xs font-bold uppercase tracking-wider mb-4">
-            Hỗ trợ khách hàng
+            {t("badge")} {/* Hỗ trợ khách hàng */}
           </span>
           <h2 className="text-3xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6">
-            Câu hỏi thường gặp
+            {t("title")} {/* Câu hỏi thường gặp */}
           </h2>
           <p className="text-lg text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
-            Giải đáp những thắc mắc phổ biến nhất về hệ thống Realtime
-            Solutions.
+            {t("subtitle")} {/* Giải đáp những thắc mắc... */}
           </p>
         </div>
 
@@ -74,8 +66,8 @@ const FAQ = () => {
                     border rounded-xl overflow-hidden transition-all duration-300
                     ${
                       isActive
-                        ? "bg-white dark:bg-gray-900 border-primary shadow-lg dark:shadow-blue-900/20" // Active: Viền xanh, có bóng
-                        : "bg-gray-50 dark:bg-gray-900 border-transparent hover:border-gray-200 dark:hover:border-gray-800" // Inactive: Nền xám nhẹ
+                        ? "bg-white dark:bg-gray-900 border-primary shadow-lg dark:shadow-blue-900/20"
+                        : "bg-gray-50 dark:bg-gray-900 border-transparent hover:border-gray-200 dark:hover:border-gray-800"
                     }
                 `}
               >
@@ -94,7 +86,7 @@ const FAQ = () => {
                     {item.question}
                   </span>
 
-                  {/* Icon xoay 45 độ khi active */}
+                  {/* Icon xoay */}
                   <span
                     className={`
                     shrink-0 flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300
@@ -102,7 +94,7 @@ const FAQ = () => {
                   `}
                   >
                     <motion.div
-                      animate={{ rotate: isActive ? 45 : 0 }} // Xoay dấu + thành dấu x
+                      animate={{ rotate: isActive ? 45 : 0 }}
                       transition={{ duration: 0.3 }}
                     >
                       <FaPlus className="w-4 h-4" />
@@ -133,14 +125,17 @@ const FAQ = () => {
           })}
         </div>
 
-        {/* Footer Note (Optional) */}
+        {/* Footer Note */}
         <div className="mt-12 text-center">
           <p className="text-gray-500 dark:text-gray-400">
-            Bạn không tìm thấy câu trả lời?{" "}
-            <a href="/contact" className="text-primary font-bold hover:underline">
-              Liên hệ ngay
-            </a>{" "}
-            với chúng tôi.
+            {t("footer_text")}{" "}
+            <Link
+              href="/contact"
+              className="text-primary font-bold hover:underline"
+            >
+              {t("footer_link")}
+            </Link>{" "}
+            {t("footer_text_2")}
           </p>
         </div>
       </div>

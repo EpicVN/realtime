@@ -1,46 +1,44 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation"; // 1. Link chuẩn
 import { FaArrowRight } from "react-icons/fa6";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { useState } from "react";
 import TechFrame from "@/components/Common/TechFrame";
-
-// --- DỮ LIỆU CONTENT CHO TUYỂN DỤNG ---
-const TEXTS = [
-  {
-    shortTitle: "Thách thức",
-    title: "HR mất quá nhiều thời gian gọi điện?",
-    description:
-      "Bạn phải gọi hàng trăm cuộc mỗi ngày để lọc hồ sơ (Screening)? Ứng viên không bắt máy vì sợ số lạ? Quên lịch phỏng vấn? Dữ liệu ứng viên lưu file Excel rời rạc?",
-    image: "/images/solutions/recruitment/img1.png", // Bạn nhớ tạo folder và ảnh nhé
-  },
-  {
-    shortTitle: "Sàng lọc tự động",
-    title: "Autocall Sàng lọc ứng viên",
-    description:
-      "Sử dụng hệ thống gọi tự động để thông báo tuyển dụng hoặc sơ tuyển hàng loạt. Chỉ những ứng viên bấm phím 'Quan tâm' mới được chuyển tiếp đến chuyên viên tuyển dụng.",
-    image: "/images/solutions/recruitment/img2.png",
-  },
-  {
-    shortTitle: "Thương hiệu",
-    title: "Voice Brandname - Tăng uy tín",
-    description:
-      "Cuộc gọi hiển thị tên Công ty thay vì số lạ. Giúp ứng viên nhận diện ngay thương hiệu nhà tuyển dụng, tăng tỷ lệ bắt máy lên tới 90% và thể hiện sự chuyên nghiệp.",
-    image: "/images/solutions/recruitment/img3.png",
-  },
-  {
-    shortTitle: "Nhắc lịch",
-    title: "Tự động nhắc lịch Phỏng vấn",
-    description:
-      "Hệ thống tự động gửi SMS hoặc Zalo ZNS nhắc lịch phỏng vấn cho ứng viên trước 1 ngày/1 giờ. Giảm thiểu tối đa tình trạng ứng viên 'bùng' lịch (No-show).",
-    image: "/images/solutions/recruitment/img4.png",
-  },
-];
+import { useTranslations } from "next-intl"; // 2. Import hook
 
 const AboutRecruitment = () => {
+  const t = useTranslations("Solutions.Recruitment.About"); // 3. Namespace
   const [activeIndex, setActiveIndex] = useState(0);
+
+  // 4. Dữ liệu dùng t() và giữ nguyên đường dẫn ảnh String
+  const TEXTS = [
+    {
+      shortTitle: t("tab_challenge"),
+      title: t("slide1_title"),
+      description: t("slide1_desc"),
+      image: "/images/solutions/recruitment/img1.png",
+    },
+    {
+      shortTitle: t("tab_screening"),
+      title: t("slide2_title"),
+      description: t("slide2_desc"),
+      image: "/images/solutions/recruitment/img2.png",
+    },
+    {
+      shortTitle: t("tab_brand"),
+      title: t("slide3_title"),
+      description: t("slide3_desc"),
+      image: "/images/solutions/recruitment/img3.png",
+    },
+    {
+      shortTitle: t("tab_reminder"),
+      title: t("slide4_title"),
+      description: t("slide4_desc"),
+      image: "/images/solutions/recruitment/img4.png",
+    },
+  ];
 
   const handleNext = () => {
     setActiveIndex((prev) => (prev + 1) % TEXTS.length);
@@ -63,7 +61,7 @@ const AboutRecruitment = () => {
         <div className="flex flex-col justify-center items-start order-2 lg:order-1 relative z-10 w-full">
           <div className="mb-6 flex items-center gap-2">
             <span className="px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs font-bold uppercase tracking-wider">
-              Giải pháp Tổng đài Tuyển dụng
+              {t("badge")} {/* Giải pháp Tổng đài Tuyển dụng */}
             </span>
           </div>
 
@@ -118,7 +116,11 @@ const AboutRecruitment = () => {
                       />
                     ) : (
                       <div
-                        className={`h-full w-full ${index < activeIndex ? "bg-gray-300 dark:bg-gray-700" : "bg-transparent"}`}
+                        className={`h-full w-full ${
+                          index < activeIndex
+                            ? "bg-gray-300 dark:bg-gray-700"
+                            : "bg-transparent"
+                        }`}
                       />
                     )}
                   </div>
@@ -132,13 +134,13 @@ const AboutRecruitment = () => {
               href="/contact"
               className="group inline-flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 font-bold rounded-lg shadow-lg hover:shadow-blue-500/30 transition-all transform hover:-translate-y-1"
             >
-              <span>Tư vấn giải pháp HR</span>
+              <span>{t("btn_consult")}</span>
               <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
         </div>
 
-        {/* --- CỘT PHẢI (Fix Aspect Ratio 16:9) --- */}
+        {/* --- CỘT PHẢI --- */}
         <div className="w-full order-1 lg:order-2">
           <div className="flex justify-center lg:justify-end items-center h-full">
             <TechFrame title={TEXTS[activeIndex].title}>

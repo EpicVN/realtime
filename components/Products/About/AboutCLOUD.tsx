@@ -1,46 +1,44 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation"; // 1. Link chuẩn
 import { FaArrowRight } from "react-icons/fa6";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { useState } from "react";
 import TechFrame from "@/components/Common/TechFrame";
-
-// --- DỮ LIỆU TÙY CHỈNH CHO CLOUD ---
-const TEXTS = [
-  {
-    shortTitle: "Tổng quan",
-    title: "RealtimeCLOUD - Hạ tầng điện toán đám mây",
-    description:
-      "Cung cấp máy chủ ảo (Cloud Server) hiệu năng cao trên nền tảng ảo hóa KVM/VMware. Khởi tạo dịch vụ chỉ trong 30 giây với hạ tầng phần cứng mạnh mẽ nhất.",
-    image: "/images/products/cloud/img1.png",
-  },
-  {
-    shortTitle: "Hiệu năng",
-    title: "100% Ổ cứng NVMe Enterprise",
-    description:
-      "Trang bị 100% ổ cứng SSD NVMe chuẩn Enterprise cho tốc độ đọc ghi (IOPS) vượt trội gấp 10 lần SSD thông thường. CPU Intel Xeon Gold đời mới xử lý đa nhiệm mượt mà.",
-    image: "/images/products/cloud/img2.png",
-  },
-  {
-    shortTitle: "An toàn",
-    title: "Bảo mật & Backup tự động",
-    description:
-      "Hệ thống tường lửa (Firewall) chống DDoS chuyên dụng. Cơ chế Backup định kỳ tự động hàng tuần (Weekly Backup) đảm bảo an toàn tuyệt đối cho dữ liệu của bạn.",
-    image: "/images/products/cloud/img3.png",
-  },
-  {
-    shortTitle: "Quản trị",
-    title: "Portal quản trị thông minh",
-    description:
-      "Giao diện Web-based thân thiện, cho phép Start/Stop/Reboot server, cài lại hệ điều hành (OS Reinstall) hoặc nâng cấp cấu hình tức thì chỉ với vài cú click chuột.",
-    image: "/images/products/cloud/img4.png",
-  },
-];
+import { useTranslations } from "next-intl"; // 2. Hook
 
 const AboutCLOUD = () => {
+  const t = useTranslations("Products.Cloud.About"); // 3. Namespace
   const [activeIndex, setActiveIndex] = useState(0);
+
+  // 4. Dữ liệu Slide dùng t()
+  const TEXTS = [
+    {
+      shortTitle: t("tab_overview"),
+      title: t("slide1_title"),
+      description: t("slide1_desc"),
+      image: "/images/products/cloud/img1.png",
+    },
+    {
+      shortTitle: t("tab_performance"),
+      title: t("slide2_title"),
+      description: t("slide2_desc"),
+      image: "/images/products/cloud/img2.png",
+    },
+    {
+      shortTitle: t("tab_security"),
+      title: t("slide3_title"),
+      description: t("slide3_desc"),
+      image: "/images/products/cloud/img3.png",
+    },
+    {
+      shortTitle: t("tab_portal"),
+      title: t("slide4_title"),
+      description: t("slide4_desc"),
+      image: "/images/products/cloud/img4.png",
+    },
+  ];
 
   const handleNext = () => {
     setActiveIndex((prev) => (prev + 1) % TEXTS.length);
@@ -63,7 +61,7 @@ const AboutCLOUD = () => {
         <div className="flex flex-col justify-center items-start order-2 lg:order-1 relative z-10 w-full">
           <div className="mb-6 flex items-center gap-2">
             <span className="px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs font-bold uppercase tracking-wider">
-              Cloud Server / VPS
+              {t("badge")} {/* Cloud Server / VPS */}
             </span>
           </div>
 
@@ -118,7 +116,11 @@ const AboutCLOUD = () => {
                       />
                     ) : (
                       <div
-                        className={`h-full w-full ${index < activeIndex ? "bg-gray-300 dark:bg-gray-700" : "bg-transparent"}`}
+                        className={`h-full w-full ${
+                          index < activeIndex
+                            ? "bg-gray-300 dark:bg-gray-700"
+                            : "bg-transparent"
+                        }`}
                       />
                     )}
                   </div>
@@ -132,21 +134,20 @@ const AboutCLOUD = () => {
               href="/contact"
               className="group inline-flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 font-bold rounded-lg shadow-lg hover:shadow-blue-500/30 transition-all transform hover:-translate-y-1"
             >
-              <span>Khởi tạo Server ngay</span>
+              <span>{t("btn_create")}</span>
               <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
             </Link>
             <Link
               href="#pricing"
               className="inline-flex items-center justify-center space-x-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-white px-8 py-4 font-bold rounded-lg transition-all"
             >
-              <span>Xem bảng giá</span>
+              <span>{t("btn_pricing")}</span>
             </Link>
           </div>
         </div>
 
         {/* --- CỘT PHẢI --- */}
         <div className="w-full order-1 lg:order-2">
-          {/* Wrapper để căn chỉnh vị trí khung TechFrame */}
           <div className="flex justify-center lg:justify-end items-center h-full">
             <TechFrame title={TEXTS[activeIndex].title}>
               <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-50 dark:bg-gray-900/50 flex items-center justify-center p-1">
@@ -157,7 +158,6 @@ const AboutCLOUD = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 1.05 }}
                     transition={{ duration: 0.5 }}
-                    // Đặt padding nhẹ để ảnh không dính sát viền khung
                     className="absolute inset-0 w-full h-full p-2 sm:p-3"
                   >
                     <Image
