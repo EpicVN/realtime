@@ -127,7 +127,7 @@ const Footer = () => {
                     {t("address_label")}:
                   </span>
                   <span>
-                    108/15/18 Đ. Số 1, Phường 16, Gò Vấp,{" "}
+                    108/15/18 Đ. Số 1, Phường An Hội Đông,{" "}
                     <br className="hidden lg:block" />
                     {t("address_city")} {/* Thành phố Hồ Chí Minh, Việt Nam */}
                   </span>

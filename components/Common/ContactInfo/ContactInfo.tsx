@@ -20,9 +20,9 @@ const ContactInfo = () => {
       icon: <FaLocationDot />,
       title: t("office_title"),
       description: t("office_desc"),
-      info: "108/15/18 Đ. Số 1, Phường 16, Gò Vấp, TP. Hồ Chí Minh", // Địa chỉ cụ thể có thể giữ nguyên hoặc đưa vào json nếu muốn dịch tên TP
+      info: "108/15/18 Đ. Số 1, Phường An Hội Đông, TP.HCM",
       btnText: t("btn_map"),
-      link: "https://maps.google.com/?q=108/15/18+Đ.+Số+1,+Phường+16,+Gò+Vấp,+Thành+phố+Hồ+Chí+Minh,+Việt+Nam",
+      link: "https://maps.google.com/?q=108/15/18+Đ.+Số+1,+Phường+An+Hội+Đông,+TP.+Hồ+Chí+Minh,+Việt+Nam",
       color: "blue",
     },
     {
