@@ -102,7 +102,9 @@ const ContactPage = () => {
             className="w-full max-w-lg mx-auto bg-white dark:bg-gray-900 p-6 md:p-8 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800"
           >
             <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-5 text-center">
-              {t("form_title")}
+              {t.rich("form_title", {
+                br: () => <br />,
+              })}
             </h2>
 
             <form action={formAction} className="space-y-4">
