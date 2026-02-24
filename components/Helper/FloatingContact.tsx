@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { FaFacebookF, FaPhone } from "react-icons/fa6";
+import { FaFacebookF, FaPaperPlane, FaPhone } from "react-icons/fa6";
 import { ImArrowUp } from "react-icons/im";
 
 // Component con hiển thị Tooltip (Nhãn chữ)
@@ -65,6 +65,26 @@ const FloatingContact = () => {
       {/* Spacer nhỏ để tách nhóm liên hệ ra */}
       <div className="h-1" />
 
+      {/* --- Kinh doanh --- */}
+      <motion.div
+        initial={{ opacity: 0, x: 50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 1 }}
+        className="pointer-events-auto relative group"
+      >
+        <Link
+          href="tel:0386923901"
+          target="_blank"
+          className="flex items-center justify-center w-11 h-11 rounded-full bg-[#1877F2] text-white shadow-lg hover:scale-110 transition-transform relative overflow-hidden"
+        >
+          <FaPhone className="text-lg z-20" />
+          {/* Hiệu ứng bóng sáng lướt qua */}
+          <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+        </Link>
+        {/* Tooltip */}
+        <Tooltip text="KD - Giang Lê - 038 6923901" />
+      </motion.div>
+
       {/* --- FACEBOOK --- */}
       <motion.div
         initial={{ opacity: 0, x: 50 }}
@@ -82,7 +102,7 @@ const FloatingContact = () => {
           <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
         </Link>
         {/* Tooltip */}
-        <Tooltip text="Chat Facebook" />
+        <Tooltip text="Facebook" />
       </motion.div>
 
       {/* --- ZALO --- */}
@@ -131,7 +151,27 @@ const FloatingContact = () => {
             />
           </svg>
         </Link>
-        <Tooltip text="Chat Zalo" />
+        <Tooltip text="Zalo" />
+      </motion.div>
+
+      {/* --- Contact form --- */}
+      <motion.div
+        initial={{ opacity: 0, x: 50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 1 }}
+        className="pointer-events-auto relative group"
+      >
+        <Link
+          href="/contact"
+          target="_blank"
+          className="flex items-center justify-center w-11 h-11 rounded-full bg-[#1877F2] text-white shadow-lg hover:scale-110 transition-transform relative overflow-hidden"
+        >
+          <FaPaperPlane className="text-lg z-20" />
+          {/* Hiệu ứng bóng sáng lướt qua */}
+          <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+        </Link>
+        {/* Tooltip */}
+        <Tooltip text="Contact" />
       </motion.div>
 
       {/* --- PHONE (HOTLINE) --- */}
