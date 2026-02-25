@@ -1,85 +1,73 @@
-"use client"
+"use client";
 
-import { useEffect, useRef, useState } from "react"
-import { EditorContent, EditorContext, useEditor } from "@tiptap/react"
+import { useEffect, useRef, useState } from "react";
+import { EditorContent, EditorContext, useEditor } from "@tiptap/react";
 
 // --- Tiptap Core Extensions ---
-import { StarterKit } from "@tiptap/starter-kit"
-import { Image } from "@tiptap/extension-image"
-import { TaskItem, TaskList } from "@tiptap/extension-list"
-import { TextAlign } from "@tiptap/extension-text-align"
-import { Typography } from "@tiptap/extension-typography"
-import { Highlight } from "@tiptap/extension-highlight"
-import { Subscript } from "@tiptap/extension-subscript"
-import { Superscript } from "@tiptap/extension-superscript"
-import { Selection } from "@tiptap/extensions"
+import { StarterKit } from "@tiptap/starter-kit";
+import { Image } from "@tiptap/extension-image";
+import { TaskItem, TaskList } from "@tiptap/extension-list";
+import { TextAlign } from "@tiptap/extension-text-align";
+import { Typography } from "@tiptap/extension-typography";
+import { Highlight } from "@tiptap/extension-highlight";
+import { Subscript } from "@tiptap/extension-subscript";
+import { Superscript } from "@tiptap/extension-superscript";
+import { Selection } from "@tiptap/extensions";
+import Placeholder from "@tiptap/extension-placeholder";
 
 // --- UI Primitives ---
-import { Button } from "@/components/tiptap-ui-primitive/button"
-import { Spacer } from "@/components/tiptap-ui-primitive/spacer"
+import { Button } from "@/components/tiptap-ui-primitive/button";
+import { Spacer } from "@/components/tiptap-ui-primitive/spacer";
 import {
   Toolbar,
   ToolbarGroup,
   ToolbarSeparator,
-} from "@/components/tiptap-ui-primitive/toolbar"
+} from "@/components/tiptap-ui-primitive/toolbar";
 
-// --- Tiptap Node ---
-import { ImageUploadNode } from "@/components/tiptap-node/image-upload-node/image-upload-node-extension"
-import { HorizontalRule } from "@/components/tiptap-node/horizontal-rule-node/horizontal-rule-node-extension"
-import "@/components/tiptap-node/blockquote-node/blockquote-node.scss"
-import "@/components/tiptap-node/code-block-node/code-block-node.scss"
-import "@/components/tiptap-node/horizontal-rule-node/horizontal-rule-node.scss"
-import "@/components/tiptap-node/list-node/list-node.scss"
-import "@/components/tiptap-node/image-node/image-node.scss"
-import "@/components/tiptap-node/heading-node/heading-node.scss"
-import "@/components/tiptap-node/paragraph-node/paragraph-node.scss"
+// --- Tiptap Node & UI Imports (Giữ nguyên như cũ của sếp) ---
+import { ImageUploadNode } from "@/components/tiptap-node/image-upload-node/image-upload-node-extension";
+import { HorizontalRule } from "@/components/tiptap-node/horizontal-rule-node/horizontal-rule-node-extension";
+import "@/components/tiptap-node/blockquote-node/blockquote-node.scss";
+import "@/components/tiptap-node/code-block-node/code-block-node.scss";
+import "@/components/tiptap-node/horizontal-rule-node/horizontal-rule-node.scss";
+import "@/components/tiptap-node/list-node/list-node.scss";
+import "@/components/tiptap-node/image-node/image-node.scss";
+import "@/components/tiptap-node/heading-node/heading-node.scss";
+import "@/components/tiptap-node/paragraph-node/paragraph-node.scss";
 
-// --- Tiptap UI ---
-import { HeadingDropdownMenu } from "@/components/tiptap-ui/heading-dropdown-menu"
-import { ImageUploadButton } from "@/components/tiptap-ui/image-upload-button"
-import { ListDropdownMenu } from "@/components/tiptap-ui/list-dropdown-menu"
-import { BlockquoteButton } from "@/components/tiptap-ui/blockquote-button"
-import { CodeBlockButton } from "@/components/tiptap-ui/code-block-button"
+import { HeadingDropdownMenu } from "@/components/tiptap-ui/heading-dropdown-menu";
+import { ImageUploadButton } from "@/components/tiptap-ui/image-upload-button";
+import { ListDropdownMenu } from "@/components/tiptap-ui/list-dropdown-menu";
+import { BlockquoteButton } from "@/components/tiptap-ui/blockquote-button";
+import { CodeBlockButton } from "@/components/tiptap-ui/code-block-button";
 import {
   ColorHighlightPopover,
   ColorHighlightPopoverContent,
   ColorHighlightPopoverButton,
-} from "@/components/tiptap-ui/color-highlight-popover"
+} from "@/components/tiptap-ui/color-highlight-popover";
 import {
   LinkPopover,
   LinkContent,
   LinkButton,
-} from "@/components/tiptap-ui/link-popover"
-import { MarkButton } from "@/components/tiptap-ui/mark-button"
-import { TextAlignButton } from "@/components/tiptap-ui/text-align-button"
-import { UndoRedoButton } from "@/components/tiptap-ui/undo-redo-button"
+} from "@/components/tiptap-ui/link-popover";
+import { MarkButton } from "@/components/tiptap-ui/mark-button";
+import { TextAlignButton } from "@/components/tiptap-ui/text-align-button";
+import { UndoRedoButton } from "@/components/tiptap-ui/undo-redo-button";
 
-// --- Icons ---
-import { ArrowLeftIcon } from "@/components/tiptap-icons/arrow-left-icon"
-import { HighlighterIcon } from "@/components/tiptap-icons/highlighter-icon"
-import { LinkIcon } from "@/components/tiptap-icons/link-icon"
+import { ArrowLeftIcon } from "@/components/tiptap-icons/arrow-left-icon";
+import { HighlighterIcon } from "@/components/tiptap-icons/highlighter-icon";
+import { LinkIcon } from "@/components/tiptap-icons/link-icon";
 
-// --- Hooks ---
-import { useIsBreakpoint } from "@/hooks/use-is-breakpoint"
-import { useWindowSize } from "@/hooks/use-window-size"
-import { useCursorVisibility } from "@/hooks/use-cursor-visibility"
+import { useIsBreakpoint } from "@/hooks/use-is-breakpoint";
+import { useWindowSize } from "@/hooks/use-window-size";
+import { useCursorVisibility } from "@/hooks/use-cursor-visibility";
+import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils";
+import "@/components/tiptap-templates/simple/simple-editor.scss";
 
-// --- Components ---
-// Đã xóa ThemeToggle để fix cứng Dark Mode
-// import { ThemeToggle } from "@/components/tiptap-templates/simple/theme-toggle"
-
-// --- Lib ---
-import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils"
-
-// --- Styles ---
-import "@/components/tiptap-templates/simple/simple-editor.scss"
-
-// Đã xóa import content.json mẫu
-
-// 1. Định nghĩa Interface Props
+// Interface Props
 interface SimpleEditorProps {
-  content?: string
-  onChange?: (html: string) => void
+  content?: string;
+  onChange?: (html: string) => void;
 }
 
 const MainToolbarContent = ({
@@ -87,21 +75,18 @@ const MainToolbarContent = ({
   onLinkClick,
   isMobile,
 }: {
-  onHighlighterClick: () => void
-  onLinkClick: () => void
-  isMobile: boolean
+  onHighlighterClick: () => void;
+  onLinkClick: () => void;
+  isMobile: boolean;
 }) => {
   return (
     <>
       <Spacer />
-
       <ToolbarGroup>
         <UndoRedoButton action="undo" />
         <UndoRedoButton action="redo" />
       </ToolbarGroup>
-
       <ToolbarSeparator />
-
       <ToolbarGroup>
         <HeadingDropdownMenu levels={[1, 2, 3, 4]} portal={isMobile} />
         <ListDropdownMenu
@@ -111,9 +96,7 @@ const MainToolbarContent = ({
         <BlockquoteButton />
         <CodeBlockButton />
       </ToolbarGroup>
-
       <ToolbarSeparator />
-
       <ToolbarGroup>
         <MarkButton type="bold" />
         <MarkButton type="italic" />
@@ -127,42 +110,28 @@ const MainToolbarContent = ({
         )}
         {!isMobile ? <LinkPopover /> : <LinkButton onClick={onLinkClick} />}
       </ToolbarGroup>
-
       <ToolbarSeparator />
-
-      <ToolbarGroup>
-        <MarkButton type="superscript" />
-        <MarkButton type="subscript" />
-      </ToolbarGroup>
-
-      <ToolbarSeparator />
-
       <ToolbarGroup>
         <TextAlignButton align="left" />
         <TextAlignButton align="center" />
         <TextAlignButton align="right" />
         <TextAlignButton align="justify" />
       </ToolbarGroup>
-
       <ToolbarSeparator />
-
       <ToolbarGroup>
         <ImageUploadButton text="Add" />
       </ToolbarGroup>
-
       <Spacer />
-
-      {/* Đã xóa ToolbarSeparator và ThemeToggle ở đây */}
     </>
-  )
-}
+  );
+};
 
 const MobileToolbarContent = ({
   type,
   onBack,
 }: {
-  type: "highlighter" | "link"
-  onBack: () => void
+  type: "highlighter" | "link";
+  onBack: () => void;
 }) => (
   <>
     <ToolbarGroup>
@@ -175,25 +144,22 @@ const MobileToolbarContent = ({
         )}
       </Button>
     </ToolbarGroup>
-
     <ToolbarSeparator />
-
     {type === "highlighter" ? (
       <ColorHighlightPopoverContent />
     ) : (
       <LinkContent />
     )}
   </>
-)
+);
 
-// 2. Nhận Props vào Component
 export function SimpleEditor({ content = "", onChange }: SimpleEditorProps) {
-  const isMobile = useIsBreakpoint()
-  const { height } = useWindowSize()
+  const isMobile = useIsBreakpoint();
+  const { height } = useWindowSize();
   const [mobileView, setMobileView] = useState<"main" | "highlighter" | "link">(
-    "main"
-  )
-  const toolbarRef = useRef<HTMLDivElement>(null)
+    "main",
+  );
+  const toolbarRef = useRef<HTMLDivElement>(null);
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -202,21 +168,19 @@ export function SimpleEditor({ content = "", onChange }: SimpleEditorProps) {
         autocomplete: "off",
         autocorrect: "off",
         autocapitalize: "off",
-        "aria-label": "Main content area, start typing to enter text.",
-        class: "simple-editor", // Giữ nguyên class cũ để sếp tự chỉnh CSS
+        class: "simple-editor focus:outline-none", // Giữ class gốc, CSS sẽ xử lý phần còn lại
       },
     },
-    // 3. Thêm hàm onUpdate để bắn dữ liệu ra ngoài
     onUpdate: ({ editor }) => {
-      onChange?.(editor.getHTML())
+      onChange?.(editor.getHTML());
     },
     extensions: [
       StarterKit.configure({
         horizontalRule: false,
-        link: {
-          openOnClick: false,
-          enableClickSelection: true,
-        },
+        link: { openOnClick: false, enableClickSelection: true },
+      }),
+      Placeholder.configure({
+        placeholder: "Nhập nội dung bài viết tại đây...",
       }),
       HorizontalRule,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
@@ -236,53 +200,79 @@ export function SimpleEditor({ content = "", onChange }: SimpleEditorProps) {
         onError: (error) => console.error("Upload failed:", error),
       }),
     ],
-    content: content, // 4. Sử dụng dữ liệu từ Props
-  })
+    content: content,
+  });
 
   const rect = useCursorVisibility({
     editor,
     overlayHeight: toolbarRef.current?.getBoundingClientRect().height ?? 0,
-  })
+  });
 
   useEffect(() => {
     if (!isMobile && mobileView !== "main") {
-      setMobileView("main")
+      setMobileView("main");
     }
-  }, [isMobile, mobileView])
+  }, [isMobile, mobileView]);
 
   return (
-    <div className="simple-editor-wrapper">
-      <EditorContext.Provider value={{ editor }}>
-        <Toolbar
-          ref={toolbarRef}
-          style={{
-            ...(isMobile
-              ? {
-                  bottom: `calc(100% - ${height - rect.y}px)`,
-                }
-              : {}),
-          }}
-        >
-          {mobileView === "main" ? (
-            <MainToolbarContent
-              onHighlighterClick={() => setMobileView("highlighter")}
-              onLinkClick={() => setMobileView("link")}
-              isMobile={isMobile}
-            />
-          ) : (
-            <MobileToolbarContent
-              type={mobileView === "highlighter" ? "highlighter" : "link"}
-              onBack={() => setMobileView("main")}
-            />
-          )}
-        </Toolbar>
+    // SỬA Ở ĐÂY: Xóa 'bg-white rounded-lg border shadow-sm'
+    // Chỉ giữ lại flex và kích thước để nó điền đầy khung cha
+    <div className="flex flex-col w-full relative">
+      {/* CSS Cưỡng chế (Giữ nguyên) */}
+      <style jsx global>{`
+        .ProseMirror {
+          max-width: 800px !important;
+          margin: 0 auto !important;
+          padding: 2rem 1.5rem !important;
+          min-height: 500px;
+          outline: none !important; /* Tắt viền xanh/đen khi gõ */
+        }
+        .ProseMirror p.is-editor-empty:first-child::before {
+          color: #9ca3af;
+          content: attr(data-placeholder);
+          float: left;
+          height: 0;
+          pointer-events: none;
+        }
+        .simple-editor-content {
+          overflow-x: hidden;
+        }
+      `}</style>
 
-        <EditorContent
-          editor={editor}
-          role="presentation"
-          className="simple-editor-content"
-        />
+      <EditorContext.Provider value={{ editor }}>
+        {/* Toolbar: Giữ border-b nhạt (gray-200) để ngăn cách nhẹ nhàng với nội dung */}
+        <div className="border-b border-gray-100 bg-gray-50/50 sticky top-0 z-999 shrink-0 backdrop-blur-sm transition-all">
+          <Toolbar
+            ref={toolbarRef}
+            style={{
+              ...(isMobile
+                ? { bottom: `calc(100% - ${height - rect.y}px)` }
+                : {}),
+            }}
+          >
+            {mobileView === "main" ? (
+              <MainToolbarContent
+                onHighlighterClick={() => setMobileView("highlighter")}
+                onLinkClick={() => setMobileView("link")}
+                isMobile={isMobile}
+              />
+            ) : (
+              <MobileToolbarContent
+                type={mobileView === "highlighter" ? "highlighter" : "link"}
+                onBack={() => setMobileView("main")}
+              />
+            )}
+          </Toolbar>
+        </div>
+
+        {/* Vùng soạn thảo */}
+        <div
+          className="w-full bg-white cursor-text simple-editor-content"
+          onClick={() => editor?.commands.focus()}
+        >
+          <EditorContent editor={editor} />
+        </div>
       </EditorContext.Provider>
     </div>
-  )
+  );
 }
