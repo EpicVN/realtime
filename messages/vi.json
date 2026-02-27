@@ -161,6 +161,7 @@
         "products": "Sản phẩm",
         "solutions": "Giải pháp",
         "partners": "Đối tác",
+        "blog": "Blog",
         "contact": "Liên hệ",
         "login": "Đăng nhập",
         "prod_cx_desc": "Nền tảng chăm sóc khách hàng đa kênh",
@@ -822,6 +823,19 @@
         "cta_desc": "Đăng ký ngay để nhận chính sách ưu đãi dành riêng cho đại lý và đối tác chiến lược.",
         "btn_register": "Đăng ký đối tác"
     },
+    "BlogPage": {
+    "title": "Tin tức & Sự kiện 📰",
+    "subtitle": "Cập nhật những xu hướng mới nhất về VoIP và CRM",
+    "read_more": "Đọc tiếp",
+    "views": "lượt xem",
+    "filter_all": "Tất cả",
+    "filter_vi": "Tiếng Việt",
+    "filter_en": "English",
+    "empty_title": "Không tìm thấy bài viết nào",
+    "empty_desc": "Chưa có bài viết nào phù hợp với bộ lọc này. Sếp hãy thử chọn ngôn ngữ khác xem sao nhé!",
+    "view_all": "Xem tất cả bài viết",
+    "back_home": "Quay về trang chủ"
+  },
     "Contact": {
         "hero_title": "Sẵn sàng bứt phá cùng",
         "hero_highlight": "Realtime Ecosystem?",

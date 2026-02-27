@@ -1,58 +1,111 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 interface PaginationProps {
   totalPages: number;
 }
 
 export default function Pagination({ totalPages }: PaginationProps) {
+  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const router = useRouter();
 
-  // Lấy trang hiện tại từ URL (ví dụ: ?page=2), mặc định là 1
+  // Lấy trang hiện tại từ URL, mặc định là 1
   const currentPage = Number(searchParams.get("page")) || 1;
 
+  // Hàm tạo URL khi chuyển trang
   const createPageURL = (pageNumber: number | string) => {
     const params = new URLSearchParams(searchParams);
     params.set("page", pageNumber.toString());
-    // Giữ lại các params khác (ví dụ search) nếu có
     return `${pathname}?${params.toString()}`;
   };
 
-  const handlePageChange = (direction: "prev" | "next") => {
-    if (direction === "prev" && currentPage > 1) {
-      router.push(createPageURL(currentPage - 1));
+  // Hàm xử lý hiển thị số trang (Logic rút gọn: 1 2 ... 5 6)
+  const generatePagination = () => {
+    // Nếu tổng trang ít (<= 7), hiện hết
+    if (totalPages <= 7) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
     }
-    if (direction === "next" && currentPage < totalPages) {
-      router.push(createPageURL(currentPage + 1));
+
+    // Logic hiển thị dấu "..." nếu trang quá dài (Nâng cao)
+    // Hiện tại để đơn giản cho sếp, mình hiển thị kiểu rút gọn cơ bản:
+    // Luôn hiện trang đầu, trang cuối, và trang hiện tại +- 1
+    if (currentPage <= 3) {
+      return [1, 2, 3, "...", totalPages];
     }
+    if (currentPage >= totalPages - 2) {
+      return [1, "...", totalPages - 2, totalPages - 1, totalPages];
+    }
+    return [
+      1,
+      "...",
+      currentPage - 1,
+      currentPage,
+      currentPage + 1,
+      "...",
+      totalPages,
+    ];
   };
 
-  return (
-    <div className="flex items-center gap-4">
-      <span className="text-sm text-gray-500 dark:text-gray-400">
-        Trang <span className="font-bold text-gray-900 dark:text-white">{currentPage}</span> / {totalPages}
-      </span>
+  const allPages = generatePagination();
 
-      <div className="flex gap-2">
-        <button
-          onClick={() => handlePageChange("prev")}
-          disabled={currentPage <= 1}
-          className="px-3 py-1.5 text-xs font-medium border rounded-md hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-        >
-          Trước
-        </button>
-        
-        <button
-          onClick={() => handlePageChange("next")}
-          disabled={currentPage >= totalPages}
-          className="px-3 py-1.5 text-xs font-medium border rounded-md hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-        >
-          Sau
-        </button>
+  return (
+    <div className="flex items-center justify-center gap-2">
+      {/* NÚT PREVIOUS */}
+      <button
+        className={`p-2 rounded-lg border transition-all ${
+          currentPage <= 1
+            ? "border-gray-100 text-gray-300 cursor-not-allowed"
+            : "border-gray-200 text-gray-600 hover:bg-gray-50 hover:border-blue-500 hover:text-blue-600 cursor-pointer"
+        }`}
+        disabled={currentPage <= 1}
+        onClick={() => router.push(createPageURL(currentPage - 1))}
+      >
+        <FaChevronLeft size={14} />
+      </button>
+
+      {/* DANH SÁCH SỐ TRANG */}
+      <div className="flex items-center gap-1">
+        {allPages.map((page, index) => {
+          if (page === "...") {
+            return (
+              <span key={index} className="px-2 text-gray-400 text-sm">
+                ...
+              </span>
+            );
+          }
+
+          const isActive = page === currentPage;
+          return (
+            <button
+              key={index}
+              onClick={() => router.push(createPageURL(page))}
+              className={`min-w-9 h-9 px-3 rounded-lg text-sm font-medium transition-all cursor-pointer ${
+                isActive
+                  ? "bg-blue-600 text-white shadow-md shadow-blue-500/30 border border-blue-600"
+                  : "bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 hover:border-gray-300"
+              }`}
+            >
+              {page}
+            </button>
+          );
+        })}
       </div>
+
+      {/* NÚT NEXT */}
+      <button
+        className={`p-2 rounded-lg border transition-all ${
+          currentPage >= totalPages
+            ? "border-gray-100 text-gray-300 cursor-not-allowed"
+            : "border-gray-200 text-gray-600 hover:bg-gray-50 hover:border-blue-500 hover:text-blue-600 cursor-pointer"
+        }`}
+        disabled={currentPage >= totalPages}
+        onClick={() => router.push(createPageURL(currentPage + 1))}
+      >
+        <FaChevronRight size={14} />
+      </button>
     </div>
   );
 }

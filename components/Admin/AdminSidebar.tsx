@@ -22,7 +22,11 @@ const MENU_GROUPS = [
     label: "QUẢN LÝ CHUNG",
     items: [
       { name: "Tổng quan", href: "/admin", icon: <FaChartPie /> },
-      { name: "Khách hàng (Leads)", href: "/admin/contacts", icon: <FaAddressBook /> },
+      {
+        name: "Khách hàng (Leads)",
+        href: "/admin/contacts",
+        icon: <FaAddressBook />,
+      },
     ],
   },
   {
@@ -60,7 +64,7 @@ export default function AdminSidebar() {
               </div>
             ) : (
               <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
-                 <FaRocket className="text-white text-lg" />
+                <FaRocket className="text-white text-lg" />
               </div>
             )}
           </div>
@@ -69,49 +73,64 @@ export default function AdminSidebar() {
 
       {/* --- MENU LINKS --- */}
       <nav className="flex-1 py-6 px-4 space-y-6 overflow-y-auto scrollbar-hide">
-        
         {/* Render từng nhóm Menu */}
         {MENU_GROUPS.map((group, groupIdx) => (
           <div key={groupIdx}>
-            {/* Tên nhóm (Chỉ hiện khi mở rộng) */}
+            {/* Tên nhóm */}
             {!isCollapsed && (
               <h3 className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-3 px-2 transition-opacity duration-300">
                 {group.label}
               </h3>
             )}
 
-            {/* List Items */}
             <div className="space-y-1">
               {group.items.map((item) => {
-                const isActive = pathname === item.href;
+                const cleanPathname =
+                  pathname.replace(/^\/[a-z]{2}/, "") || "/";
+
+                const isActive =
+                  item.href === "/admin"
+                    ? cleanPathname === "/admin"
+                    : cleanPathname.startsWith(item.href);
+
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
                     title={isCollapsed ? item.name : ""}
-                    className={`z
-                      relative group flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 font-medium
-                      ${
-                        isActive
-                          ? "bg-linear-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-500/25" // Active: Gradient + Shadow đẹp
-                          : "hover:bg-slate-800/50 hover:text-white text-slate-400" // Hover nhẹ nhàng
-                      }
-                      ${isCollapsed ? "justify-center" : ""} 
-                    `}
+                    className={`
+              relative group flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 font-medium
+              ${
+                isActive
+                  ? "bg-linear-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-500/25"
+                  : "hover:bg-slate-800/50 hover:text-white text-slate-400"
+              }
+              ${isCollapsed ? "justify-center" : ""} 
+            `}
                   >
                     {/* Icon */}
-                    <span className={`text-lg transition-transform duration-200 ${!isActive && "group-hover:scale-110"}`}>
-                        {item.icon}
+                    <span
+                      className={`text-lg transition-transform duration-200 ${
+                        !isActive && "group-hover:scale-110"
+                      }`}
+                    >
+                      {item.icon}
                     </span>
-                    
+
                     {/* Text */}
-                    <span className={`whitespace-nowrap transition-all duration-300 ${isCollapsed ? "w-0 overflow-hidden opacity-0" : "w-auto opacity-100"}`}>
+                    <span
+                      className={`whitespace-nowrap transition-all duration-300 ${
+                        isCollapsed
+                          ? "w-0 overflow-hidden opacity-0"
+                          : "w-auto opacity-100"
+                      }`}
+                    >
                       {item.name}
                     </span>
 
-                    {/* Active Indicator (Dấu chấm phát sáng khi Active - Chỉ hiện khi thu nhỏ) */}
+                    {/* Dấu chấm sáng khi Active (chỉ hiện khi thu nhỏ) */}
                     {isActive && isCollapsed && (
-                        <div className="absolute right-2 w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]"></div>
+                      <div className="absolute right-2 w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]"></div>
                     )}
                   </Link>
                 );
@@ -122,7 +141,7 @@ export default function AdminSidebar() {
 
         {/* --- KHU VỰC KHÁC (Phân cách bằng đường kẻ mờ) --- */}
         <div className="h-px bg-linear-to-r from-transparent via-gray-700 to-transparent my-4"></div>
-        
+
         {/* Nút Về trang chủ */}
         <Link
           href="/"
@@ -134,8 +153,12 @@ export default function AdminSidebar() {
             ${isCollapsed ? "justify-center" : ""} 
           `}
         >
-          <span className="text-lg group-hover:rotate-12 transition-transform"><FaHome /></span>
-          <span className={`whitespace-nowrap transition-all duration-300 ${isCollapsed ? "w-0 overflow-hidden opacity-0" : "w-auto opacity-100"}`}>
+          <span className="text-lg group-hover:rotate-12 transition-transform">
+            <FaHome />
+          </span>
+          <span
+            className={`whitespace-nowrap transition-all duration-300 ${isCollapsed ? "w-0 overflow-hidden opacity-0" : "w-auto opacity-100"}`}
+          >
             Về trang chủ
           </span>
         </Link>
@@ -147,26 +170,32 @@ export default function AdminSidebar() {
         className="absolute -right-3 top-24 z-50 p-1.5 rounded-full bg-blue-600 text-white shadow-lg shadow-blue-600/30 hover:bg-blue-500 hover:scale-110 transition-all border-2 border-slate-900 cursor-pointer"
         title="Đóng/Mở Menu"
       >
-        {isCollapsed ? <FaChevronRight size={10} /> : <FaChevronLeft size={10} />}
+        {isCollapsed ? (
+          <FaChevronRight size={10} />
+        ) : (
+          <FaChevronLeft size={10} />
+        )}
       </button>
 
       {/* --- FOOTER --- */}
       <div className="p-4 border-t border-gray-800/50 bg-slate-900/30">
         {!isCollapsed ? (
           <div className="flex items-center gap-3">
-             <div className="w-8 h-8 rounded-full bg-linear-to-br from-purple-500 to-pink-500 flex items-center justify-center text-xs font-bold text-white">
-                AD
-             </div>
-             <div className="flex flex-col">
-                <span className="text-xs font-bold text-white">Realtime Admin</span>
-                <span className="text-[10px] text-gray-500">v2.0.0</span>
-             </div>
-             <FaCog className="ml-auto text-gray-500 hover:text-white cursor-pointer" />
+            <div className="w-8 h-8 rounded-full bg-linear-to-br from-purple-500 to-pink-500 flex items-center justify-center text-xs font-bold text-white">
+              AD
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xs font-bold text-white">
+                Realtime Admin
+              </span>
+              <span className="text-[10px] text-gray-500">v2.0.0</span>
+            </div>
+            <FaCog className="ml-auto text-gray-500 hover:text-white cursor-pointer" />
           </div>
         ) : (
-             <div className="w-8 h-8 rounded-full bg-linear-to-br from-purple-500 to-pink-500 flex items-center justify-center text-xs font-bold text-white">
-                AD
-             </div>
+          <div className="w-8 h-8 rounded-full bg-linear-to-br from-purple-500 to-pink-500 flex items-center justify-center text-xs font-bold text-white">
+            AD
+          </div>
         )}
       </div>
     </aside>

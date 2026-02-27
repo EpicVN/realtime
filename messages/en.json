@@ -161,6 +161,7 @@
         "products": "Products",
         "solutions": "Solutions",
         "partners": "Partners",
+        "blog": "Blog",
         "contact": "Contact",
         "login": "Login",
         "prod_cx_desc": "Omnichannel customer service platform",
@@ -821,6 +822,19 @@
         "cta_title": "Become our partner today",
         "cta_desc": "Register now to receive exclusive policies for agencies and strategic partners.",
         "btn_register": "Register Partner"
+    },
+    "BlogPage": {
+        "title": "News & Events 📰",
+        "subtitle": "Update the latest trends on VoIP and CRM",
+        "read_more": "Read more",
+        "views": "views",
+        "filter_all": "All",
+        "filter_vi": "Vietnamese",
+        "filter_en": "English",
+        "empty_title": "No posts found",
+        "empty_desc": "There are no posts matching this filter. Please try selecting another language!",
+        "view_all": "View all posts",
+        "back_home": "Back to Home"
     },
     "Contact": {
         "hero_title": "Ready for a breakthrough with",

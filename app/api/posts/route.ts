@@ -19,7 +19,7 @@ function stringToSlug(str: string) {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { title, description, content, thumbnail } = body;
+    const { title, description, content, thumbnail, language } = body;
 
     // Validate cơ bản
     if (!title || !content) {
@@ -46,7 +46,8 @@ export async function POST(req: Request) {
         description,
         content,
         thumbnail,
-        published: true, // Đăng luôn
+        language: language || "vi",
+        published: false,
       },
     });
 

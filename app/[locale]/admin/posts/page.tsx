@@ -1,8 +1,13 @@
 import Pagination from "@/components/Helper/Pagination";
-import Link from "next/link";
+import DeletePostButton from "@/components/Posts/DeletePostButton"; // Đảm bảo đường dẫn đúng
+import PostStatusToggle from "@/components/Posts/PostStatusToggle";
+import { prisma } from "@/lib/prisma";
 import Image from "next/image";
-import { FaEdit, FaTrash, FaPlus, FaEye } from "react-icons/fa";
-import { prisma } from "@/lib/prisma"; // Import Prisma
+import Link from "next/link";
+import { FaEdit, FaEye, FaPlus } from "react-icons/fa";
+
+// Số lượng bài viết trên mỗi trang
+const ITEMS_PER_PAGE = 10;
 
 // --- 1. Hàm tính toán thống kê ---
 async function getPostStats() {
@@ -24,13 +29,30 @@ async function getPostStats() {
 }
 
 // --- 2. Component Chính (Server Component) ---
-export default async function PostsPage() {
-  // Lấy dữ liệu thật từ DB
+// Next.js 15: searchParams là Promise, cần await
+export default async function PostsPage(props: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const searchParams = await props.searchParams;
+
+  // 1. Xác định trang hiện tại (Mặc định là 1 nếu không có param)
+  const currentPage = Number(searchParams?.page) || 1;
+
+  // 2. Tính toán vị trí cần bỏ qua (Skip)
+  // Ví dụ: Trang 1 -> skip 0. Trang 2 -> skip 10.
+  const skip = (currentPage - 1) * ITEMS_PER_PAGE;
+
+  // 3. Lấy dữ liệu theo trang
   const posts = await prisma.post.findMany({
-    orderBy: { createdAt: "desc" }, // Bài mới nhất lên đầu
+    take: ITEMS_PER_PAGE, // Lấy 10 bài
+    skip: skip, // Bỏ qua các bài của trang trước
+    orderBy: { createdAt: "desc" },
   });
 
   const stats = await getPostStats();
+
+  // 4. Tính tổng số trang
+  const totalPages = Math.ceil(stats.total / ITEMS_PER_PAGE);
 
   // Hàm format ngày tháng
   const formatDate = (date: Date) => {
@@ -40,6 +62,10 @@ export default async function PostsPage() {
       year: "numeric",
     });
   };
+
+  // Tính toán hiển thị "Hiển thị từ X đến Y"
+  const startItem = (currentPage - 1) * ITEMS_PER_PAGE + 1;
+  const endItem = Math.min(currentPage * ITEMS_PER_PAGE, stats.total);
 
   return (
     <div className="flex flex-col gap-4 h-[calc(100vh-9rem)]">
@@ -65,6 +91,7 @@ export default async function PostsPage() {
 
       {/* --- STATS MINI --- */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 shrink-0">
+        {/* ... (Phần Stats giữ nguyên như code cũ của sếp) ... */}
         <div className="bg-white dark:bg-gray-800 p-3 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex flex-col">
           <span className="text-[10px] text-gray-500 uppercase font-bold">
             Tổng bài
@@ -106,7 +133,6 @@ export default async function PostsPage() {
           <table className="w-full text-left text-sm text-gray-600 dark:text-gray-300 table-fixed">
             <thead className="bg-gray-50 dark:bg-gray-700 uppercase font-bold text-xs text-gray-500 dark:text-gray-200 sticky top-0 z-10 border-b border-gray-200 dark:border-gray-600">
               <tr>
-                {/* Đã xóa Category & Author -> Tăng width cho Title */}
                 <th className="px-6 py-4 w-[50%]">Tiêu đề bài viết</th>
                 <th className="px-6 py-4 w-[15%] text-center hidden sm:table-cell">
                   Views
@@ -120,7 +146,7 @@ export default async function PostsPage() {
               {posts.length === 0 ? (
                 <tr>
                   <td colSpan={4} className="text-center py-10 text-gray-400">
-                    Chưa có bài viết nào. Hãy thêm mới!
+                    Chưa có bài viết nào.
                   </td>
                 </tr>
               ) : (
@@ -132,7 +158,6 @@ export default async function PostsPage() {
                     {/* Tiêu đề */}
                     <td className="px-6 py-4">
                       <div className="flex items-start gap-3">
-                        {/* Thumbnail */}
                         {post.thumbnail && (
                           <Image
                             src={post.thumbnail}
@@ -164,18 +189,11 @@ export default async function PostsPage() {
                     </td>
 
                     {/* Trạng thái */}
-                    <td className="px-6 py-4 text-center">
-                      {post.published ? (
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 border border-green-200 dark:border-green-800">
-                          <span className="w-1.5 h-1.5 rounded-full bg-green-600"></span>
-                          Đã đăng
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600">
-                          <span className="w-1.5 h-1.5 rounded-full bg-gray-500"></span>
-                          Nháp
-                        </span>
-                      )}
+                    <td className="p-4 text-center">
+                      <PostStatusToggle
+                        id={post.id} // Truyền ID vào đây
+                        initialStatus={post.published}
+                      />
                     </td>
 
                     {/* Hành động */}
@@ -185,23 +203,18 @@ export default async function PostsPage() {
                           href={`/posts/${post.slug}`}
                           target="_blank"
                           className="p-2 text-gray-500 hover:bg-gray-100 rounded transition-colors"
-                          title="Xem bài viết"
+                          title="Xem"
                         >
                           <FaEye />
                         </Link>
                         <Link
                           href={`/admin/posts/edit/${post.id}`}
                           className="p-2 text-blue-600 hover:bg-blue-100 rounded transition-colors"
-                          title="Chỉnh sửa"
+                          title="Sửa"
                         >
                           <FaEdit />
                         </Link>
-                        <button
-                          className="p-2 text-red-600 hover:bg-red-100 rounded transition-colors"
-                          title="Xóa"
-                        >
-                          <FaTrash />
-                        </button>
+                        <DeletePostButton id={post.id} />
                       </div>
                     </td>
                   </tr>
@@ -214,9 +227,12 @@ export default async function PostsPage() {
         {/* FOOTER */}
         <div className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 px-6 py-3 flex justify-between items-center shrink-0">
           <span className="text-xs text-gray-400">
-            Hiển thị {posts.length} kết quả mới nhất
+            {posts.length > 0
+              ? `Hiển thị ${startItem}-${endItem} trong tổng số ${stats.total} bài viết`
+              : "0 kết quả"}
           </span>
-          <Pagination totalPages={1} />
+          {/* Truyền đúng tham số cho Pagination */}
+          <Pagination totalPages={totalPages} />
         </div>
       </div>
     </div>

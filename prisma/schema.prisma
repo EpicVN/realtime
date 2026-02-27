@@ -13,7 +13,7 @@ datasource db {
 // Dùng Enum giúp code không bao giờ bị lỗi chính tả kiểu "admin" vs "Admin"
 enum Role {
   SUPER_ADMIN // Tài khoản trùm (không được đổi pass)
-  ADMIN       // Tài khoản thường
+  ADMIN // Tài khoản thường
 }
 
 // 2. Model cho Contact Form (Khách hàng từ Web)
@@ -23,7 +23,7 @@ model Contact {
   email     String
   phone     String?
   company   String?
-  interest  String?  // VD: VoIP, CRM, AutoDialer
+  interest  String? // VD: VoIP, CRM, AutoDialer
   message   String
   status    String   @default("PENDING") // PENDING, CALLED, CLOSED
   createdAt DateTime @default(now())
@@ -35,7 +35,7 @@ model User {
   id        String   @id @default(cuid())
   name      String?
   email     String   @unique
-  password  String   // BẮT BUỘC PHẢI CÓ để lưu mật khẩu mã hóa
+  password  String // BẮT BUỘC PHẢI CÓ để lưu mật khẩu mã hóa
   role      Role     @default(ADMIN)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -44,13 +44,14 @@ model User {
 // 4. Model Post (Bài viết trên Blog)
 model Post {
   id          String   @id @default(uuid())
-  title       String
+  title       String   @db.VarChar(100)
   slug        String   @unique
-  description String?  @db.Text
+  description String?  @db.VarChar(160)
   content     String   @db.Text
   thumbnail   String?
   published   Boolean  @default(true)
   views       Int      @default(0)
+  language    String   @default("vi")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }

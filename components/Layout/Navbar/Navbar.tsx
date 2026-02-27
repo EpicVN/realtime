@@ -3,7 +3,7 @@
 import Logo from "@/components/Helper/Logo";
 import ThemeToggler from "@/components/Helper/ThemeToggler";
 import { AnimatePresence, motion } from "framer-motion";
-import { Link, usePathname } from "@/i18n/navigation"; // 1. Link chuẩn
+import { Link, usePathname } from "@/i18n/navigation";
 import { useEffect, useState } from "react";
 import {
   FaChevronDown,
@@ -17,7 +17,7 @@ import {
 import { HiBars3BottomRight } from "react-icons/hi2";
 import { RiFileMusicFill } from "react-icons/ri";
 import LangSwitcher from "@/components/Helper/LangSwitcher";
-import { useTranslations } from "next-intl"; // 2. Import hook
+import { useTranslations } from "next-intl";
 
 // --- TYPE DEFINITIONS ---
 interface GridColumn {
@@ -53,7 +53,7 @@ type Props = {
 };
 
 const Navbar = ({ openNav, currentUser }: Props) => {
-  const t = useTranslations("Navbar"); // 3. Namespace
+  const t = useTranslations("Navbar");
   const [navBar, setNavBar] = useState(false);
   const pathname = usePathname();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -70,7 +70,7 @@ const Navbar = ({ openNav, currentUser }: Props) => {
 
   const showBackground = navBar || pathname !== "/";
 
-  // 4. DỮ LIỆU NAV_DATA DÙNG t()
+  // --- DỮ LIỆU NAV_DATA ---
   const NAV_DATA: NavLink[] = [
     { id: 1, label: t("home"), url: "/" },
     {
@@ -150,12 +150,17 @@ const Navbar = ({ openNav, currentUser }: Props) => {
       ],
     },
     { id: 4, label: t("partners"), url: "/partners" },
-    { id: 5, label: t("contact"), url: "/contact" },
+    
+    // --- THÊM MỤC BLOG ---
+    { id: 5, label: t("blog"), url: "/posts" }, // Nhớ thêm key "blog" vào file ngôn ngữ
+    
+    { id: 6, label: t("contact"), url: "/contact" },
   ];
 
   return (
     <div
       className={`transition-all duration-200 h-25 z-100 fixed w-full ${
+        // SỬA: Giảm chiều cao xuống h-20 (80px)
         showBackground
           ? "bg-primary shadow-md dark:bg-gray-900/90 dark:backdrop-blur-md border-b border-transparent dark:border-gray-800"
           : "bg-transparent"
@@ -163,12 +168,13 @@ const Navbar = ({ openNav, currentUser }: Props) => {
     >
       <div className="flex items-center h-full justify-between w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Logo */}
-        <Link href="/">
+        <Link href="/" className="shrink-0">
           <Logo type="white" />
         </Link>
 
         {/* --- NAVLINKS (DESKTOP) --- */}
-        <div className="hidden lg:flex items-center gap-6 h-full">
+        {/* SỬA: Giảm gap xuống gap-5 */}
+        <div className="hidden lg:flex items-center gap-5 h-full">
           {NAV_DATA.map((link) => {
             return (
               <div
@@ -180,7 +186,8 @@ const Navbar = ({ openNav, currentUser }: Props) => {
                 {/* Main Link Text */}
                 <Link
                   href={link.url}
-                  className="flex items-center gap-1.5 text-white font-semibold transition-all duration-200 py-6 hover:text-cyan-300 dark:hover:text-orange-400"
+                  // SỬA: Thêm text-[15px] và font-medium
+                  className="flex items-center gap-1 text-white font-semibold transition-all duration-200 py-6 hover:text-cyan-300 dark:hover:text-orange-400"
                 >
                   <p>{link.label}</p>
                   {link.submenu && (
@@ -212,7 +219,8 @@ const Navbar = ({ openNav, currentUser }: Props) => {
                         clipPath: "inset(0% 0% 100% 0%)",
                       }}
                       transition={{ duration: 0.3, ease: "easeOut" }}
-                      className={`absolute top-15 left-1/2 -translate-x-1/2 pt-4 ${
+                      className={`absolute top-16 left-1/2 -translate-x-1/2 pt-4 ${
+                         // Sửa top-16 cho khớp với chiều cao mới
                         link.layout === "grid" ? "w-150" : "w-85"
                       }`}
                     >
@@ -220,9 +228,7 @@ const Navbar = ({ openNav, currentUser }: Props) => {
                         {/* Mũi tên trang trí */}
                         <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-blue-500 rotate-45 transform"></div>
 
-                        {/* --- RENDER LOGIC KHÁC NHAU --- */}
-
-                        {/* CASE 1: MEGA MENU (Dịch vụ) */}
+                        {/* RENDER LOGIC */}
                         {link.layout === "grid" ? (
                           <div className="grid grid-cols-2 gap-8 p-6">
                             {(link.submenu as GridColumn[]).map(
@@ -231,16 +237,14 @@ const Navbar = ({ openNav, currentUser }: Props) => {
                                   key={colIdx}
                                   className="flex flex-col gap-3"
                                 >
-                                  {/* Tiêu đề cột */}
                                   <h4 className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1 border-b border-gray-100 dark:border-gray-700 pb-2">
                                     {column.heading}
                                   </h4>
-                                  {/* List items trong cột */}
                                   <div className="flex flex-col gap-1">
                                     {column.items.map(
                                       (
                                         item: { title: string; url: string },
-                                        itemIdx: number,
+                                        itemIdx: number
                                       ) => (
                                         <Link
                                           key={itemIdx}
@@ -250,15 +254,14 @@ const Navbar = ({ openNav, currentUser }: Props) => {
                                           <span className="w-1.5 h-1.5 rounded-full bg-gray-300 group-hover:bg-blue-500 transition-colors"></span>
                                           {item.title}
                                         </Link>
-                                      ),
+                                      )
                                     )}
                                   </div>
                                 </div>
-                              ),
+                              )
                             )}
                           </div>
                         ) : (
-                          /* CASE 2: SIMPLE MENU (Sản phẩm) */
                           <div className="p-2 flex flex-col gap-1 relative z-10">
                             {(link.submenu as SimpleMenuItem[]).map(
                               (subItem: SimpleMenuItem, idx: number) => (
@@ -279,7 +282,7 @@ const Navbar = ({ openNav, currentUser }: Props) => {
                                     </p>
                                   </div>
                                 </Link>
-                              ),
+                              )
                             )}
                           </div>
                         )}
@@ -293,28 +296,36 @@ const Navbar = ({ openNav, currentUser }: Props) => {
         </div>
 
         {/* Buttons & Toggler */}
-        <div className="flex items-center space-x-6">
+        {/* SỬA: Giảm space-x xuống 3 */}
+        <div className="flex items-center space-x-3">
           {currentUser ? (
             <Link
               href="/admin"
-              className="box-border relative z-20 items-center justify-center w-auto px-4 py-2 sm:px-6 sm:py-2.5 overflow-hidden font-bold text-white transition-all duration-300 bg-linear-to-r from-green-500 to-emerald-600 rounded-md cursor-pointer hover:shadow-lg hover:scale-105 ease focus:outline-none hidden sm:inline-flex gap-2"
+              // SỬA: Giảm padding px-4 py-2, bo tròn rounded-full cho hiện đại
+              className="box-border relative z-20 items-center justify-center w-auto px-4 py-2 overflow-hidden font-bold text-white transition-all duration-300 bg-linear-to-r from-green-500 to-emerald-600 rounded-full cursor-pointer hover:shadow-lg hover:scale-105 ease focus:outline-none hidden sm:inline-flex gap-2 text-sm"
             >
-              <span className="relative z-20 flex items-center text-center text-sm">
+              <span className="relative z-20 flex items-center text-center">
                 Dashboard
               </span>
             </Link>
           ) : (
             <Link
               href="/login"
-              className="box-border relative z-20 items-center justify-center w-auto px-4 py-2 sm:px-6 sm:py-2.5 overflow-hidden font-bold text-gray-900 transition-all duration-300 bg-white rounded-md cursor-pointer hover:bg-primary-dark hover:text-white hover:shadow-lg ease focus:outline-none dark:bg-white dark:text-gray-900 dark:hover:bg-primary-dark dark:hover:shadow-lg dark:focus:ring-0 dark:focus:outline-none dark:hover:text-white hidden sm:inline-flex"
+              // SỬA: Tương tự như trên
+              className="box-border relative z-20 items-center justify-center w-auto px-4 py-2 overflow-hidden font-bold text-gray-900 transition-all duration-300 bg-white rounded-full cursor-pointer hover:bg-gray-50 hover:text-primary hover:shadow-lg ease focus:outline-none hidden sm:inline-flex text-sm"
             >
-              <span className="relative z-20 flex items-center text-center text-sm">
-                {t("login")} {/* Đăng nhập */}
+              <span className="relative z-20 flex items-center text-center">
+                {t("login")}
               </span>
             </Link>
           )}
-          <LangSwitcher />
-          <ThemeToggler />
+          
+          {/* SỬA: Thu nhỏ cụm chức năng phụ */}
+          <div className="flex items-center gap-1 sm:gap-2">
+            <LangSwitcher />
+            <ThemeToggler />
+          </div>
+
           <HiBars3BottomRight
             onClick={openNav}
             className="w-8 h-8 cursor-pointer text-white lg:hidden"
