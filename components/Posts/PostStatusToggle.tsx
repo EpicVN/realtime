@@ -28,7 +28,7 @@ export default function PostStatusToggle({ id, initialStatus }: Props) {
 
       if (res.ok) {
         setPublished(newStatus);
-        toast.success(newStatus ? "Đã xuất bản!" : "Đã chuyển về nháp!");
+        toast.success(newStatus ? "Đã đăng bài viết!" : "Đã tắt bài viết!");
         router.refresh(); // Refresh để cập nhật lại UI Admin nếu cần
       } else {
         toast.error("Lỗi cập nhật.");
@@ -48,7 +48,7 @@ export default function PostStatusToggle({ id, initialStatus }: Props) {
       <button
         onClick={togglePublish}
         disabled={loading}
-        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 hover:cursor-pointer ${
           published ? "bg-green-500" : "bg-gray-300"
         }`}
       >

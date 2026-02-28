@@ -22,15 +22,22 @@ async function main() {
     // Nếu chưa có thì tạo mới
     const hashedPassword = await hash(password, 12); // Mã hóa mật khẩu
 
-    await prisma.user.create({
-      data: {
-        email,
-        password: hashedPassword,
-        name: "Super Admin",
+    const user = await prisma.user.upsert({
+      where: { email: email },
+      update: {
         role: "SUPER_ADMIN",
+        permissions: [], // Super Admin full quyền nên để rỗng cũng được
+        password: hashedPassword, // Reset lại mật khẩu luôn cho chắc
+      },
+      create: {
+        email: email,
+        name: "Super Admin",
+        password: hashedPassword,
+        role: "SUPER_ADMIN",
+        permissions: [],
       },
     });
-    console.log(`✅ Đã tạo SuperAdmin: ${email}`);
+    console.log(`✅ Đã tạo SuperAdmin: ${user.name} với ${email}.`);
   } else {
     console.log(`ℹ️ SuperAdmin đã tồn tại.`);
   }
