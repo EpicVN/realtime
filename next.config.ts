@@ -8,7 +8,20 @@ const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 // 2. Cấu hình Next.js gốc của sếp
 const nextConfig: NextConfig = {
   images: {
-    unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: "http",
+        hostname: "localhost",
+      },
+      {
+        protocol: "https",
+        hostname: "realtime.vn",
+      },
+      {
+        protocol: "https",
+        hostname: "www.realtime.vn",
+      },
+    ],
   },
 };
 

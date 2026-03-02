@@ -226,6 +226,7 @@ export default function CreatePostPage() {
                     alt="Thumbnail"
                     fill
                     className="w-full h-full object-cover"
+                    unoptimized={formData.thumbnail.startsWith("/uploads/")}
                   />
                   <button
                     onClick={() => setFormData({ ...formData, thumbnail: "" })}
