@@ -74,18 +74,34 @@ const CustomImageButton = ({ editor }: { editor: Editor | null }) => {
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      // Convert sang Base64
-      const reader = new FileReader();
-      reader.onload = () => {
-        if (typeof reader.result === "string" && editor) {
-          // Chèn ảnh vào Editor dùng lệnh chuẩn của Tiptap
-          editor.chain().focus().setImage({ src: reader.result }).run();
-        }
-      };
-      reader.readAsDataURL(file);
+
+    if (file && editor) {
+      // --- BƯỚC 1: Tạo FormData để gửi lên Server ---
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        // --- BƯỚC 2: Gọi API Upload (API sếp vừa tạo) ---
+        // Sếp có thể thêm loading state ở đây nếu muốn
+        const response = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!response.ok) throw new Error("Upload thất bại");
+
+        const data = await response.json();
+
+        // --- BƯỚC 3: Chèn URL ảnh vào Editor (Lưu đường dẫn thôi, nhẹ hều) ---
+        // data.url chính là "/uploads/..."
+        editor.chain().focus().setImage({ src: data.url }).run();
+      } catch (error) {
+        console.error(error);
+        alert("Lỗi khi tải ảnh lên server!");
+      }
     }
-    // Reset input để chọn lại file cũ được
+
+    // Reset input
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
