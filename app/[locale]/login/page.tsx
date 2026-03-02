@@ -1,21 +1,24 @@
-"use client"; // <--- QUAN TRỌNG: Chuyển thành Client Component
+"use client";
 
 import Logo from "@/components/Helper/Logo";
 import Link from "next/link";
 import { useState } from "react";
 import { FaArrowLeft, FaExclamationTriangle } from "react-icons/fa";
-import { checkUserRole, authenticate } from "./action"; // Import từ file vừa tạo
+import { checkUserRole, authenticate } from "./action";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation"; // <--- 1. IMPORT ROUTER
 
 export default function LoginPage() {
+  const router = useRouter(); // <--- 2. KHỞI TẠO ROUTER
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  // Lưu ý: Khi dùng form action, tham số nhận vào là FormData
   const handleSubmit = async (formData: FormData) => {
     setLoading(true);
     setError(null);
 
-    // 1. Kiểm tra User & Lấy Role trước
+    // --- BƯỚC 1: Kiểm tra User & Lấy Role ---
     const check = await checkUserRole(formData);
 
     if (check.error) {
@@ -25,24 +28,37 @@ export default function LoginPage() {
     }
 
     if (check.success && check.role) {
-      // 2. LƯU ROLE VÀO LOCALSTORAGE (Mấu chốt vấn đề)
-      localStorage.setItem("userRole", check.role);
-
-      // 3. Gọi hàm đăng nhập thật để chuyển trang
-      const loginError = await authenticate(formData);
-
-      // Nếu authenticate trả về lỗi (hiếm khi xảy ra vì đã check ở bước 1)
-      if (loginError) {
-        setError(loginError);
-        setLoading(false);
+      // --- BƯỚC 2: LƯU ROLE VÀO LOCALSTORAGE ---
+      if (typeof window !== "undefined") {
+        localStorage.setItem("userRole", check.role);
       }
+
+      // --- BƯỚC 3: GỌI HÀM ĐĂNG NHẬP (AUTH.JS) ---
+      const loginResult = await authenticate(formData);
+
+      // Kiểm tra kết quả trả về (Object)
+      if (loginResult?.error) {
+        setError(loginResult.error);
+        setLoading(false);
+      } else {
+        // --- BƯỚC 4: THÀNH CÔNG -> CHUYỂN HƯỚNG ---
+        toast.success("Đăng nhập thành công!");
+
+        // Refresh để cập nhật session cookie mới nhất
+        router.refresh();
+        // Chuyển hướng sang trang Admin
+        router.push("/admin");
+      }
+    } else {
+      // Trường hợp check role thành công nhưng không có role (hiếm)
+      setLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen w-full flex flex-col md:flex-row bg-white dark:bg-[#020817]">
       {/* --- CỘT TRÁI (Branding) --- */}
-      <div className="hidden md:flex w-1/2 bg-primary dark:bg-slate-900 items-center justify-center p-12 relative overflow-hidden">
+      <div className="hidden md:flex w-1/2 bg-blue-600 dark:bg-slate-900 items-center justify-center p-12 relative overflow-hidden">
         <div className="relative z-10 text-center">
           <div className="mb-6 scale-150 flex justify-center">
             <Logo type="white" />
@@ -81,6 +97,7 @@ export default function LoginPage() {
             </div>
           )}
 
+          {/* Form dùng action */}
           <form action={handleSubmit} className="space-y-5">
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
