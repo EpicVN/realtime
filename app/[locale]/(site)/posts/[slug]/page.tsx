@@ -105,6 +105,7 @@ export default async function PostDetailPage({ params }: Props) {
                 fill
                 className="object-cover"
                 priority
+                unoptimized={post.thumbnail?.startsWith("/uploads/")}
               />
             </div>
           )}

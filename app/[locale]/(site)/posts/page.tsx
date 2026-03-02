@@ -115,6 +115,7 @@ export default async function BlogPage({ params, searchParams }: Props) {
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    unoptimized={post.thumbnail?.startsWith("/uploads/")}
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-gray-400">

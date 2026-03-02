@@ -165,6 +165,7 @@ export default async function PostsPage(props: {
                             width={48}
                             height={48}
                             className="w-12 h-12 rounded object-cover border hidden sm:block shrink-0"
+                            unoptimized={post.thumbnail?.startsWith("/uploads/")}
                           />
                         )}
                         <div className="overflow-hidden">
