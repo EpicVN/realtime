@@ -8,12 +8,7 @@ const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 // 2. Cấu hình Next.js gốc của sếp
 const nextConfig: NextConfig = {
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "res.cloudinary.com", // Cho phép ảnh từ Cloudinary
-      },
-    ],
+    unoptimized: true,
   },
 };
 
