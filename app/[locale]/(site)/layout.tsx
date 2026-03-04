@@ -3,6 +3,7 @@ import FloatingContact from "@/components/Helper/FloatingContact";
 import Footer from "@/components/Layout/Footer/Footer";
 import ResponsiveNav from "@/components/Layout/Navbar/ResponsiveNav";
 import { auth } from "@/auth";
+import { getSiteConfig } from "@/app/actions/config";
 
 export default async function SiteLayout({
   children,
@@ -10,12 +11,13 @@ export default async function SiteLayout({
   children: React.ReactNode;
 }) {
   const session = await auth();
+  const config = await getSiteConfig();
 
   return (
     <div className="flex flex-col min-h-screen">
       {/* Navbar chỉ hiện ở các trang trong nhóm (site) */}
       <ResponsiveNav currentUser={session?.user} />
-      <FloatingContact />
+      <FloatingContact config={config} />
 
       <div className="">{children}</div>
 

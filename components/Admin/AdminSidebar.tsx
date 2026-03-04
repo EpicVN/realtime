@@ -58,6 +58,12 @@ const MENU_GROUPS = [
         icon: <FaNewspaper />,
         allowedRoles: ["SUPER_ADMIN", "ADMIN"],
       },
+      {
+        name: "Cấu hình thông tin",
+        href: "/admin/settings",
+        icon: <FaCog />,
+        allowedRoles: ["SUPER_ADMIN", "ADMIN"],
+      },
     ],
   },
 ];

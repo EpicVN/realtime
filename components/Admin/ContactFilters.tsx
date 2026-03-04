@@ -43,7 +43,7 @@ export default function ContactFilters() {
   return (
     <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 mb-4 flex flex-col xl:flex-row gap-4">
       {/* Tìm kiếm */}
-      <div className="relative flex-1 min-w-[200px]">
+      <div className="relative flex-1 min-w-50">
         <input
           type="text"
           placeholder="Tìm tên, SĐT, Email..."

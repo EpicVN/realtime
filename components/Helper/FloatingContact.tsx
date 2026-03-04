@@ -6,16 +6,24 @@ import { useEffect, useState } from "react";
 import { FaFacebookF, FaPaperPlane, FaPhone } from "react-icons/fa6";
 import { ImArrowUp } from "react-icons/im";
 
-// Component con hiển thị Tooltip (Nhãn chữ)
+interface FloatingContactConfig {
+  salePhone?: string;
+  hotline?: string;
+  saleName?: string;
+  fbLink?: string;
+  zaloLink?: string;
+}
+
+// Component con hiển thị Tooltip (Giữ nguyên của sếp)
 const Tooltip = ({ text }: { text: string }) => (
   <span className="absolute right-[130%] top-1/2 -translate-y-1/2 px-3 py-1.5 bg-gray-900/90 text-white text-xs font-medium rounded-lg opacity-0 group-hover:opacity-100 group-hover:right-[115%] transition-all duration-300 whitespace-nowrap shadow-lg pointer-events-none backdrop-blur-sm z-10">
     {text}
-    {/* Mũi tên nhỏ trỏ vào nút */}
     <span className="absolute top-1/2 -right-1 -translate-y-1/2 border-t-4 border-t-transparent border-b-4 border-b-transparent border-l-4 border-l-gray-900/90"></span>
   </span>
 );
 
-const FloatingContact = () => {
+// CHÚ Ý: Nhận config từ thẻ cha truyền xuống
+const FloatingContact = ({ config }: { config: FloatingContactConfig }) => {
   const [showTopBtn, setShowTopBtn] = useState(false);
 
   useEffect(() => {
@@ -27,7 +35,6 @@ const FloatingContact = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Hàm cuộn mượt thủ công (như đã làm ở bước trước)
   const scrollToTop = () => {
     const duration = 800;
     const start = window.scrollY;
@@ -43,9 +50,13 @@ const FloatingContact = () => {
     requestAnimationFrame(animateScroll);
   };
 
+  // Loại bỏ khoảng trắng trong số điện thoại để dùng cho thẻ href="tel:..."
+  const cleanSalePhone = config?.salePhone?.replace(/\s+/g, "") || "0386923901";
+  const cleanHotline = config?.hotline?.replace(/\s+/g, "") || "0933119056";
+
   return (
     <div className="fixed bottom-6 right-6 z-9999 flex flex-col items-end gap-3 pointer-events-none">
-      {/* --- BACK TO TOP --- */}
+      {/* ... (Phần BACK TO TOP giữ nguyên) ... */}
       <AnimatePresence>
         {showTopBtn && (
           <motion.button
@@ -56,13 +67,11 @@ const FloatingContact = () => {
             className="pointer-events-auto group relative flex items-center justify-center w-10 h-10 rounded-full bg-primary text-white shadow-lg shadow-blue-500/40 border border-blue-500 hover:bg-primary-dark dark:hover:bg-white dark:hover:text-gray-900  hover:scale-110 transition-transform duration-300"
           >
             <ImArrowUp className="text-sm" />
-            {/* Tooltip cho nút lên đầu trang */}
             <Tooltip text="Lên đầu trang" />
           </motion.button>
         )}
       </AnimatePresence>
 
-      {/* Spacer nhỏ để tách nhóm liên hệ ra */}
       <div className="h-1" />
 
       {/* --- Kinh doanh --- */}
@@ -73,16 +82,17 @@ const FloatingContact = () => {
         className="pointer-events-auto relative group"
       >
         <Link
-          href="tel:0386923901"
+          href={`tel:${cleanSalePhone}`} // <-- Dùng data động
           target="_blank"
           className="flex items-center justify-center w-11 h-11 rounded-full bg-[#1877F2] text-white shadow-lg hover:scale-110 transition-transform relative overflow-hidden"
         >
           <FaPhone className="text-lg z-20" />
-          {/* Hiệu ứng bóng sáng lướt qua */}
           <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
         </Link>
-        {/* Tooltip */}
-        <Tooltip text="KD - Giang Lê - 038 6923901" />
+        <Tooltip
+          text={`KD - ${config?.saleName || "Giang Lê"} - ${config?.salePhone || "038 6923901"}`}
+        />{" "}
+        {/* <-- Data động */}
       </motion.div>
 
       {/* --- FACEBOOK --- */}
@@ -93,15 +103,13 @@ const FloatingContact = () => {
         className="pointer-events-auto relative group"
       >
         <Link
-          href="https://facebook.com/Realtime.vn?_rdc=1&_rdr#"
+          href={config?.fbLink || "#"} // <-- Dùng data động
           target="_blank"
           className="flex items-center justify-center w-11 h-11 rounded-full bg-[#1877F2] text-white shadow-lg hover:scale-110 transition-transform relative overflow-hidden"
         >
           <FaFacebookF className="text-lg z-20" />
-          {/* Hiệu ứng bóng sáng lướt qua */}
           <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
         </Link>
-        {/* Tooltip */}
         <Tooltip text="Facebook" />
       </motion.div>
 
@@ -113,18 +121,17 @@ const FloatingContact = () => {
         className="pointer-events-auto relative group"
       >
         <Link
-          href="https://zalo.me/0933119056"
+          href={config?.zaloLink || "#"} // <-- Dùng data động
           target="_blank"
-          // Giữ nguyên các class của Link để tạo hình tròn xanh và shadow
           className="flex items-center justify-center w-11 h-11 rounded-full bg-[#0068FF] text-white shadow-lg hover:scale-110 transition-transform"
         >
+          {/* SVG Zalo giữ nguyên */}
           <svg
-            viewBox="0 0 48 48" // Giữ nguyên ViewBox để icon không bị méo
+            viewBox="0 0 48 48"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="w-7 h-7" // Mình để w-7 h-7 (28px) cho to rõ hơn chút vì icon này nhiều chi tiết
+            className="w-7 h-7"
           >
-            {/* Paste toàn bộ các thẻ path từ file SVG của bạn vào đây */}
             <path
               fill="#2962ff"
               d="M15,36V6.827l-1.211-0.811C8.64,8.083,5,13.112,5,19v10c0,7.732,6.268,14,14,14h10 c4.722,0,8.883-2.348,11.417-5.931V36H15z"
@@ -163,14 +170,11 @@ const FloatingContact = () => {
       >
         <Link
           href="/contact"
-          target="_blank"
           className="flex items-center justify-center w-11 h-11 rounded-full bg-[#1877F2] text-white shadow-lg hover:scale-110 transition-transform relative overflow-hidden"
         >
           <FaPaperPlane className="text-lg z-20" />
-          {/* Hiệu ứng bóng sáng lướt qua */}
           <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
         </Link>
-        {/* Tooltip */}
         <Tooltip text="Contact" />
       </motion.div>
 
@@ -182,7 +186,7 @@ const FloatingContact = () => {
         className="pointer-events-auto relative group mt-1"
       >
         <Link
-          href="tel:0933119056"
+          href={`tel:${cleanHotline}`} // <-- Dùng data động
           className="flex items-center justify-center w-14 h-14 rounded-full bg-red-600 text-white shadow-[0_4px_20px_rgba(220,38,38,0.5)] relative z-20 hover:scale-105 transition-transform"
         >
           <motion.div
@@ -200,12 +204,10 @@ const FloatingContact = () => {
 
         {/* Tooltip đặc biệt cho Hotline */}
         <span className="absolute right-[125%] top-1/2 -translate-y-1/2 px-4 py-2 bg-red-600 text-white text-xs font-bold rounded-full opacity-0 group-hover:opacity-100 group-hover:right-[110%] transition-all duration-300 whitespace-nowrap shadow-lg pointer-events-none z-10">
-          Hotline: 0933 119 056
-          {/* Mũi tên đỏ */}
+          Hotline: {config?.hotline || "0933 119 056"} {/* <-- Data động */}
           <span className="absolute top-1/2 -right-1 -translate-y-1/2 border-t-4 border-t-transparent border-b-4 border-b-transparent border-l-4 border-l-red-600"></span>
         </span>
 
-        {/* Pulse Effect */}
         <span className="absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-20 animate-ping top-0 left-0 -z-10"></span>
         <span className="absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-20 top-0 left-0 -z-10 animate-pulse delay-75 scale-125"></span>
       </motion.div>

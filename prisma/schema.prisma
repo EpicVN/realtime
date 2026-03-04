@@ -56,3 +56,16 @@ model Post {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
+// 5. Model SiteConfig (Cấu hình chung của website, chỉ có 1 record duy nhất)
+model SiteConfig {
+  id          String   @id @default("global") // Chỉ lưu 1 record duy nhất
+  hotline     String   @default("0933119056")
+  salePhone   String   @default("038 6923901")
+  saleName    String   @default("Giang Lê")
+  zaloLink    String   @default("https://zalo.me/0933119056")
+  fbLink      String   @default("https://facebook.com/Realtime.vn")
+  email       String   @default("sales@realtime.vn")
+  address     String   @default("108/15/18 Đ. Số 1, Phường An Hội Đông, TP.HCM")
+  updatedAt   DateTime @updatedAt
+}

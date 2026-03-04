@@ -8,21 +8,33 @@ import {
   FaArrowRight,
 } from "react-icons/fa6";
 import { motion } from "framer-motion";
-import { useTranslations } from "next-intl"; // 1. Import hook
+import { useTranslations } from "next-intl";
 
-const ContactInfo = () => {
-  const t = useTranslations("Home.ContactInfo"); // 2. Namespace
+interface ContactConfig {
+  hotline?: string;
+  salePhone?: string;
+  address?: string;
+  email?: string;
+}
 
-  // 3. Đưa dữ liệu vào trong component
+// BỔ SUNG: Nhận biến config từ thẻ cha truyền xuống (Thêm dấu ? để không bị lỗi nếu chỗ nào quên truyền)
+const ContactInfo = ({ config }: { config?: ContactConfig }) => {
+  const t = useTranslations("Home.ContactInfo");
+
+  // Xử lý số điện thoại bỏ khoảng trắng để link thẻ "tel:" hoạt động
+  const cleanHotline = config?.hotline?.replace(/\s+/g, "") || "0933119056";
+
+  // Thay đổi data cứng bằng config động
   const contactData = [
     {
       id: 1,
       icon: <FaLocationDot />,
       title: t("office_title"),
       description: t("office_desc"),
-      info: "108/15/18 Đ. Số 1, Phường An Hội Đông, TP.HCM",
+      // Dùng địa chỉ từ Database, nếu trống thì dùng mặc định
+      info: config?.address || "108/15/18 Đ. Số 1, Phường An Hội Đông, TP.HCM",
       btnText: t("btn_map"),
-      link: "https://maps.google.com/?q=108/15/18+Đ.+Số+1,+Phường+An+Hội+Đông,+TP.+Hồ+Chí+Minh,+Việt+Nam",
+      link: "https://maps.google.com/?q=108/15/18+Đ.+Số+1,+Phường+An+Hội+Đông,+TP.+Hồ+Chí+Minh,+Việt+Nam", // Sếp có thể thêm link bản đồ vào Database sau nếu cần
       color: "blue",
     },
     {
@@ -30,9 +42,10 @@ const ContactInfo = () => {
       icon: <FaPhoneVolume />,
       title: t("hotline_title"),
       description: t("hotline_desc"),
-      info: "+84 28 7303 3888\n0933 119 056",
+      // Gộp Hotline và SĐT Sale để hiển thị thành 2 dòng như thiết kế gốc
+      info: `${config?.hotline || "0933 119 056"}\n${config?.salePhone || "+84 28 7303 3888"}`,
       btnText: t("btn_call"),
-      link: "tel:+842873033888",
+      link: `tel:${cleanHotline}`, // Link gọi thẳng Hotline
       color: "green",
     },
     {
@@ -40,9 +53,10 @@ const ContactInfo = () => {
       icon: <FaEnvelope />,
       title: t("email_title"),
       description: t("email_desc"),
-      info: "sales@realtime.vn",
+      // Dùng email từ Database
+      info: config?.email || "sales@realtime.vn",
       btnText: t("btn_email"),
-      link: "mailto:sales@realtime.vn",
+      link: `mailto:${config?.email || "sales@realtime.vn"}`,
       color: "purple",
     },
   ];
@@ -52,11 +66,9 @@ const ContactInfo = () => {
       <div className="container mx-auto px-6">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-            {t("title")} {/* Thông tin liên hệ chi tiết */}
+            {t("title")}
           </h2>
-          <p className="text-gray-500 dark:text-gray-400">
-            {t("subtitle")} {/* Kết nối với chúng tôi... */}
-          </p>
+          <p className="text-gray-500 dark:text-gray-400">{t("subtitle")}</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -123,7 +135,7 @@ const ContactInfo = () => {
                   {item.description}
                 </p>
 
-                {/* INFO */}
+                {/* INFO (Hiển thị dữ liệu động) */}
                 <div className="mb-8 font-medium text-gray-800 dark:text-gray-200 whitespace-pre-line">
                   {item.info}
                 </div>
@@ -133,7 +145,10 @@ const ContactInfo = () => {
                   <a
                     href={item.link}
                     target={
-                      item.title === "Văn phòng chính" ? "_blank" : "_self"
+                      item.title === "Văn phòng chính" ||
+                      item.title === "Head Office"
+                        ? "_blank"
+                        : "_self"
                     }
                     className={`
                             inline-flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold transition-all duration-300
