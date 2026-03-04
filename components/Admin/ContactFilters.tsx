@@ -59,7 +59,7 @@ export default function ContactFilters() {
       <select
         value={status}
         onChange={(e) => setStatus(e.target.value)}
-        className="py-2 px-3 text-sm border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 bg-transparent outline-none dark:text-white"
+        className="py-2 px-3 text-sm border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 bg-transparent outline-none dark:text-white hover:cursor-pointer"
       >
         <option value="ALL">Tất cả trạng thái</option>
         <option value="PENDING">Chờ xử lý</option>
@@ -73,7 +73,7 @@ export default function ContactFilters() {
           type="datetime-local"
           value={fromDate}
           onChange={(e) => setFromDate(e.target.value)}
-          className="py-2 px-3 text-sm border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 bg-transparent outline-none dark:text-white w-40"
+          className="py-2 px-3 text-sm border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 bg-transparent outline-none dark:text-white w-40 hover:cursor-pointer"
           title="Từ ngày giờ"
         />
         <span className="text-gray-500">-</span>
@@ -81,7 +81,7 @@ export default function ContactFilters() {
           type="datetime-local"
           value={toDate}
           onChange={(e) => setToDate(e.target.value)}
-          className="py-2 px-3 text-sm border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 bg-transparent outline-none dark:text-white w-40"
+          className="py-2 px-3 text-sm border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 bg-transparent outline-none dark:text-white w-40 hover:cursor-pointer"
           title="Đến ngày giờ"
         />
       </div>
@@ -90,13 +90,13 @@ export default function ContactFilters() {
       <div className="flex gap-2">
         <button
           onClick={handleFilter}
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition-colors"
+          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition-colors hover:cursor-pointer"
         >
           <FaFilter /> Lọc
         </button>
         <button
           onClick={handleReset}
-          className="flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200 px-3 py-2 rounded-lg text-sm font-medium shadow-sm transition-colors"
+          className="flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200 px-3 py-2 rounded-lg text-sm font-medium shadow-sm transition-colors hover:cursor-pointer"
           title="Xóa bộ lọc"
         >
           <FaRedo />

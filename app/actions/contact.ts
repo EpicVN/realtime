@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // app/actions/contact.ts
 "use server";
 
@@ -15,5 +16,18 @@ export async function updateContactStatus(id: string, status: string) {
     return { success: true };
   } catch (error) {
     return { success: false, error: "Lỗi cập nhật trạng thái" };
+  }
+}
+
+export async function deleteContact(id: string) {
+  try {
+    await prisma.contact.delete({
+      where: { id: id }, // Nếu id của sếp kiểu Int thì dùng Number(id)
+    });
+    // Báo cho Next.js biết là data đã thay đổi, cần tải lại giao diện trang contacts
+    revalidatePath("/admin/contacts");
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: "Lỗi khi xóa liên hệ" };
   }
 }

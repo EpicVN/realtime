@@ -1,16 +1,15 @@
-// Trong file app/admin/contacts/page.tsx
+// app/admin/contacts/page.tsx
 import { prisma } from "@/lib/prisma";
 import { FaFileExcel } from "react-icons/fa";
 import Pagination from "@/components/Helper/Pagination";
-// Import file bộ lọc mới thay cho ContactSearch
 import ContactFilters from "@/components/Admin/ContactFilters";
 import ContactStatus from "@/components/Admin/ContactStatus";
+import DeleteContactButton from "@/components/Admin/DeleteContactButton"; // <-- Import nút xóa
 import Link from "next/link";
 
 export default async function ContactsPage({
   searchParams,
 }: {
-  // Cập nhật thêm các type cho searchParams
   searchParams: Promise<{
     page?: string;
     query?: string;
@@ -29,7 +28,7 @@ export default async function ContactsPage({
   const fromDate = params.from || "";
   const toDate = params.to || "";
 
-  // 1. Xây dựng điều kiện lọc linh hoạt cho Prisma
+  // 1. Xây dựng điều kiện lọc
   const whereCondition: {
     OR?: Array<
       | { name?: { contains: string; mode: "insensitive" } }
@@ -71,7 +70,6 @@ export default async function ContactsPage({
 
   const totalPages = Math.ceil(totalCount / pageSize);
 
-  // Tạo URL query cho nút xuất Excel
   const excelQuery = new URLSearchParams();
   if (query) excelQuery.set("query", query);
   if (status !== "ALL") excelQuery.set("status", status);
@@ -94,7 +92,6 @@ export default async function ContactsPage({
         </div>
 
         <Link
-          // Truyền toàn bộ bộ lọc vào API Excel
           href={`/api/admin/export-contacts?${excelQuery.toString()}`}
           target="_blank"
           className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium shadow-sm whitespace-nowrap transition-colors"
@@ -103,7 +100,7 @@ export default async function ContactsPage({
         </Link>
       </div>
 
-      {/* Component Bộ Lọc Mới */}
+      {/* Component Bộ Lọc */}
       <ContactFilters />
 
       {/* TABLE WRAPPER */}
@@ -116,10 +113,11 @@ export default async function ContactsPage({
                 <th className="px-4 py-3 w-40">Họ tên</th>
                 <th className="px-4 py-3 w-30">SĐT</th>
                 <th className="px-4 py-3 w-40 hidden md:table-cell">Email</th>
-                {/* TÁCH CỘT NHU CẦU RA RIÊNG */}
                 <th className="px-4 py-3 w-35">Nhu cầu</th>
                 <th className="px-4 py-3 min-w-37.5">Lời nhắn</th>
                 <th className="px-4 py-3 w-30 text-center">Trạng thái</th>
+                {/* THÊM CỘT HÀNH ĐỘNG (XÓA) */}
+                <th className="px-4 py-3 w-16 text-center">Xóa</th>
               </tr>
             </thead>
 
@@ -127,7 +125,7 @@ export default async function ContactsPage({
               {contacts.length === 0 ? (
                 <tr>
                   <td
-                    colSpan={7}
+                    colSpan={8}
                     className="px-6 py-20 text-center text-gray-400"
                   >
                     Chưa có dữ liệu.
@@ -139,7 +137,6 @@ export default async function ContactsPage({
                     key={contact.id}
                     className="hover:bg-blue-50/50 dark:hover:bg-blue-900/10 transition-colors"
                   >
-                    {/* 1. Ngày gửi */}
                     <td className="px-4 py-3 whitespace-nowrap text-xs font-mono">
                       {new Date(contact.createdAt).toLocaleDateString("vi-VN", {
                         day: "2-digit",
@@ -150,7 +147,6 @@ export default async function ContactsPage({
                       })}
                     </td>
 
-                    {/* 2. Họ tên */}
                     <td
                       className="px-4 py-3 font-semibold text-gray-900 dark:text-white truncate"
                       title={contact.name}
@@ -158,12 +154,10 @@ export default async function ContactsPage({
                       {contact.name}
                     </td>
 
-                    {/* 3. SĐT */}
                     <td className="px-4 py-3 text-blue-600 font-mono text-xs">
                       {contact.phone || "-"}
                     </td>
 
-                    {/* 4. Email */}
                     <td className="px-4 py-3 hidden md:table-cell">
                       <div
                         className="truncate max-w-45"
@@ -173,7 +167,6 @@ export default async function ContactsPage({
                       </div>
                     </td>
 
-                    {/* 5. CỘT NHU CẦU DẠNG BADGE */}
                     <td className="px-4 py-3">
                       <span
                         className="inline-block truncate max-w-30 px-2 py-0.5 rounded text-[11px] font-bold bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 border border-blue-200 dark:border-blue-800"
@@ -183,7 +176,6 @@ export default async function ContactsPage({
                       </span>
                     </td>
 
-                    {/* 6. CỘT LỜI NHẮN */}
                     <td className="px-4 py-3">
                       <p
                         className="truncate max-w-50 text-gray-500 italic"
@@ -193,12 +185,16 @@ export default async function ContactsPage({
                       </p>
                     </td>
 
-                    {/* 7. Trạng thái */}
                     <td className="px-4 py-3 text-center">
                       <ContactStatus
                         id={contact.id}
                         currentStatus={contact.status || "PENDING"}
                       />
+                    </td>
+
+                    {/* HIỂN THỊ NÚT XÓA Ở ĐÂY */}
+                    <td className="px-4 py-3 text-center">
+                      <DeleteContactButton id={contact.id} />
                     </td>
                   </tr>
                 ))
