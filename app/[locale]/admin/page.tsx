@@ -66,8 +66,7 @@ export default async function AdminDashboard() {
           Lời chào mừng!
         </h3>
         <p className="text-gray-600 dark:text-gray-300">
-          Chào mừng trở lại bảng điều khiển. Hãy chọn các mục bên thanh thực đơn
-          (Sidebar) để bắt đầu quản lý.
+          Chào mừng trở lại bảng điều khiển. Hãy chọn các mục bên thanh menu để bắt đầu quản lý.
         </p>
       </div>
     </div>

@@ -4,8 +4,14 @@ import { FaFileExcel } from "react-icons/fa";
 import Pagination from "@/components/Helper/Pagination";
 import ContactFilters from "@/components/Admin/ContactFilters";
 import ContactStatus from "@/components/Admin/ContactStatus";
-import DeleteContactButton from "@/components/Admin/DeleteContactButton"; // <-- Import nút xóa
+import DeleteContactButton from "@/components/Admin/DeleteContactButton";
 import Link from "next/link";
+
+// BỔ SUNG IMPORTS CHO AUTH & PERMISSIONS
+import { redirect } from "next/navigation";
+import { auth } from "@/auth";
+import { PERMISSIONS, hasPermission } from "@/lib/permissions";
+import { Prisma } from "@prisma/client";
 
 export default async function ContactsPage({
   searchParams,
@@ -18,6 +24,32 @@ export default async function ContactsPage({
     to?: string;
   }>;
 }) {
+  // ==========================================
+  // LOGIC CHECK QUYỀN (BẢO VỀ ROUTE BẰNG SERVER)
+  // ==========================================
+  const session = await auth();
+
+  // 1. Chưa đăng nhập -> Đá ra ngoài
+  if (!session || !session.user) {
+    redirect("/admin");
+  }
+
+  const user = session.user as { role?: string; permissions?: string[] };
+  const role = user.role;
+  const permissions = user.permissions || [];
+
+  // 2. Check quyền "Xem khách hàng"
+  // (Sếp nhớ đảm bảo biến PERMISSIONS.VIEW_LEADS đã có trong thư viện của sếp nhé)
+  const canViewContacts =
+    role === "SUPER_ADMIN" ||
+    hasPermission(permissions, PERMISSIONS.VIEW_LEADS);
+
+  // 3. Không có quyền -> Đá về Dashboard
+  if (!canViewContacts) {
+    redirect("/admin");
+  }
+  // ==========================================
+
   const params = await searchParams;
   const currentPage = Number(params.page) || 1;
   const pageSize = 6;
@@ -29,21 +61,13 @@ export default async function ContactsPage({
   const toDate = params.to || "";
 
   // 1. Xây dựng điều kiện lọc
-  const whereCondition: {
-    OR?: Array<
-      | { name?: { contains: string; mode: "insensitive" } }
-      | { phone?: { contains: string; mode: "insensitive" } }
-      | { email?: { contains: string; mode: "insensitive" } }
-    >;
-    status?: string;
-    createdAt?: { gte?: Date; lte?: Date };
-  } = {};
+  const whereCondition: Prisma.ContactWhereInput = {};
 
   if (query) {
     whereCondition.OR = [
-      { name: { contains: query, mode: "insensitive" } },
-      { phone: { contains: query, mode: "insensitive" } },
-      { email: { contains: query, mode: "insensitive" } },
+      { name: { contains: query, mode: Prisma.QueryMode.insensitive } },
+      { phone: { contains: query, mode: Prisma.QueryMode.insensitive } },
+      { email: { contains: query, mode: Prisma.QueryMode.insensitive } },
     ];
   }
 

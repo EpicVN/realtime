@@ -91,7 +91,7 @@ export default function DeletePostButton({ id }: { id: number | string }) {
               <button
                 onClick={() => setIsOpen(false)}
                 disabled={loading}
-                className="flex-1 px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-50"
+                className="flex-1 px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 hover:cursor-pointer disabled:hover:cursor-not-allowed"
               >
                 Hủy bỏ
               </button>
@@ -99,7 +99,7 @@ export default function DeletePostButton({ id }: { id: number | string }) {
               <button
                 onClick={handleDelete}
                 disabled={loading}
-                className="flex-1 px-4 py-2.5 text-sm font-bold text-white bg-red-600 rounded-xl hover:bg-red-700 shadow-lg shadow-red-500/30 transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                className="flex-1 px-4 py-2.5 text-sm font-bold text-white bg-red-600 rounded-xl hover:bg-red-700 shadow-lg shadow-red-500/30 transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed hover:cursor-pointer"
               >
                 {loading ? (
                   <span className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>

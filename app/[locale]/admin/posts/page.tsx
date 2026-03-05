@@ -1,13 +1,23 @@
+// app/admin/posts/page.tsx
 import Pagination from "@/components/Helper/Pagination";
-import DeletePostButton from "@/components/Posts/DeletePostButton"; // Đảm bảo đường dẫn đúng
+import DeletePostButton from "@/components/Posts/DeletePostButton";
 import PostStatusToggle from "@/components/Posts/PostStatusToggle";
 import { prisma } from "@/lib/prisma";
 import Image from "next/image";
 import Link from "next/link";
 import { FaEdit, FaEye, FaPlus } from "react-icons/fa";
 
-// Số lượng bài viết trên mỗi trang
+// BỔ SUNG IMPORTS CHO AUTH & PERMISSIONS
+import { redirect } from "next/navigation";
+import { auth } from "@/auth";
+import { PERMISSIONS, hasPermission } from "@/lib/permissions";
+
 const ITEMS_PER_PAGE = 10;
+
+interface SessionUser {
+  role: string;
+  permissions?: string[];
+}
 
 // --- 1. Hàm tính toán thống kê ---
 async function getPostStats() {
@@ -29,32 +39,46 @@ async function getPostStats() {
 }
 
 // --- 2. Component Chính (Server Component) ---
-// Next.js 15: searchParams là Promise, cần await
 export default async function PostsPage(props: {
   searchParams: Promise<{ page?: string }>;
 }) {
+  // ==========================================
+  // LOGIC CHECK QUYỀN (BẢO VỆ ROUTE BẰNG SERVER)
+  // ==========================================
+  const session = await auth();
+
+  // 1. Chưa đăng nhập -> Đá ra ngoài
+  if (!session || !session.user) {
+    redirect("/admin");
+  }
+
+  const role = (session.user as SessionUser).role;
+  const permissions = (session.user as SessionUser).permissions || [];
+
+  // 2. Check quyền "Quản lý bài viết"
+  const canManagePosts =
+    role === "SUPER_ADMIN" ||
+    hasPermission(permissions, PERMISSIONS.MANAGE_POSTS);
+
+  // 3. Không có quyền -> Đá về Dashboard
+  if (!canManagePosts) {
+    redirect("/admin");
+  }
+  // ==========================================
+
   const searchParams = await props.searchParams;
-
-  // 1. Xác định trang hiện tại (Mặc định là 1 nếu không có param)
   const currentPage = Number(searchParams?.page) || 1;
-
-  // 2. Tính toán vị trí cần bỏ qua (Skip)
-  // Ví dụ: Trang 1 -> skip 0. Trang 2 -> skip 10.
   const skip = (currentPage - 1) * ITEMS_PER_PAGE;
 
-  // 3. Lấy dữ liệu theo trang
   const posts = await prisma.post.findMany({
-    take: ITEMS_PER_PAGE, // Lấy 10 bài
-    skip: skip, // Bỏ qua các bài của trang trước
+    take: ITEMS_PER_PAGE,
+    skip: skip,
     orderBy: { createdAt: "desc" },
   });
 
   const stats = await getPostStats();
-
-  // 4. Tính tổng số trang
   const totalPages = Math.ceil(stats.total / ITEMS_PER_PAGE);
 
-  // Hàm format ngày tháng
   const formatDate = (date: Date) => {
     return new Date(date).toLocaleDateString("vi-VN", {
       day: "2-digit",
@@ -63,7 +87,6 @@ export default async function PostsPage(props: {
     });
   };
 
-  // Tính toán hiển thị "Hiển thị từ X đến Y"
   const startItem = (currentPage - 1) * ITEMS_PER_PAGE + 1;
   const endItem = Math.min(currentPage * ITEMS_PER_PAGE, stats.total);
 
@@ -91,7 +114,6 @@ export default async function PostsPage(props: {
 
       {/* --- STATS MINI --- */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 shrink-0">
-        {/* ... (Phần Stats giữ nguyên như code cũ của sếp) ... */}
         <div className="bg-white dark:bg-gray-800 p-3 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex flex-col">
           <span className="text-[10px] text-gray-500 uppercase font-bold">
             Tổng bài
@@ -128,7 +150,6 @@ export default async function PostsPage(props: {
 
       {/* --- TABLE WRAPPER --- */}
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col flex-1 overflow-hidden">
-        {/* SCROLL AREA */}
         <div className="flex-1 overflow-auto relative scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600">
           <table className="w-full text-left text-sm text-gray-600 dark:text-gray-300 table-fixed">
             <thead className="bg-gray-50 dark:bg-gray-700 uppercase font-bold text-xs text-gray-500 dark:text-gray-200 sticky top-0 z-10 border-b border-gray-200 dark:border-gray-600">
@@ -155,7 +176,6 @@ export default async function PostsPage(props: {
                     key={post.id}
                     className="hover:bg-blue-50/50 dark:hover:bg-blue-900/10 transition-colors group"
                   >
-                    {/* Tiêu đề */}
                     <td className="px-6 py-4">
                       <div className="flex items-start gap-3">
                         {post.thumbnail && (
@@ -165,7 +185,9 @@ export default async function PostsPage(props: {
                             width={48}
                             height={48}
                             className="w-12 h-12 rounded object-cover border hidden sm:block shrink-0"
-                            unoptimized={post.thumbnail?.startsWith("/uploads/")}
+                            unoptimized={post.thumbnail?.startsWith(
+                              "/uploads/",
+                            )}
                           />
                         )}
                         <div className="overflow-hidden">
@@ -184,20 +206,17 @@ export default async function PostsPage(props: {
                       </div>
                     </td>
 
-                    {/* Views */}
                     <td className="px-6 py-4 text-center text-gray-500 hidden sm:table-cell font-mono text-sm">
                       {post.views.toLocaleString()}
                     </td>
 
-                    {/* Trạng thái */}
                     <td className="p-4 text-center">
                       <PostStatusToggle
-                        id={post.id} // Truyền ID vào đây
+                        id={post.id}
                         initialStatus={post.published}
                       />
                     </td>
 
-                    {/* Hành động */}
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
                         <Link
@@ -210,7 +229,7 @@ export default async function PostsPage(props: {
                         </Link>
                         <Link
                           href={`/admin/posts/edit/${post.id}`}
-                          className="p-2 text-blue-600 hover:bg-blue-100 rounded transition-colors"
+                          className="p-2 text-blue-600 hover:bg-blue-100 rounded transition-colors hover:cursor-pointer"
                           title="Sửa"
                         >
                           <FaEdit />
@@ -232,7 +251,6 @@ export default async function PostsPage(props: {
               ? `Hiển thị ${startItem}-${endItem} trong tổng số ${stats.total} bài viết`
               : "0 kết quả"}
           </span>
-          {/* Truyền đúng tham số cho Pagination */}
           <Pagination totalPages={totalPages} />
         </div>
       </div>

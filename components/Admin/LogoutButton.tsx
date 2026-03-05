@@ -8,12 +8,13 @@ type Props = {
 
 export default function LogoutButton({ logoutAction }: Props) {
   const handleLogout = async () => {
-    // 1. Xóa Role cũ trong LocalStorage (FIX LỖI QUYỀN HẠN)
+    // 1. Dọn dẹp sạch sẽ tàn dư của hệ thống cũ trong LocalStorage
     if (typeof window !== "undefined") {
       localStorage.removeItem("userRole");
+      localStorage.removeItem("userPermissions"); // <-- BỔ SUNG DÒNG NÀY ĐỂ QUÉT SẠCH
     }
 
-    // 2. Gọi Server Action để đăng xuất thật
+    // 2. Gọi Server Action (NextAuth signOut) để xóa Cookie và đá về trang Login
     await logoutAction();
   };
 

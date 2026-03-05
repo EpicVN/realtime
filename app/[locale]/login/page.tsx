@@ -4,53 +4,39 @@ import Logo from "@/components/Helper/Logo";
 import Link from "next/link";
 import { useState } from "react";
 import { FaArrowLeft, FaExclamationTriangle } from "react-icons/fa";
-import { checkUserRole, authenticate } from "./action";
+import { authenticate } from "./action"; // Bỏ checkUserRole đi, chỉ giữ lại authenticate
 import { toast } from "sonner";
-import { useRouter } from "next/navigation"; // <--- 1. IMPORT ROUTER
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
-  const router = useRouter(); // <--- 2. KHỞI TẠO ROUTER
+  const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // Lưu ý: Khi dùng form action, tham số nhận vào là FormData
   const handleSubmit = async (formData: FormData) => {
     setLoading(true);
     setError(null);
 
-    // --- BƯỚC 1: Kiểm tra User & Lấy Role ---
-    const check = await checkUserRole(formData);
-
-    if (check.error) {
-      setError(check.error);
-      setLoading(false);
-      return;
-    }
-
-    if (check.success && check.role) {
-      // --- BƯỚC 2: LƯU ROLE VÀO LOCALSTORAGE ---
-      if (typeof window !== "undefined") {
-        localStorage.setItem("userRole", check.role);
-      }
-
-      // --- BƯỚC 3: GỌI HÀM ĐĂNG NHẬP (AUTH.JS) ---
+    try {
+      // 1. Gọi trực tiếp hàm authenticate chuẩn NextAuth v5
       const loginResult = await authenticate(formData);
 
-      // Kiểm tra kết quả trả về (Object)
+      // 2. Nếu hàm trả về lỗi (sai pass/email) -> Hiển thị lỗi
       if (loginResult?.error) {
         setError(loginResult.error);
-        setLoading(false);
-      } else {
-        // --- BƯỚC 4: THÀNH CÔNG -> CHUYỂN HƯỚNG ---
+      }
+      // 3. Nếu thành công (không có lỗi) -> Chuyển hướng
+      else if (loginResult?.success) {
         toast.success("Đăng nhập thành công!");
-
-        // Refresh để cập nhật session cookie mới nhất
+        // Refresh để Next.js lấy lại Session từ Cookie
         router.refresh();
-        // Chuyển hướng sang trang Admin
+        // Đá vào trang Dashboard
         router.push("/admin");
       }
-    } else {
-      // Trường hợp check role thành công nhưng không có role (hiếm)
+    } catch (err) {
+      console.error(err);
+      setError("Có lỗi hệ thống xảy ra.");
+    } finally {
       setLoading(false);
     }
   };

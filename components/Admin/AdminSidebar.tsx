@@ -1,3 +1,4 @@
+// components/Admin/AdminSidebar.tsx
 "use client";
 
 import Link from "next/link";
@@ -15,17 +16,18 @@ import {
 } from "react-icons/fa";
 import Logo from "../Helper/Logo";
 import { FaRocket } from "react-icons/fa6";
+import { PERMISSIONS, hasPermission } from "@/lib/permissions";
 
-// --- ĐỊNH NGHĨA KIỂU DỮ LIỆU USER ---
+// 1. CHUẨN HÓA LẠI KIỂU DỮ LIỆU USER ĐỂ NHẬN ĐƯỢC PERMISSIONS
 type UserProps = {
   name?: string | null;
-  role?: string | null; // "SUPER_ADMIN" | "ADMIN"
+  role?: string | null;
   email?: string | null;
+  permissions?: string[]; // Quan trọng: Phải có mảng này
 };
 
-// ... (Giữ nguyên phần CONST MENU_GROUPS) ...
+// 2. CẤU TRÚC MENU MỚI (Dùng thẳng tên quyền thực tế để check)
 const MENU_GROUPS = [
-  // ... code menu ...
   {
     label: "QUẢN LÝ CHUNG",
     items: [
@@ -33,13 +35,13 @@ const MENU_GROUPS = [
         name: "Tổng quan",
         href: "/admin",
         icon: <FaChartPie />,
-        allowedRoles: ["SUPER_ADMIN", "ADMIN"],
+        requiredPermission: "ALL", // Ai cũng được xem
       },
       {
         name: "Khách hàng",
         href: "/admin/contacts",
         icon: <FaAddressBook />,
-        allowedRoles: ["SUPER_ADMIN", "ADMIN"],
+        requiredPermission: PERMISSIONS.VIEW_LEADS, // Check bằng quyền cụ thể
       },
     ],
   },
@@ -50,34 +52,31 @@ const MENU_GROUPS = [
         name: "Nhân viên",
         href: "/admin/users",
         icon: <FaUsers />,
-        allowedRoles: ["SUPER_ADMIN"],
+        // Vì Super Admin mặc định thấy hết, nên ta chỉ cần chỉ định quyền của Admin
+        requiredPermission: PERMISSIONS.MANAGE_USERS,
       },
       {
         name: "Tin tức / Blog",
         href: "/admin/posts",
         icon: <FaNewspaper />,
-        allowedRoles: ["SUPER_ADMIN", "ADMIN"],
+        requiredPermission: PERMISSIONS.MANAGE_POSTS,
       },
       {
         name: "Cấu hình thông tin",
         href: "/admin/settings",
         icon: <FaCog />,
-        allowedRoles: ["SUPER_ADMIN", "ADMIN"],
+        requiredPermission: PERMISSIONS.MANAGE_SETTINGS,
       },
     ],
   },
 ];
 
-// --- NHẬN PROPS USER TỪ LAYOUT ---
 export default function AdminSidebar({ user }: { user: UserProps }) {
   const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
-  // Dùng role được truyền trực tiếp từ Server (An toàn hơn localStorage)
-  // Nếu không có user, mặc định là ADMIN để ẩn các mục nhạy cảm
   const currentRole = user?.role || "ADMIN";
-
-  // Lấy chữ cái đầu của tên để làm Avatar (Ví dụ: "Khoa" -> "K")
+  const userPermissions = user?.permissions || [];
   const initial = user?.name ? user.name.charAt(0).toUpperCase() : "A";
 
   return (
@@ -88,7 +87,6 @@ export default function AdminSidebar({ user }: { user: UserProps }) {
         ${isCollapsed ? "w-20" : "w-72"} 
       `}
     >
-      {/* Background Effect */}
       <div className="absolute inset-0 bg-linear-to-b from-slate-900 via-slate-950 to-black opacity-80 -z-10" />
 
       {/* Header */}
@@ -108,16 +106,22 @@ export default function AdminSidebar({ user }: { user: UserProps }) {
         </Link>
       </div>
 
-      {/* Sửa lại phần filter menu dùng currentRole mới */}
+      {/* --- PHẦN RENDER MENU --- */}
       <nav className="flex-1 py-6 px-4 space-y-6 overflow-y-auto scrollbar-hide">
         {MENU_GROUPS.map((group, groupIdx) => {
-          const visibleItems = group.items.filter(
-            (item) => item.allowedRoles.includes(currentRole), // <--- Dùng biến currentRole
-          );
+          // LỌC MENU DỰA VÀO QUYỀN
+          const visibleItems = group.items.filter((item) => {
+            if (currentRole === "SUPER_ADMIN") return true; // Sếp trùm thấy hết
+            if (item.requiredPermission === "ALL") return true; // Menu chung ai cũng thấy
+
+            // Check xem trong mảng permissions của user có chứa quyền này không
+            return hasPermission(userPermissions, item.requiredPermission);
+          });
+
+          // Nếu cả group bị ẩn hết thì không render cái tiêu đề (QUẢN LÝ CHUNG, HỆ THỐNG)
           if (visibleItems.length === 0) return null;
 
           return (
-            // ... (Code render menu giữ nguyên) ...
             <div key={groupIdx}>
               {!isCollapsed && (
                 <h3 className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-3 px-2 transition-opacity duration-300">
@@ -126,12 +130,12 @@ export default function AdminSidebar({ user }: { user: UserProps }) {
               )}
               <div className="space-y-1">
                 {visibleItems.map((item) => {
-                  // ... (Logic active link giữ nguyên) ...
                   const cleanPathname =
                     pathname.replace(/^\/[a-z]{2}/, "") || "/";
                   const isActive =
-                    item.href === "/admin"
-                      ? cleanPathname === "/admin"
+                    item.href === "/admin/dashboard" || item.href === "/admin"
+                      ? cleanPathname === "/admin/dashboard" ||
+                        cleanPathname === "/admin"
                       : cleanPathname.startsWith(item.href);
 
                   return (
@@ -139,7 +143,11 @@ export default function AdminSidebar({ user }: { user: UserProps }) {
                       key={item.href}
                       href={item.href}
                       title={isCollapsed ? item.name : undefined}
-                      className={`relative group flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 font-medium ${isActive ? "bg-linear-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-500/25" : "hover:bg-slate-800/50 hover:text-white text-slate-400"} ${isCollapsed ? "justify-center" : ""}`}
+                      className={`relative group flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 font-medium ${
+                        isActive
+                          ? "bg-linear-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-500/25"
+                          : "hover:bg-slate-800/50 hover:text-white text-slate-400"
+                      } ${isCollapsed ? "justify-center" : ""}`}
                     >
                       <span
                         className={`text-lg transition-transform duration-200 ${!isActive && "group-hover:scale-110"}`}
@@ -162,7 +170,6 @@ export default function AdminSidebar({ user }: { user: UserProps }) {
           );
         })}
 
-        {/* ... (Phần link về trang chủ, nút toggle giữ nguyên) ... */}
         <div className="h-px bg-linear-to-r from-transparent via-gray-700 to-transparent my-4"></div>
         <Link
           href="/"
@@ -181,6 +188,7 @@ export default function AdminSidebar({ user }: { user: UserProps }) {
         </Link>
       </nav>
 
+      {/* NÚT THU GỌN */}
       <button
         onClick={() => setIsCollapsed(!isCollapsed)}
         className="absolute -right-3 top-24 z-50 p-1.5 rounded-full bg-blue-600 text-white shadow-lg shadow-blue-600/30 hover:bg-blue-500 hover:scale-110 transition-all border-2 border-slate-900 cursor-pointer"
@@ -193,15 +201,13 @@ export default function AdminSidebar({ user }: { user: UserProps }) {
         )}
       </button>
 
-      {/* --- FOOTER HIỂN THỊ INFO --- */}
+      {/* --- FOOTER INFO --- */}
       <div className="p-4 border-t border-gray-800/50 bg-slate-900/30">
         {!isCollapsed ? (
           <div className="flex items-center gap-3">
-            {/* Avatar chữ cái đầu */}
             <div className="w-9 h-9 shrink-0 rounded-full bg-linear-to-br from-purple-500 to-pink-500 flex items-center justify-center text-sm font-bold text-white shadow-lg shadow-purple-500/20 ring-2 ring-slate-800">
               {initial}
             </div>
-
             <div className="flex flex-col overflow-hidden">
               <span
                 className="text-xs font-bold text-white truncate"
@@ -210,11 +216,9 @@ export default function AdminSidebar({ user }: { user: UserProps }) {
                 {user?.name || "Realtime Admin"}
               </span>
               <span className="text-[10px] text-gray-500 uppercase font-semibold tracking-wider truncate">
-                {user?.role === "SUPER_ADMIN" ? "Super Admin" : "Nhân viên"}
+                {currentRole === "SUPER_ADMIN" ? "Super Admin" : "Nhân viên"}
               </span>
             </div>
-
-            <FaCog className="ml-auto text-gray-500 hover:text-white cursor-pointer transition-colors" />
           </div>
         ) : (
           <div

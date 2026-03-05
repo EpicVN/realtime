@@ -1,13 +1,15 @@
+// components/Admin/DynamicAdminSidebar.tsx
 "use client";
 
 import dynamic from "next/dynamic";
 
-// 1. Định nghĩa kiểu dữ liệu User (Copy giống bên AdminSidebar)
+// 1. Thêm biến permissions vào đây
 type UserProps = {
   name?: string | null;
   email?: string | null;
   image?: string | null;
-  role?: string | null; // Đây là cái quan trọng nhất
+  role?: string | null; 
+  permissions?: string[]; // <-- BỔ SUNG DÒNG NÀY
 };
 
 const AdminSidebar = dynamic(() => import("./AdminSidebar"), {
@@ -17,7 +19,7 @@ const AdminSidebar = dynamic(() => import("./AdminSidebar"), {
   ),
 });
 
-// 2. Thay 'any' bằng 'UserProps'
 export default function DynamicAdminSidebar({ user }: { user: UserProps }) {
-  return <AdminSidebar user={user} />;
+  // Vì truyền nguyên cục `session.user` từ layout xuống, nó đã chứa sẵn permissions rồi
+  return <AdminSidebar user={user} />; 
 }

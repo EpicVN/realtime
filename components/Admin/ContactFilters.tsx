@@ -59,7 +59,7 @@ export default function ContactFilters() {
       <select
         value={status}
         onChange={(e) => setStatus(e.target.value)}
-        className="py-2 px-3 text-sm border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 bg-transparent outline-none dark:text-white hover:cursor-pointer"
+        className="py-2 px-3 text-sm border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 bg-transparent outline-none dark:text-white hover:cursor-pointer dark:bg-gray-800 dark:hover:bg-gray-700 transition-colors"
       >
         <option value="ALL">Tất cả trạng thái</option>
         <option value="PENDING">Chờ xử lý</option>

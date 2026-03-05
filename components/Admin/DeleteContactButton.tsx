@@ -40,7 +40,7 @@ export default function DeleteContactButton({ id }: { id: string }) {
       <button
         onClick={handleOpen}
         disabled={isPending} // Khóa nút khi đang load
-        className="p-2 text-red-500 hover:bg-red-50 hover:text-red-700 dark:hover:bg-red-900/20 rounded-lg transition-all duration-200 disabled:opacity-50 hover:cursor-pointer disabled:hover:cursor-not-allowed"
+        className="p-2 text-red-500 hover:bg-red-100 hover:text-red-700 rounded-lg transition-all duration-200 disabled:opacity-50 hover:cursor-pointer disabled:hover:cursor-not-allowed"
         title="Xóa liên hệ"
       >
         <FaTrash size={16} />
