@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { prisma } from "@/lib/prisma";
 import { Metadata, ResolvingMetadata } from "next";
 import Image from "next/image";
@@ -10,7 +9,9 @@ type Props = {
   params: Promise<{ slug: string }>;
 };
 
+// ==========================================
 // 1. HÀM SEO (Metadata)
+// ==========================================
 export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata,
@@ -21,7 +22,8 @@ export async function generateMetadata(
     where: { slug: slug },
   });
 
-  if (!post) {
+  // CHẶN NGAY TỪ BƯỚC SEO: Không có bài HOẶC bài đang ẩn (published = false)
+  if (!post || !post.published) {
     return { title: "Không tìm thấy bài viết" };
   }
 
@@ -53,33 +55,37 @@ export async function generateMetadata(
   };
 }
 
+// ==========================================
 // 2. GIAO DIỆN CHI TIẾT BÀI VIẾT
+// ==========================================
 export default async function PostDetailPage({ params }: Props) {
   const { slug } = await params;
 
-  let post;
-  try {
-    post = await prisma.post.update({
-      where: { slug: slug },
-      data: {
-        views: {
-          increment: 1,
-        },
-      },
-    });
-  } catch (error) {
-    post = await prisma.post.findUnique({
-      where: { slug: slug },
-    });
-  }
+  // Bước 1: Tìm bài viết trước (Không dùng update ngay để tránh cộng view cho bài nháp/bài lỗi)
+  const post = await prisma.post.findUnique({
+    where: { slug: slug },
+  });
 
-  if (!post) {
+  // Bước 2: CHỐT CHẶN BẢO MẬT (Quan trọng nhất)
+  // Nếu bài viết không tồn tại HOẶC chưa được xuất bản (published === false) -> Trả về 404
+  if (!post || !post.published) {
     notFound();
   }
 
+  // Bước 3: Nếu qua được chốt chặn, tiến hành cộng 1 view ngầm trong DB
+  // Sếp yên tâm là khách vẫn load trang mượt mà vì ta không gán lại biến post
+  prisma.post
+    .update({
+      where: { id: post.id },
+      data: { views: { increment: 1 } },
+    })
+    .catch((err) => console.error("Lỗi tăng view:", err));
+
+  // Vì ta tăng view ngầm, nên giao diện tạm cộng 1 vào số view hiện tại để khách thấy ngay
+  const currentViews = post.views + 1;
+
   return (
-    // THAY ĐỔI 1: Tối ưu lề trên (mt) theo màn hình
-    <div className="bg-gray-50 dark:bg-gray-950 min-h-screen py-8 sm:py-10 mt-24">
+    <div className="bg-gray-50 dark:bg-gray-950 min-h-screen py-8 sm:py-10 mt-16 sm:mt-24">
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         {/* NÚT QUAY LẠI */}
         <div className="mb-4 sm:mb-6">
@@ -95,7 +101,6 @@ export default async function PostDetailPage({ params }: Props) {
         <div className="bg-white dark:bg-gray-900 rounded-xl sm:rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden">
           {/* ẢNH BÌA */}
           {post.thumbnail && (
-            // Thêm min-h để không bị sụp chiều cao khi load
             <div className="relative w-full aspect-video md:aspect-21/9 min-h-50 bg-gray-100 dark:bg-gray-800">
               <Image
                 src={post.thumbnail}
@@ -109,11 +114,8 @@ export default async function PostDetailPage({ params }: Props) {
           )}
 
           {/* NỘI DUNG */}
-          {/* THAY ĐỔI 2: Tối ưu padding cho Mobile (p-4) và PC (md:p-10) */}
           <div className="p-4 sm:p-6 md:p-10">
-            {/* Header bài viết */}
             <div className="mb-6 sm:mb-8 border-b border-gray-100 dark:border-gray-800 pb-6 sm:pb-8">
-              {/* THAY ĐỔI 3: Chữ Header linh hoạt */}
               <h1 className="text-xl sm:text-2xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4 leading-snug">
                 {post.title}
               </h1>
@@ -132,14 +134,11 @@ export default async function PostDetailPage({ params }: Props) {
 
                 <div className="flex items-center gap-2" title="Lượt xem">
                   <FaEye className="text-blue-500" />
-                  <span>{post.views || 0} lượt xem</span>
+                  <span>{currentViews} lượt xem</span>
                 </div>
               </div>
             </div>
 
-            {/* THAY ĐỔI 4: Sửa class Tailwind Typography (prose) */}
-            {/* Thêm prose-sm sm:prose-base để chữ không quá to trên điện thoại */}
-            {/* Thêm prose-img:max-w-full để hình ảnh chèn trong Editor tự động thu nhỏ */}
             <div
               className="prose prose-sm sm:prose-base md:prose-lg prose-blue max-w-none dark:prose-invert
                 prose-headings:font-bold prose-headings:text-gray-800 dark:prose-headings:text-gray-100
