@@ -2,6 +2,7 @@
 import { auth, signOut } from "@/auth";
 import { redirect } from "next/navigation";
 import AdminLayoutClient from "./AdminLayoutClient";
+import AdminFloatingIcon from "@/components/Helper/AdminFloatingIcon";
 
 export default async function AdminLayout({
   children,
@@ -24,7 +25,8 @@ export default async function AdminLayout({
   // 3. Render giao diện Client và truyền data xuống
   return (
     <AdminLayoutClient user={session.user} logoutAction={handleSignOut}>
-      {children}
+      <AdminFloatingIcon />
+      <div>{children}</div>
     </AdminLayoutClient>
   );
 }

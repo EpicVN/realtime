@@ -93,7 +93,10 @@ export default function AdminLayoutClient({
           </div>
         </header>
 
-        <main className="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto overflow-x-hidden relative">
+        <main
+          id="admin-main-scroll-area"
+          className="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto overflow-x-hidden relative"
+        >
           {children}
         </main>
       </div>
