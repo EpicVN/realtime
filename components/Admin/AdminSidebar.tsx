@@ -18,15 +18,13 @@ import Logo from "../Helper/Logo";
 import { FaRocket } from "react-icons/fa6";
 import { PERMISSIONS, hasPermission } from "@/lib/permissions";
 
-// 1. CHUẨN HÓA LẠI KIỂU DỮ LIỆU USER ĐỂ NHẬN ĐƯỢC PERMISSIONS
 type UserProps = {
   name?: string | null;
   role?: string | null;
   email?: string | null;
-  permissions?: string[]; // Quan trọng: Phải có mảng này
+  permissions?: string[];
 };
 
-// 2. CẤU TRÚC MENU MỚI (Dùng thẳng tên quyền thực tế để check)
 const MENU_GROUPS = [
   {
     label: "QUẢN LÝ CHUNG",
@@ -35,13 +33,13 @@ const MENU_GROUPS = [
         name: "Tổng quan",
         href: "/admin",
         icon: <FaChartPie />,
-        requiredPermission: "ALL", // Ai cũng được xem
+        requiredPermission: "ALL",
       },
       {
         name: "Khách hàng",
         href: "/admin/contacts",
         icon: <FaAddressBook />,
-        requiredPermission: PERMISSIONS.VIEW_LEADS, // Check bằng quyền cụ thể
+        requiredPermission: PERMISSIONS.VIEW_LEADS,
       },
     ],
   },
@@ -52,7 +50,6 @@ const MENU_GROUPS = [
         name: "Nhân viên",
         href: "/admin/users",
         icon: <FaUsers />,
-        // Vì Super Admin mặc định thấy hết, nên ta chỉ cần chỉ định quyền của Admin
         requiredPermission: PERMISSIONS.MANAGE_USERS,
       },
       {
@@ -71,7 +68,13 @@ const MENU_GROUPS = [
   },
 ];
 
-export default function AdminSidebar({ user }: { user: UserProps }) {
+export default function AdminSidebar({
+  user,
+  onMobileItemClick,
+}: {
+  user: UserProps;
+  onMobileItemClick?: () => void;
+}) {
   const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -84,24 +87,25 @@ export default function AdminSidebar({ user }: { user: UserProps }) {
       className={`
         relative shrink-0 z-20 flex flex-col min-h-screen border-r border-gray-800 transition-all duration-300 ease-in-out
         bg-slate-950 text-slate-300
-        ${isCollapsed ? "w-20" : "w-72"} 
+        w-72 ${isCollapsed ? "lg:w-20" : ""} 
       `}
     >
       <div className="absolute inset-0 bg-linear-to-b from-slate-900 via-slate-950 to-black opacity-80 -z-10" />
 
-      {/* Header */}
-      <div className="h-20 flex items-center justify-center border-b border-gray-800/50 bg-slate-900/50 backdrop-blur-sm">
-        <Link href="/admin">
+      {/* --- HEADER SIDEBAR --- */}
+      <div className="h-16 lg:h-20 flex items-center justify-center border-b border-gray-800/50 bg-slate-900/50 backdrop-blur-sm px-2">
+        <Link href="/admin" onClick={onMobileItemClick} className="w-full">
           <div className="transition-all duration-300 flex items-center justify-center">
-            {!isCollapsed ? (
-              <div className="scale-90 origin-center">
-                <Logo />
-              </div>
-            ) : (
-              <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
-                <FaRocket className="text-white text-lg" />
-              </div>
-            )}
+            <div
+              className={`scale-75 lg:scale-90 origin-center ${isCollapsed ? "lg:hidden" : "block"}`}
+            >
+              <Logo />
+            </div>
+            <div
+              className={`w-10 h-10 bg-blue-600 rounded-xl items-center justify-center shadow-lg shadow-blue-500/20 ${isCollapsed ? "hidden lg:flex" : "hidden"}`}
+            >
+              <FaRocket className="text-white text-lg" />
+            </div>
           </div>
         </Link>
       </div>
@@ -109,45 +113,41 @@ export default function AdminSidebar({ user }: { user: UserProps }) {
       {/* --- PHẦN RENDER MENU --- */}
       <nav className="flex-1 py-6 px-4 space-y-6 overflow-y-auto scrollbar-hide">
         {MENU_GROUPS.map((group, groupIdx) => {
-          // LỌC MENU DỰA VÀO QUYỀN
           const visibleItems = group.items.filter((item) => {
-            if (currentRole === "SUPER_ADMIN") return true; // Sếp trùm thấy hết
-            if (item.requiredPermission === "ALL") return true; // Menu chung ai cũng thấy
-
-            // Check xem trong mảng permissions của user có chứa quyền này không
+            if (currentRole === "SUPER_ADMIN") return true;
+            if (item.requiredPermission === "ALL") return true;
             return hasPermission(userPermissions, item.requiredPermission);
           });
 
-          // Nếu cả group bị ẩn hết thì không render cái tiêu đề (QUẢN LÝ CHUNG, HỆ THỐNG)
           if (visibleItems.length === 0) return null;
 
           return (
             <div key={groupIdx}>
-              {!isCollapsed && (
-                <h3 className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-3 px-2 transition-opacity duration-300">
-                  {group.label}
-                </h3>
-              )}
+              <h3
+                className={`text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-3 px-2 transition-opacity duration-300 ${isCollapsed ? "lg:hidden" : ""}`}
+              >
+                {group.label}
+              </h3>
               <div className="space-y-1">
                 {visibleItems.map((item) => {
                   const cleanPathname =
                     pathname.replace(/^\/[a-z]{2}/, "") || "/";
                   const isActive =
-                    item.href === "/admin/dashboard" || item.href === "/admin"
-                      ? cleanPathname === "/admin/dashboard" ||
-                        cleanPathname === "/admin"
+                    item.href === "/admin" || item.href === "/admin"
+                      ? cleanPathname === "/admin" || cleanPathname === "/admin"
                       : cleanPathname.startsWith(item.href);
 
                   return (
                     <Link
                       key={item.href}
                       href={item.href}
+                      onClick={onMobileItemClick}
                       title={isCollapsed ? item.name : undefined}
                       className={`relative group flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 font-medium ${
                         isActive
                           ? "bg-linear-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-500/25"
                           : "hover:bg-slate-800/50 hover:text-white text-slate-400"
-                      } ${isCollapsed ? "justify-center" : ""}`}
+                      } ${isCollapsed ? "lg:justify-center" : ""}`}
                     >
                       <span
                         className={`text-lg transition-transform duration-200 ${!isActive && "group-hover:scale-110"}`}
@@ -155,12 +155,12 @@ export default function AdminSidebar({ user }: { user: UserProps }) {
                         {item.icon}
                       </span>
                       <span
-                        className={`whitespace-nowrap transition-all duration-300 ${isCollapsed ? "w-0 overflow-hidden opacity-0" : "w-auto opacity-100"}`}
+                        className={`whitespace-nowrap transition-all duration-300 ${isCollapsed ? "lg:w-0 lg:overflow-hidden lg:opacity-0" : "w-auto opacity-100"}`}
                       >
                         {item.name}
                       </span>
                       {isActive && isCollapsed && (
-                        <div className="absolute right-2 w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]"></div>
+                        <div className="hidden lg:block absolute right-2 w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]"></div>
                       )}
                     </Link>
                   );
@@ -174,24 +174,25 @@ export default function AdminSidebar({ user }: { user: UserProps }) {
         <Link
           href="/"
           target="_blank"
+          onClick={onMobileItemClick}
           title={isCollapsed ? "Về trang chủ" : undefined}
-          className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 font-medium group text-emerald-400 hover:bg-emerald-500/10 hover:text-emerald-300 border border-dashed border-gray-700 hover:border-emerald-500/50 ${isCollapsed ? "justify-center" : ""}`}
+          className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 font-medium group text-emerald-400 hover:bg-emerald-500/10 hover:text-emerald-300 border border-dashed border-gray-700 hover:border-emerald-500/50 ${isCollapsed ? "lg:justify-center" : ""}`}
         >
           <span className="text-lg group-hover:rotate-12 transition-transform">
             <FaHome />
           </span>
           <span
-            className={`whitespace-nowrap transition-all duration-300 ${isCollapsed ? "w-0 overflow-hidden opacity-0" : "w-auto opacity-100"}`}
+            className={`whitespace-nowrap transition-all duration-300 ${isCollapsed ? "lg:w-0 lg:overflow-hidden lg:opacity-0" : "w-auto opacity-100"}`}
           >
             Về trang chủ
           </span>
         </Link>
       </nav>
 
-      {/* NÚT THU GỌN */}
+      {/* --- NÚT THU GỌN CHỈ HIỆN TRÊN DESKTOP --- */}
       <button
         onClick={() => setIsCollapsed(!isCollapsed)}
-        className="absolute -right-3 top-24 z-50 p-1.5 rounded-full bg-blue-600 text-white shadow-lg shadow-blue-600/30 hover:bg-blue-500 hover:scale-110 transition-all border-2 border-slate-900 cursor-pointer"
+        className="hidden lg:flex absolute -right-3 top-24 z-50 p-1.5 rounded-full bg-blue-600 text-white shadow-lg shadow-blue-600/30 hover:bg-blue-500 hover:scale-110 transition-all border-2 border-slate-900 cursor-pointer items-center justify-center"
         title="Đóng/Mở Menu"
       >
         {isCollapsed ? (
@@ -203,31 +204,32 @@ export default function AdminSidebar({ user }: { user: UserProps }) {
 
       {/* --- FOOTER INFO --- */}
       <div className="p-4 border-t border-gray-800/50 bg-slate-900/30">
-        {!isCollapsed ? (
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 shrink-0 rounded-full bg-linear-to-br from-purple-500 to-pink-500 flex items-center justify-center text-sm font-bold text-white shadow-lg shadow-purple-500/20 ring-2 ring-slate-800">
-              {initial}
-            </div>
-            <div className="flex flex-col overflow-hidden">
-              <span
-                className="text-xs font-bold text-white truncate"
-                title={user?.name || "Admin"}
-              >
-                {user?.name || "Realtime Admin"}
-              </span>
-              <span className="text-[10px] text-gray-500 uppercase font-semibold tracking-wider truncate">
-                {currentRole === "SUPER_ADMIN" ? "Super Admin" : "Nhân viên"}
-              </span>
-            </div>
-          </div>
-        ) : (
-          <div
-            className="w-9 h-9 mx-auto rounded-full bg-linear-to-br from-purple-500 to-pink-500 flex items-center justify-center text-sm font-bold text-white shadow-lg shadow-purple-500/20 ring-2 ring-slate-800"
-            title={user?.name || "Admin"}
-          >
+        <div
+          className={`flex items-center gap-3 ${isCollapsed ? "lg:hidden" : ""}`}
+        >
+          <div className="w-9 h-9 shrink-0 rounded-full bg-linear-to-br from-purple-500 to-pink-500 flex items-center justify-center text-sm font-bold text-white shadow-lg shadow-purple-500/20 ring-2 ring-slate-800">
             {initial}
           </div>
-        )}
+          <div className="flex flex-col overflow-hidden">
+            <span
+              className="text-xs font-bold text-white truncate"
+              title={user?.name || "Admin"}
+            >
+              {user?.name || "Realtime Admin"}
+            </span>
+            <span className="text-[10px] text-gray-500 uppercase font-semibold tracking-wider truncate">
+              {currentRole === "SUPER_ADMIN" ? "Super Admin" : "Nhân viên"}
+            </span>
+          </div>
+        </div>
+
+        {/* Avatar icon chỉ hiện trên Desktop khi thu gọn */}
+        <div
+          className={`mx-auto w-9 h-9 rounded-full bg-linear-to-br from-purple-500 to-pink-500 items-center justify-center text-sm font-bold text-white shadow-lg shadow-purple-500/20 ring-2 ring-slate-800 ${isCollapsed ? "hidden lg:flex" : "hidden"}`}
+          title={user?.name || "Admin"}
+        >
+          {initial}
+        </div>
       </div>
     </aside>
   );

@@ -22,7 +22,6 @@ interface InitialPostData {
   thumbnail: string;
 }
 
-// BỔ SUNG: Nhận postId và initialData từ thẻ cha (Server)
 export default function EditPostClient({
   postId,
   initialData,
@@ -34,7 +33,6 @@ export default function EditPostClient({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
 
-  // State form lấy trực tiếp data Server truyền vào
   const [formData, setFormData] = useState({
     title: initialData.title || "",
     description: initialData.description || "",
@@ -107,7 +105,7 @@ export default function EditPostClient({
       if (res.ok) {
         toast.success("Cập nhật bài viết thành công!");
         router.push("/admin/posts");
-        router.refresh(); // F5 lại trang list
+        router.refresh();
       } else {
         toast.error("Lỗi khi cập nhật, vui lòng thử lại.");
       }
@@ -120,30 +118,32 @@ export default function EditPostClient({
   };
 
   return (
-    <div className="max-w-7xl mx-auto pb-20">
+    <div className="max-w-7xl mx-auto pb-10 sm:pb-20">
       {/* --- HEADER --- */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 mt-[-6]">
-        <div className="flex items-center gap-3">
+      {/* Chuyển thành flex-col trên mobile để Nút bấm rớt xuống full width */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8">
+        <div className="flex items-center gap-3 w-full sm:w-auto">
           <Link
             href="/admin/posts"
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors text-gray-500 dark:text-gray-400"
+            className="p-2 hover:bg-gray-200 dark:hover:bg-gray-800 rounded-full transition-colors text-gray-500 dark:text-gray-400 shrink-0 bg-gray-100 dark:bg-gray-800 sm:bg-transparent"
           >
             <FaArrowLeft />
           </Link>
-          <div>
-            <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
+          <div className="min-w-0 flex-1">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white truncate">
               Chỉnh sửa bài viết
             </h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 truncate">
               ID: {postId}
             </p>
           </div>
         </div>
 
+        {/* Nút cập nhật bung full width trên điện thoại */}
         <button
           onClick={handleUpdate}
           disabled={loading}
-          className={`flex items-center gap-2 px-6 py-2.5 rounded-xl font-medium text-sm text-white transition-all shadow-lg shadow-blue-500/30 cursor-pointer ${
+          className={`w-full sm:w-auto flex justify-center items-center gap-2 px-6 py-3 sm:py-2.5 rounded-xl font-medium text-sm text-white transition-all shadow-lg shadow-blue-500/30 cursor-pointer shrink-0 ${
             loading
               ? "bg-gray-400 dark:bg-gray-600 cursor-not-allowed"
               : "bg-linear-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 hover:scale-[1.02] active:scale-[0.98]"
@@ -155,31 +155,33 @@ export default function EditPostClient({
       </div>
 
       {/* --- MAIN GRID LAYOUT --- */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 h-full">
-        {/* CỘT TRÁI */}
-        <div className="lg:col-span-2 space-y-6">
+      {/* Đổi khoảng cách (gap) nhỏ lại trên Mobile (gap-4) */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-8 h-full">
+        {/* --- CỘT TRÁI (Tiêu đề + Nội dung) --- */}
+        <div className="lg:col-span-2 space-y-4 lg:space-y-6">
           {/* Ô Nhập Tiêu Đề */}
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
-            <label className="block text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-2">
-              Tiêu đề bài viết <span className="text-red-500">*</span>
-            </label>
-
-            <span
-              className={`text-xs font-mono font-bold ${
-                formData.title.length >= 100
-                  ? "text-red-600 dark:text-red-400"
-                  : formData.title.length >= 80
-                    ? "text-yellow-500"
-                    : "text-gray-400 dark:text-gray-500"
-              }`}
-            >
-              {formData.title.length}/100
-            </span>
+          <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
+            <div className="flex justify-between items-center mb-2">
+              <label className="block text-xs font-bold text-gray-400 dark:text-gray-500 uppercase">
+                Tiêu đề bài viết <span className="text-red-500">*</span>
+              </label>
+              <span
+                className={`text-xs font-mono font-bold ${
+                  formData.title.length >= 100
+                    ? "text-red-600 dark:text-red-400"
+                    : formData.title.length >= 80
+                      ? "text-yellow-500"
+                      : "text-gray-400 dark:text-gray-500"
+                }`}
+              >
+                {formData.title.length}/100
+              </span>
+            </div>
 
             <input
               type="text"
               placeholder="Nhập tiêu đề bài viết tại đây..."
-              className="w-full text-2xl font-bold text-gray-800 dark:text-white placeholder-gray-300 dark:placeholder-gray-600 border-none outline-none focus:ring-0 bg-transparent leading-tight p-0 mt-1"
+              className="w-full text-lg sm:text-2xl font-bold text-gray-800 dark:text-white placeholder-gray-300 dark:placeholder-gray-600 border-none outline-none focus:ring-0 bg-transparent leading-tight p-0 mt-1"
               value={formData.title}
               maxLength={100}
               onChange={(e) =>
@@ -189,7 +191,8 @@ export default function EditPostClient({
           </div>
 
           {/* Editor */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 min-h-125 flex flex-col overflow-hidden text-gray-900">
+          {/* Trên mobile đôi khi Editor bị tràn, overflow-hidden giúp bảo vệ khung */}
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 min-h-75 sm:min-h-125 flex flex-col overflow-hidden text-gray-900">
             <SimpleEditor
               content={formData.content}
               onChange={(html) => setFormData({ ...formData, content: html })}
@@ -197,11 +200,11 @@ export default function EditPostClient({
           </div>
         </div>
 
-        {/* CỘT PHẢI */}
-        <div className="space-y-6">
+        {/* --- CỘT PHẢI (Ảnh + SEO) --- */}
+        <div className="space-y-4 lg:space-y-6 flex flex-col">
           {/* Ảnh đại diện */}
-          <div className="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
-            <h3 className="font-semibold text-gray-700 dark:text-gray-200 mb-3 flex items-center gap-2">
+          <div className="bg-white dark:bg-gray-800 p-4 sm:p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
+            <h3 className="font-semibold text-gray-700 dark:text-gray-200 mb-3 flex items-center gap-2 text-sm sm:text-base">
               <FaImage className="text-blue-500" /> Ảnh đại diện{" "}
               <span className="text-red-500">*</span>
             </h3>
@@ -214,12 +217,17 @@ export default function EditPostClient({
                     alt="Preview"
                     fill
                     className="w-full h-full object-cover"
+                    unoptimized={
+                      previewUrl.startsWith("blob:") ||
+                      previewUrl.startsWith("/uploads/")
+                    }
                   />
+                  {/* Trên mobile nên để opacity-100 luôn cho nút Xóa, vì ko có chuột để hover */}
                   <button
                     onClick={removeThumbnail}
-                    className="absolute top-2 right-2 bg-white/90 dark:bg-gray-900/90 p-1.5 rounded-full text-red-500 hover:text-red-600 hover:bg-white dark:hover:bg-gray-800 shadow-sm transition-all opacity-0 group-hover:opacity-100"
+                    className="absolute top-2 right-2 bg-white/90 dark:bg-gray-900/90 p-2 sm:p-1.5 rounded-full text-red-500 hover:text-red-600 hover:bg-white dark:hover:bg-gray-800 shadow-sm transition-all sm:opacity-0 group-hover:opacity-100"
                   >
-                    <FaTimes size={14} />
+                    <FaTimes size={16} />
                   </button>
                 </div>
               ) : (
@@ -235,7 +243,7 @@ export default function EditPostClient({
                     <FaCloudUploadAlt size={24} />
                   </div>
                   <span className="text-sm text-gray-500 dark:text-gray-400 font-medium">
-                    Thay ảnh khác
+                    Tải ảnh lên
                   </span>
                 </div>
               )}
@@ -249,14 +257,14 @@ export default function EditPostClient({
             </div>
           </div>
 
-          {/* SEO */}
-          <div className="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
-            <h3 className="font-semibold text-gray-700 dark:text-gray-200 mb-3">
+          {/* SEO Mô tả */}
+          <div className="bg-white dark:bg-gray-800 p-4 sm:p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
+            <h3 className="font-semibold text-gray-700 dark:text-gray-200 mb-3 text-sm sm:text-base">
               Mô tả ngắn (SEO) <span className="text-red-500">*</span>
             </h3>
             <textarea
-              rows={4}
-              placeholder="Viết tóm tắt ngắn..."
+              rows={5}
+              placeholder="Viết tóm tắt ngắn để hiển thị trên Google..."
               className="w-full p-3 text-sm border border-gray-200 dark:border-gray-600 bg-transparent rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all resize-none text-gray-600 dark:text-gray-300 placeholder-gray-400 dark:placeholder-gray-500"
               value={formData.description}
               maxLength={160}
@@ -264,8 +272,8 @@ export default function EditPostClient({
                 setFormData({ ...formData, description: e.target.value })
               }
             />
-            <div className="flex justify-between mt-2 text-xs text-gray-400 dark:text-gray-500">
-              <span>150-160 ký tự</span>
+            <div className="flex justify-between mt-2 text-xs text-gray-400 dark:text-gray-500 font-mono">
+              <span>Chuẩn SEO: 140-160 ký tự</span>
               <span
                 className={`${
                   formData.description.length >= 160

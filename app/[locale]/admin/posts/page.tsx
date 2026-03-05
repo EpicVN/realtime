@@ -7,7 +7,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaEdit, FaEye, FaPlus } from "react-icons/fa";
 
-// BỔ SUNG IMPORTS CHO AUTH & PERMISSIONS
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { PERMISSIONS, hasPermission } from "@/lib/permissions";
@@ -42,29 +41,22 @@ async function getPostStats() {
 export default async function PostsPage(props: {
   searchParams: Promise<{ page?: string }>;
 }) {
-  // ==========================================
-  // LOGIC CHECK QUYỀN (BẢO VỆ ROUTE BẰNG SERVER)
-  // ==========================================
   const session = await auth();
 
-  // 1. Chưa đăng nhập -> Đá ra ngoài
   if (!session || !session.user) {
-    redirect("/admin");
+    redirect("/login");
   }
 
   const role = (session.user as SessionUser).role;
   const permissions = (session.user as SessionUser).permissions || [];
 
-  // 2. Check quyền "Quản lý bài viết"
   const canManagePosts =
     role === "SUPER_ADMIN" ||
     hasPermission(permissions, PERMISSIONS.MANAGE_POSTS);
 
-  // 3. Không có quyền -> Đá về Dashboard
   if (!canManagePosts) {
-    redirect("/admin");
+    redirect("/admin/dashboard");
   }
-  // ==========================================
 
   const searchParams = await props.searchParams;
   const currentPage = Number(searchParams?.page) || 1;
@@ -91,11 +83,12 @@ export default async function PostsPage(props: {
   const endItem = Math.min(currentPage * ITEMS_PER_PAGE, stats.total);
 
   return (
-    <div className="flex flex-col gap-4 h-[calc(100vh-9rem)]">
+    // THAY ĐỔI 1: Bỏ chiều cao fix cứng, đổi thành flex-1 h-full min-h-[70vh]
+    <div className="flex flex-col gap-4 flex-1 h-full min-h-[70vh]">
       {/* --- HEADER --- */}
-      <div className="flex flex-col md:flex-row justify-between md:items-center gap-4 shrink-0">
+      <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 shrink-0">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">
             Quản lý Tin tức
           </h1>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
@@ -106,43 +99,44 @@ export default async function PostsPage(props: {
 
         <Link
           href="/admin/posts/create"
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm whitespace-nowrap w-fit cursor-pointer"
+          className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm whitespace-nowrap w-full sm:w-fit cursor-pointer"
         >
           <FaPlus /> Viết bài mới
         </Link>
       </div>
 
       {/* --- STATS MINI --- */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 shrink-0">
-        <div className="bg-white dark:bg-gray-800 p-3 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex flex-col">
-          <span className="text-[10px] text-gray-500 uppercase font-bold">
+      {/* 4 cục này sếp làm grid-cols-2 trên mobile là quá đẹp rồi, giữ nguyên */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 shrink-0">
+        <div className="bg-white dark:bg-gray-800 p-3 sm:p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex flex-col justify-center">
+          <span className="text-[10px] sm:text-xs text-gray-500 uppercase font-bold">
             Tổng bài
           </span>
-          <span className="text-xl font-bold text-gray-800 dark:text-white">
+          <span className="text-lg sm:text-xl font-bold text-gray-800 dark:text-white">
             {stats.total}
           </span>
         </div>
-        <div className="bg-white dark:bg-gray-800 p-3 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex flex-col">
-          <span className="text-[10px] text-green-500 uppercase font-bold">
+        <div className="bg-white dark:bg-gray-800 p-3 sm:p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex flex-col justify-center">
+          <span className="text-[10px] sm:text-xs text-green-500 uppercase font-bold">
             Đã đăng
           </span>
-          <span className="text-xl font-bold text-gray-800 dark:text-white">
+          <span className="text-lg sm:text-xl font-bold text-gray-800 dark:text-white">
             {stats.published}
           </span>
         </div>
-        <div className="bg-white dark:bg-gray-800 p-3 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex flex-col">
-          <span className="text-[10px] text-orange-500 uppercase font-bold">
+        <div className="bg-white dark:bg-gray-800 p-3 sm:p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex flex-col justify-center">
+          <span className="text-[10px] sm:text-xs text-orange-500 uppercase font-bold">
             Nháp
           </span>
-          <span className="text-xl font-bold text-gray-800 dark:text-white">
+          <span className="text-lg sm:text-xl font-bold text-gray-800 dark:text-white">
             {stats.drafts}
           </span>
         </div>
-        <div className="bg-white dark:bg-gray-800 p-3 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex flex-col">
-          <span className="text-[10px] text-blue-500 uppercase font-bold">
+        <div className="bg-white dark:bg-gray-800 p-3 sm:p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex flex-col justify-center">
+          <span className="text-[10px] sm:text-xs text-blue-500 uppercase font-bold">
             Lượt xem
           </span>
-          <span className="text-xl font-bold text-gray-800 dark:text-white">
+          <span className="text-lg sm:text-xl font-bold text-gray-800 dark:text-white">
             {stats.views.toLocaleString()}
           </span>
         </div>
@@ -150,16 +144,22 @@ export default async function PostsPage(props: {
 
       {/* --- TABLE WRAPPER --- */}
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col flex-1 overflow-hidden">
-        <div className="flex-1 overflow-auto relative scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600">
-          <table className="w-full text-left text-sm text-gray-600 dark:text-gray-300 table-fixed">
+        {/* THAY ĐỔI 2: overflow-x-auto để có thanh cuộn ngang trên điện thoại */}
+        <div className="flex-1 overflow-x-auto overflow-y-auto relative scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600">
+          {/* THAY ĐỔI 3: Thêm min-w-[700px] để bảng không bị ép bẹp dí */}
+          <table className="w-full text-left text-sm text-gray-600 dark:text-gray-300 table-fixed min-w-175">
             <thead className="bg-gray-50 dark:bg-gray-700 uppercase font-bold text-xs text-gray-500 dark:text-gray-200 sticky top-0 z-10 border-b border-gray-200 dark:border-gray-600">
               <tr>
-                <th className="px-6 py-4 w-[50%]">Tiêu đề bài viết</th>
-                <th className="px-6 py-4 w-[15%] text-center hidden sm:table-cell">
+                <th className="px-4 sm:px-6 py-4 w-[50%]">Tiêu đề bài viết</th>
+                <th className="px-4 sm:px-6 py-4 w-[15%] text-center hidden sm:table-cell">
                   Views
                 </th>
-                <th className="px-6 py-4 w-[15%] text-center">Trạng thái</th>
-                <th className="px-6 py-4 w-[20%] text-right">Hành động</th>
+                <th className="px-4 sm:px-6 py-4 w-[15%] text-center">
+                  Trạng thái
+                </th>
+                <th className="px-4 sm:px-6 py-4 w-[20%] text-right">
+                  Hành động
+                </th>
               </tr>
             </thead>
 
@@ -176,8 +176,9 @@ export default async function PostsPage(props: {
                     key={post.id}
                     className="hover:bg-blue-50/50 dark:hover:bg-blue-900/10 transition-colors group"
                   >
-                    <td className="px-6 py-4">
+                    <td className="px-4 sm:px-6 py-4">
                       <div className="flex items-start gap-3">
+                        {/* Ảnh Thumbnail bị ẩn trên điện thoại (hidden sm:block) -> Gọn gàng! */}
                         {post.thumbnail && (
                           <Image
                             src={post.thumbnail}
@@ -194,7 +195,7 @@ export default async function PostsPage(props: {
                           <Link
                             href={`/posts/${post.slug}`}
                             target="_blank"
-                            className="font-semibold text-gray-900 dark:text-white truncate block hover:text-blue-600 text-base"
+                            className="font-semibold text-gray-900 dark:text-white truncate block hover:text-blue-600 text-sm sm:text-base"
                             title={post.title}
                           >
                             {post.title}
@@ -206,30 +207,30 @@ export default async function PostsPage(props: {
                       </div>
                     </td>
 
-                    <td className="px-6 py-4 text-center text-gray-500 hidden sm:table-cell font-mono text-sm">
+                    <td className="px-4 sm:px-6 py-4 text-center text-gray-500 hidden sm:table-cell font-mono text-sm">
                       {post.views.toLocaleString()}
                     </td>
 
-                    <td className="p-4 text-center">
+                    <td className="px-4 sm:px-6 py-4 text-center">
                       <PostStatusToggle
                         id={post.id}
                         initialStatus={post.published}
                       />
                     </td>
 
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex items-center justify-end gap-2">
+                    <td className="px-4 sm:px-6 py-4 text-right">
+                      <div className="flex items-center justify-end gap-1 sm:gap-2">
                         <Link
                           href={`/posts/${post.slug}`}
                           target="_blank"
-                          className="p-2 text-gray-500 hover:bg-gray-100 rounded transition-colors"
+                          className="p-2 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
                           title="Xem"
                         >
                           <FaEye />
                         </Link>
                         <Link
                           href={`/admin/posts/edit/${post.id}`}
-                          className="p-2 text-blue-600 hover:bg-blue-100 rounded transition-colors hover:cursor-pointer"
+                          className="p-2 text-blue-600 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded transition-colors hover:cursor-pointer"
                           title="Sửa"
                         >
                           <FaEdit />
@@ -244,9 +245,10 @@ export default async function PostsPage(props: {
           </table>
         </div>
 
-        {/* FOOTER */}
-        <div className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 px-6 py-3 flex justify-between items-center shrink-0">
-          <span className="text-xs text-gray-400">
+        {/* --- FOOTER --- */}
+        {/* Đưa về flex-col trên mobile để Phân trang không bị ép lòi ra ngoài */}
+        <div className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-3 shrink-0">
+          <span className="text-xs text-gray-400 hidden sm:inline">
             {posts.length > 0
               ? `Hiển thị ${startItem}-${endItem} trong tổng số ${stats.total} bài viết`
               : "0 kết quả"}

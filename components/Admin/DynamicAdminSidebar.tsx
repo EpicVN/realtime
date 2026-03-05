@@ -3,13 +3,12 @@
 
 import dynamic from "next/dynamic";
 
-// 1. Thêm biến permissions vào đây
 type UserProps = {
   name?: string | null;
   email?: string | null;
   image?: string | null;
-  role?: string | null; 
-  permissions?: string[]; // <-- BỔ SUNG DÒNG NÀY
+  role?: string | null;
+  permissions?: string[];
 };
 
 const AdminSidebar = dynamic(() => import("./AdminSidebar"), {
@@ -19,7 +18,13 @@ const AdminSidebar = dynamic(() => import("./AdminSidebar"), {
   ),
 });
 
-export default function DynamicAdminSidebar({ user }: { user: UserProps }) {
-  // Vì truyền nguyên cục `session.user` từ layout xuống, nó đã chứa sẵn permissions rồi
-  return <AdminSidebar user={user} />; 
+// THÊM onMobileItemClick VÀO PROPS
+export default function DynamicAdminSidebar({ 
+  user, 
+  onMobileItemClick 
+}: { 
+  user: UserProps;
+  onMobileItemClick?: () => void;
+}) {
+  return <AdminSidebar user={user} onMobileItemClick={onMobileItemClick} />;
 }

@@ -10,7 +10,6 @@ export default function ContactFilters() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  // Lấy giá trị hiện tại từ URL để làm giá trị mặc định
   const [query, setQuery] = useState(searchParams.get("query") || "");
   const [status, setStatus] = useState(searchParams.get("status") || "ALL");
   const [fromDate, setFromDate] = useState(searchParams.get("from") || "");
@@ -18,7 +17,7 @@ export default function ContactFilters() {
 
   const handleFilter = () => {
     const params = new URLSearchParams(searchParams);
-    params.set("page", "1"); // Đặt lại về trang 1
+    params.set("page", "1");
 
     if (query) params.set("query", query);
     else params.delete("query");
@@ -37,70 +36,82 @@ export default function ContactFilters() {
     setStatus("ALL");
     setFromDate("");
     setToDate("");
-    router.replace(pathname); // Xóa hết params
+    router.replace(pathname);
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 mb-4 flex flex-col xl:flex-row gap-4">
-      {/* Tìm kiếm */}
-      <div className="relative flex-1 min-w-50">
-        <input
-          type="text"
-          placeholder="Tìm tên, SĐT, Email..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          className="w-full pl-9 pr-4 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 bg-transparent outline-none transition-all dark:text-white"
-          onKeyDown={(e) => e.key === "Enter" && handleFilter()}
-        />
-        <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs" />
+    // THAY ĐỔI 1: Ép w-full cho khung ngoài cùng để nó không bao giờ vượt quá viền màn hình
+    <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col xl:flex-row gap-4 w-full shrink-0">
+      {/* --- CỤM 1: TÌM KIẾM & TRẠNG THÁI --- */}
+      <div className="flex flex-col sm:flex-row gap-4 flex-1 w-full">
+        <div className="relative flex-1 w-full min-w-0">
+          <input
+            type="text"
+            placeholder="Tìm tên, SĐT, Email..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className="w-full pl-9 pr-4 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 bg-transparent outline-none transition-all dark:text-white"
+            onKeyDown={(e) => e.key === "Enter" && handleFilter()}
+          />
+          <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs" />
+        </div>
+
+        <select
+          value={status}
+          onChange={(e) => setStatus(e.target.value)}
+          className="w-full sm:w-auto py-2 px-3 text-sm border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 bg-transparent outline-none dark:text-white hover:cursor-pointer dark:bg-gray-800 dark:hover:bg-gray-700 transition-colors shrink-0"
+        >
+          <option value="ALL">Tất cả trạng thái</option>
+          <option value="PENDING">Chờ xử lý</option>
+          <option value="CALLED">Đã gọi</option>
+          <option value="CLOSED">Đã xử lý</option>
+        </select>
       </div>
 
-      {/* Lọc trạng thái */}
-      <select
-        value={status}
-        onChange={(e) => setStatus(e.target.value)}
-        className="py-2 px-3 text-sm border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 bg-transparent outline-none dark:text-white hover:cursor-pointer dark:bg-gray-800 dark:hover:bg-gray-700 transition-colors"
-      >
-        <option value="ALL">Tất cả trạng thái</option>
-        <option value="PENDING">Chờ xử lý</option>
-        <option value="CALLED">Đã gọi</option>
-        <option value="CLOSED">Đã xử lý</option>
-      </select>
+      {/* --- CỤM 2: NGÀY THÁNG & NÚT THAO TÁC --- */}
+      {/* Chuyển thành flex-col trên mobile (dọc) và sm:flex-row trên Tablet (ngang) */}
+      <div className="flex flex-col sm:flex-row gap-4 w-full xl:w-auto shrink-0">
+        {/* LỌC THỜI GIAN: ĐÂY LÀ CHỖ QUYẾT ĐỊNH */}
+        {/* Dùng flex-col để ép 2 cái ngày nằm trên dưới trên Mobile, sm:flex-row để nằm ngang trên PC */}
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2 w-full sm:w-auto">
+          <input
+            type="datetime-local"
+            value={fromDate}
+            onChange={(e) => setFromDate(e.target.value)}
+            className="w-full sm:w-auto py-2 px-3 text-sm border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 bg-transparent outline-none dark:text-white hover:cursor-pointer min-w-0"
+            title="Từ ngày giờ"
+          />
 
-      {/* Lọc thời gian (Dùng datetime-local để gộp chung ngày và giờ cho gọn) */}
-      <div className="flex items-center gap-2">
-        <input
-          type="datetime-local"
-          value={fromDate}
-          onChange={(e) => setFromDate(e.target.value)}
-          className="py-2 px-3 text-sm border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 bg-transparent outline-none dark:text-white w-40 hover:cursor-pointer"
-          title="Từ ngày giờ"
-        />
-        <span className="text-gray-500">-</span>
-        <input
-          type="datetime-local"
-          value={toDate}
-          onChange={(e) => setToDate(e.target.value)}
-          className="py-2 px-3 text-sm border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 bg-transparent outline-none dark:text-white w-40 hover:cursor-pointer"
-          title="Đến ngày giờ"
-        />
-      </div>
+          {/* Dấu gạch ngang chỉ hiện trên giao diện ngang (Tablet/PC) */}
+          <span className="hidden sm:inline text-gray-500 shrink-0 text-center">
+            -
+          </span>
 
-      {/* Nút thao tác */}
-      <div className="flex gap-2">
-        <button
-          onClick={handleFilter}
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition-colors hover:cursor-pointer"
-        >
-          <FaFilter /> Lọc
-        </button>
-        <button
-          onClick={handleReset}
-          className="flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200 px-3 py-2 rounded-lg text-sm font-medium shadow-sm transition-colors hover:cursor-pointer"
-          title="Xóa bộ lọc"
-        >
-          <FaRedo />
-        </button>
+          <input
+            type="datetime-local"
+            value={toDate}
+            onChange={(e) => setToDate(e.target.value)}
+            className="w-full sm:w-auto py-2 px-3 text-sm border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 bg-transparent outline-none dark:text-white hover:cursor-pointer min-w-0"
+            title="Đến ngày giờ"
+          />
+        </div>
+
+        {/* NÚT THAO TÁC */}
+        <div className="flex gap-2 w-full sm:w-auto shrink-0">
+          <button
+            onClick={handleFilter}
+            className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition-colors hover:cursor-pointer"
+          >
+            <FaFilter /> Lọc
+          </button>
+          <button
+            onClick={handleReset}
+            className="flex-none flex items-center justify-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200 px-3 py-2 rounded-lg text-sm font-medium shadow-sm transition-colors hover:cursor-pointer"
+            title="Xóa bộ lọc"
+          >
+            <FaRedo />
+          </button>
+        </div>
       </div>
     </div>
   );

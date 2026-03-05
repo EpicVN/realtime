@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 
 // --- Tiptap Core Extensions ---
 import { Highlight } from "@tiptap/extension-highlight";
-import { Image } from "@tiptap/extension-image"; // Dùng cái này là đủ
+import { Image } from "@tiptap/extension-image";
 import { TaskItem, TaskList } from "@tiptap/extension-list";
 import Placeholder from "@tiptap/extension-placeholder";
 import { Subscript } from "@tiptap/extension-subscript";
@@ -17,7 +17,6 @@ import { StarterKit } from "@tiptap/starter-kit";
 
 // --- UI Primitives ---
 import { Button } from "@/components/tiptap-ui-primitive/button";
-import { Spacer } from "@/components/tiptap-ui-primitive/spacer";
 import {
   Toolbar,
   ToolbarGroup,
@@ -58,9 +57,7 @@ import { LinkIcon } from "@/components/tiptap-icons/link-icon";
 import { BiImageAdd } from "react-icons/bi";
 
 import "@/components/tiptap-templates/simple/simple-editor.scss";
-import { useCursorVisibility } from "@/hooks/use-cursor-visibility";
 import { useIsBreakpoint } from "@/hooks/use-is-breakpoint";
-import { useWindowSize } from "@/hooks/use-window-size";
 
 // Interface Props
 interface SimpleEditorProps {
@@ -68,7 +65,7 @@ interface SimpleEditorProps {
   onChange?: (html: string) => void;
 }
 
-// --- Component Nút Thêm Ảnh Mới (Đơn giản & Ổn định) ---
+// --- Component Nút Thêm Ảnh Mới ---
 const CustomImageButton = ({ editor }: { editor: Editor | null }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -76,13 +73,10 @@ const CustomImageButton = ({ editor }: { editor: Editor | null }) => {
     const file = e.target.files?.[0];
 
     if (file && editor) {
-      // --- BƯỚC 1: Tạo FormData để gửi lên Server ---
       const formData = new FormData();
       formData.append("file", file);
 
       try {
-        // --- BƯỚC 2: Gọi API Upload (API sếp vừa tạo) ---
-        // Sếp có thể thêm loading state ở đây nếu muốn
         const response = await fetch("/api/upload", {
           method: "POST",
           body: formData,
@@ -91,9 +85,6 @@ const CustomImageButton = ({ editor }: { editor: Editor | null }) => {
         if (!response.ok) throw new Error("Upload thất bại");
 
         const data = await response.json();
-
-        // --- BƯỚC 3: Chèn URL ảnh vào Editor (Lưu đường dẫn thôi, nhẹ hều) ---
-        // data.url chính là "/uploads/..."
         editor.chain().focus().setImage({ src: data.url }).run();
       } catch (error) {
         console.error(error);
@@ -101,7 +92,6 @@ const CustomImageButton = ({ editor }: { editor: Editor | null }) => {
       }
     }
 
-    // Reset input
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
@@ -110,10 +100,10 @@ const CustomImageButton = ({ editor }: { editor: Editor | null }) => {
       <Button
         variant="ghost"
         onClick={() => fileInputRef.current?.click()}
-        className="flex items-center gap-1"
+        className="flex items-center gap-1 shrink-0"
       >
         <BiImageAdd className="w-4 h-4" />
-        <span className="text-sm">Thêm ảnh</span>
+        <span className="text-sm hidden sm:inline">Thêm ảnh</span>
       </Button>
       <input
         type="file"
@@ -127,7 +117,7 @@ const CustomImageButton = ({ editor }: { editor: Editor | null }) => {
 };
 
 const MainToolbarContent = ({
-  editor, // Nhận editor để truyền vào nút ảnh
+  editor,
   onHighlighterClick,
   onLinkClick,
   isMobile,
@@ -138,14 +128,15 @@ const MainToolbarContent = ({
   isMobile: boolean;
 }) => {
   return (
-    <>
-      <Spacer />
-      <ToolbarGroup>
+    <div className="flex items-center flex-nowrap gap-1 w-max shrink-0 pr-2">
+      <ToolbarGroup className="shrink-0 flex items-center">
         <UndoRedoButton action="undo" />
         <UndoRedoButton action="redo" />
       </ToolbarGroup>
-      <ToolbarSeparator />
-      <ToolbarGroup>
+
+      <ToolbarSeparator className="shrink-0 mx-1 h-6" />
+
+      <ToolbarGroup className="shrink-0 flex items-center">
         <HeadingDropdownMenu levels={[1, 2, 3]} portal={isMobile} />
         <ListDropdownMenu
           types={["bulletList", "orderedList"]}
@@ -153,8 +144,10 @@ const MainToolbarContent = ({
         />
         <BlockquoteButton />
       </ToolbarGroup>
-      <ToolbarSeparator />
-      <ToolbarGroup>
+
+      <ToolbarSeparator className="shrink-0 mx-1 h-6" />
+
+      <ToolbarGroup className="shrink-0 flex items-center">
         <MarkButton type="bold" />
         <MarkButton type="italic" />
         <MarkButton type="underline" />
@@ -167,21 +160,21 @@ const MainToolbarContent = ({
         )}
         {!isMobile ? <LinkPopover /> : <LinkButton onClick={onLinkClick} />}
       </ToolbarGroup>
-      <ToolbarSeparator />
-      <ToolbarGroup>
+
+      <ToolbarSeparator className="shrink-0 mx-1 h-6" />
+
+      <ToolbarGroup className="shrink-0 flex items-center">
         <TextAlignButton align="left" />
         <TextAlignButton align="center" />
         <TextAlignButton align="justify" />
       </ToolbarGroup>
-      <ToolbarSeparator />
 
-      {/* Nút thêm ảnh mới - Không dùng ImageUploadButton cũ nữa */}
-      <ToolbarGroup>
+      <ToolbarSeparator className="shrink-0 mx-1 h-6" />
+
+      <ToolbarGroup className="shrink-0 flex items-center pr-2">
         <CustomImageButton editor={editor} />
       </ToolbarGroup>
-
-      <Spacer />
-    </>
+    </div>
   );
 };
 
@@ -192,8 +185,8 @@ const MobileToolbarContent = ({
   type: "highlighter" | "link";
   onBack: () => void;
 }) => (
-  <>
-    <ToolbarGroup>
+  <div className="flex items-center flex-nowrap w-max shrink-0 pr-2">
+    <ToolbarGroup className="shrink-0">
       <Button variant="ghost" onClick={onBack}>
         <ArrowLeftIcon className="tiptap-button-icon" />
         {type === "highlighter" ? (
@@ -203,22 +196,22 @@ const MobileToolbarContent = ({
         )}
       </Button>
     </ToolbarGroup>
-    <ToolbarSeparator />
-    {type === "highlighter" ? (
-      <ColorHighlightPopoverContent />
-    ) : (
-      <LinkContent />
-    )}
-  </>
+    <ToolbarSeparator className="shrink-0 mx-1 h-6" />
+    <div className="shrink-0">
+      {type === "highlighter" ? (
+        <ColorHighlightPopoverContent />
+      ) : (
+        <LinkContent />
+      )}
+    </div>
+  </div>
 );
 
 export function SimpleEditor({ content = "", onChange }: SimpleEditorProps) {
   const isMobile = useIsBreakpoint();
-  const { height } = useWindowSize();
   const [mobileView, setMobileView] = useState<"main" | "highlighter" | "link">(
     "main",
   );
-  const toolbarRef = useRef<HTMLDivElement>(null);
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -227,25 +220,21 @@ export function SimpleEditor({ content = "", onChange }: SimpleEditorProps) {
         autocomplete: "off",
         autocorrect: "off",
         autocapitalize: "off",
-        class: "simple-editor focus:outline-none",
+        class: "simple-editor focus:outline-none min-h-[300px] w-full",
       },
       handlePaste: (view, event, slice) => {
         const items = Array.from(event.clipboardData?.items || []);
-
-        // Tìm xem có file ảnh nào trong clipboard không
         const imageItem = items.find((item) => item.type.startsWith("image"));
 
         if (imageItem) {
-          event.preventDefault(); // Ngăn hành động paste mặc định
+          event.preventDefault();
           const file = imageItem.getAsFile();
 
           if (file) {
-            // Convert sang Base64
             const reader = new FileReader();
             reader.onload = (e) => {
               const src = e.target?.result as string;
               if (src) {
-                // Chèn ảnh vào vị trí con trỏ hiện tại
                 const { schema } = view.state;
                 const node = schema.nodes.image.create({ src });
                 const transaction = view.state.tr.replaceSelectionWith(node);
@@ -253,11 +242,10 @@ export function SimpleEditor({ content = "", onChange }: SimpleEditorProps) {
               }
             };
             reader.readAsDataURL(file);
-            return true; // Đã xử lý xong, Tiptap không cần làm gì thêm
+            return true;
           }
         }
-
-        return false; // Nếu không phải ảnh, cho phép paste text bình thường
+        return false;
       },
     },
     onUpdate: ({ editor }) => {
@@ -279,8 +267,6 @@ export function SimpleEditor({ content = "", onChange }: SimpleEditorProps) {
       Subscript,
       Superscript,
       Selection,
-
-      // QUAN TRỌNG: Chỉ dùng Image chuẩn, GỠ BỎ ImageUploadNode
       Image.configure({
         inline: true,
         allowBase64: true,
@@ -289,21 +275,13 @@ export function SimpleEditor({ content = "", onChange }: SimpleEditorProps) {
     content: content,
   });
 
-  // FIX LỖI MẤT ẢNH KHI EDIT: Cập nhật nội dung khi API load xong
   useEffect(() => {
     if (editor && content && editor.getHTML() !== content) {
-      // Chỉ update nếu nội dung thực sự khác biệt để tránh nhảy con trỏ
-      // Kiểm tra sơ bộ độ dài để tránh so sánh chuỗi quá lớn liên tục
       if (Math.abs(editor.getHTML().length - content.length) > 10) {
         editor.commands.setContent(content);
       }
     }
   }, [content, editor]);
-
-  const rect = useCursorVisibility({
-    editor,
-    overlayHeight: toolbarRef.current?.getBoundingClientRect().height ?? 0,
-  });
 
   useEffect(() => {
     if (!isMobile && mobileView !== "main") {
@@ -312,14 +290,21 @@ export function SimpleEditor({ content = "", onChange }: SimpleEditorProps) {
   }, [isMobile, mobileView]);
 
   return (
-    <div className="flex flex-col w-full relative">
+    <div className="flex flex-col w-full h-full relative bg-white dark:bg-gray-900 rounded-2xl overflow-hidden">
       <style jsx global>{`
         .ProseMirror {
-          max-width: 800px !important;
-          margin: 0 auto !important;
-          padding: 2rem 1.5rem !important;
-          min-height: 500px;
+          max-width: 100% !important;
+          margin: 0 !important;
+          padding: 1.5rem 1rem !important;
+          min-height: 300px;
           outline: none !important;
+          width: 100%;
+        }
+        @media (min-width: 640px) {
+          .ProseMirror {
+            padding: 2rem !important;
+            min-height: 500px;
+          }
         }
         .ProseMirror p.is-editor-empty:first-child::before {
           color: #9ca3af;
@@ -331,7 +316,6 @@ export function SimpleEditor({ content = "", onChange }: SimpleEditorProps) {
         .simple-editor-content {
           overflow-x: hidden;
         }
-        /* Style cho ảnh trong editor */
         .ProseMirror img {
           max-width: 100%;
           height: auto;
@@ -345,33 +329,32 @@ export function SimpleEditor({ content = "", onChange }: SimpleEditorProps) {
       `}</style>
 
       <EditorContext.Provider value={{ editor }}>
-        <div className="border-b border-gray-100 bg-gray-50/95 sticky top-16.25 z-999 shrink-0 backdrop-blur-md transition-all">
-          <Toolbar
-            ref={toolbarRef}
-            style={{
-              ...(isMobile
-                ? { bottom: `calc(100% - ${height - rect.y}px)` }
-                : {}),
-            }}
-          >
-            {mobileView === "main" ? (
-              <MainToolbarContent
-                editor={editor} // Truyền editor xuống để nút ảnh dùng
-                onHighlighterClick={() => setMobileView("highlighter")}
-                onLinkClick={() => setMobileView("link")}
-                isMobile={isMobile}
-              />
-            ) : (
-              <MobileToolbarContent
-                type={mobileView === "highlighter" ? "highlighter" : "link"}
-                onBack={() => setMobileView("main")}
-              />
-            )}
-          </Toolbar>
+        {/* LỚP BỌC 1: Cố định (sticky) */}
+        <div className="sticky top-0 z-20 w-full border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+          {/* LỚP BỌC 2: Vuốt ngang (overflow-x-auto) và giấu thanh cuộn */}
+          <div className="w-full overflow-x-auto overflow-y-hidden scrollbar-hide touch-pan-x">
+            {/* ÉP TOOLBAR BUNG DÀI RA BẰNG CLASS !important */}
+            <Toolbar className="relative! flex! flex-nowrap! w-max! min-w-full! border-none! bg-transparent! shadow-none! p-2! h-auto! overflow-visible!">
+              {mobileView === "main" ? (
+                <MainToolbarContent
+                  editor={editor}
+                  onHighlighterClick={() => setMobileView("highlighter")}
+                  onLinkClick={() => setMobileView("link")}
+                  isMobile={isMobile}
+                />
+              ) : (
+                <MobileToolbarContent
+                  type={mobileView === "highlighter" ? "highlighter" : "link"}
+                  onBack={() => setMobileView("main")}
+                />
+              )}
+            </Toolbar>
+          </div>
         </div>
 
+        {/* Khu vực soạn thảo */}
         <div
-          className="w-full bg-white cursor-text simple-editor-content"
+          className="w-full cursor-text simple-editor-content flex-1"
           onClick={() => editor?.commands.focus()}
         >
           <EditorContent editor={editor} />

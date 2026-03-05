@@ -5,9 +5,9 @@ import Pagination from "@/components/Helper/Pagination";
 import ContactFilters from "@/components/Admin/ContactFilters";
 import ContactStatus from "@/components/Admin/ContactStatus";
 import DeleteContactButton from "@/components/Admin/DeleteContactButton";
+import ContactMessage from "@/components/Admin/ContactMessage";
 import Link from "next/link";
 
-// BỔ SUNG IMPORTS CHO AUTH & PERMISSIONS
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { PERMISSIONS, hasPermission } from "@/lib/permissions";
@@ -24,31 +24,23 @@ export default async function ContactsPage({
     to?: string;
   }>;
 }) {
-  // ==========================================
-  // LOGIC CHECK QUYỀN (BẢO VỀ ROUTE BẰNG SERVER)
-  // ==========================================
   const session = await auth();
 
-  // 1. Chưa đăng nhập -> Đá ra ngoài
   if (!session || !session.user) {
-    redirect("/admin");
+    redirect("/login");
   }
 
   const user = session.user as { role?: string; permissions?: string[] };
   const role = user.role;
   const permissions = user.permissions || [];
 
-  // 2. Check quyền "Xem khách hàng"
-  // (Sếp nhớ đảm bảo biến PERMISSIONS.VIEW_LEADS đã có trong thư viện của sếp nhé)
   const canViewContacts =
     role === "SUPER_ADMIN" ||
     hasPermission(permissions, PERMISSIONS.VIEW_LEADS);
 
-  // 3. Không có quyền -> Đá về Dashboard
   if (!canViewContacts) {
-    redirect("/admin");
+    redirect("/admin/dashboard");
   }
-  // ==========================================
 
   const params = await searchParams;
   const currentPage = Number(params.page) || 1;
@@ -60,7 +52,6 @@ export default async function ContactsPage({
   const fromDate = params.from || "";
   const toDate = params.to || "";
 
-  // 1. Xây dựng điều kiện lọc
   const whereCondition: Prisma.ContactWhereInput = {};
 
   if (query) {
@@ -81,7 +72,6 @@ export default async function ContactsPage({
     if (toDate) whereCondition.createdAt.lte = new Date(toDate);
   }
 
-  // 2. Lấy dữ liệu
   const [contacts, totalCount] = await Promise.all([
     prisma.contact.findMany({
       where: whereCondition,
@@ -101,16 +91,17 @@ export default async function ContactsPage({
   if (toDate) excelQuery.set("to", toDate);
 
   return (
-    <div className="flex flex-col gap-4 h-[calc(100vh-9rem)]">
-      {/* Tiêu đề & Nút xuất Excel */}
-      <div className="flex flex-col md:flex-row justify-between md:items-center gap-4 shrink-0">
+    // Đổi h-[calc...] thành flex-1 và min-h để không bị lỗi chiều cao trên Mobile
+    <div className="flex flex-col gap-4 flex-1 h-full min-h-[70vh]">
+      {/* --- HEADER KHU VỰC --- */}
+      <div className="flex flex-row justify-between items-center gap-4 shrink-0">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">
             Quản lý Liên hệ
           </h1>
           <div className="flex items-center gap-2 mt-1">
-            <span className="text-sm text-gray-500 dark:text-gray-400">
-              Tổng: <strong className="text-blue-600">{totalCount}</strong>
+            <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+              Tổng số: <strong className="text-blue-600">{totalCount}</strong>
             </span>
           </div>
         </div>
@@ -118,19 +109,21 @@ export default async function ContactsPage({
         <Link
           href={`/api/admin/export-contacts?${excelQuery.toString()}`}
           target="_blank"
-          className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium shadow-sm whitespace-nowrap transition-colors"
+          className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg text-sm font-medium shadow-sm whitespace-nowrap transition-colors"
         >
           <FaFileExcel /> <span className="hidden sm:inline">Xuất Excel</span>
         </Link>
       </div>
 
-      {/* Component Bộ Lọc */}
+      {/* --- BỘ LỌC (Sếp nhớ check cả responsive bên trong component này nhé) --- */}
       <ContactFilters />
 
-      {/* TABLE WRAPPER */}
+      {/* --- TABLE WRAPPER --- */}
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col flex-1 overflow-hidden">
-        <div className="flex-1 overflow-auto relative scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600">
-          <table className="w-full text-left text-sm text-gray-600 dark:text-gray-300 table-fixed">
+        {/* Lớp bọc này cho phép cuộn ngang (overflow-x-auto) trên Mobile */}
+        <div className="flex-1 overflow-x-auto overflow-y-auto relative scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600">
+          {/* THÊM min-w-[900px] ĐỂ ÉP BẢNG KHÔNG BỊ VỠ CHỮ TRÊN ĐIỆN THOẠI */}
+          <table className="w-full text-left text-sm text-gray-600 dark:text-gray-300 table-fixed min-w-225">
             <thead className="bg-gray-50 dark:bg-gray-700 uppercase font-bold text-xs text-gray-500 dark:text-gray-200 sticky top-0 z-10 border-b border-gray-200 dark:border-gray-600">
               <tr>
                 <th className="px-4 py-3 w-35">Ngày gửi</th>
@@ -139,8 +132,7 @@ export default async function ContactsPage({
                 <th className="px-4 py-3 w-40 hidden md:table-cell">Email</th>
                 <th className="px-4 py-3 w-35">Nhu cầu</th>
                 <th className="px-4 py-3 min-w-37.5">Lời nhắn</th>
-                <th className="px-4 py-3 w-30 text-center">Trạng thái</th>
-                {/* THÊM CỘT HÀNH ĐỘNG (XÓA) */}
+                <th className="px-4 py-3 w-32 text-center">Trạng thái</th>
                 <th className="px-4 py-3 w-16 text-center">Xóa</th>
               </tr>
             </thead>
@@ -201,12 +193,7 @@ export default async function ContactsPage({
                     </td>
 
                     <td className="px-4 py-3">
-                      <p
-                        className="truncate max-w-50 text-gray-500 italic"
-                        title={contact.message || ""}
-                      >
-                        {contact.message || "Không có nội dung"}
-                      </p>
+                      <ContactMessage message={contact.message} />
                     </td>
 
                     <td className="px-4 py-3 text-center">
@@ -216,7 +203,6 @@ export default async function ContactsPage({
                       />
                     </td>
 
-                    {/* HIỂN THỊ NÚT XÓA Ở ĐÂY */}
                     <td className="px-4 py-3 text-center">
                       <DeleteContactButton id={contact.id} />
                     </td>
@@ -227,8 +213,8 @@ export default async function ContactsPage({
           </table>
         </div>
 
-        {/* FOOTER */}
-        <div className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 px-4 py-3 flex justify-between items-center shrink-0">
+        {/* --- FOOTER PHÂN TRANG --- */}
+        <div className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-3 shrink-0">
           <span className="text-xs text-gray-400 hidden sm:inline">
             Hiển thị {contacts.length}/{totalCount}
           </span>

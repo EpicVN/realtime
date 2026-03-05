@@ -6,7 +6,6 @@ import { FaUserShield, FaTimes, FaCheck } from "react-icons/fa";
 import { toast } from "sonner";
 import { PERMISSIONS } from "@/lib/permissions";
 
-// Khai báo type
 export type User = {
   id: string;
   name: string | null;
@@ -20,7 +19,7 @@ interface UserFormModalProps {
   isOpen: boolean;
   onClose: () => void;
   editingUser: User | null;
-  onSuccess: () => void; // Hàm gọi lại để báo cho cha biết đã làm xong
+  onSuccess: () => void;
 }
 
 export default function UserFormModal({
@@ -38,19 +37,17 @@ export default function UserFormModal({
     permissions: [] as string[],
   });
 
-  // Tự động điền data khi mở Modal
   useEffect(() => {
     if (isOpen) {
       if (editingUser) {
         setFormData({
           name: editingUser.name || "",
           email: editingUser.email || "",
-          password: "", // Không hiển thị pass cũ
+          password: "",
           role: editingUser.role,
           permissions: editingUser.permissions || [],
         });
       } else {
-        // Reset form nếu là tạo mới
         setFormData({
           name: "",
           email: "",
@@ -101,8 +98,8 @@ export default function UserFormModal({
         toast.success(
           editingUser ? "Cập nhật thành công!" : "Tạo nhân viên thành công!",
         );
-        onSuccess(); // Báo cho Component cha (UsersClient) để làm mới dữ liệu
-        onClose(); // Đóng Modal
+        onSuccess();
+        onClose();
       } else {
         const errorData = await res.json();
         toast.error(errorData.error || "Có lỗi xảy ra");
@@ -118,22 +115,26 @@ export default function UserFormModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden animate-in zoom-in-95 duration-200">
-        <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-800">
-          <h3 className="font-bold text-lg text-gray-800 dark:text-white flex items-center gap-2">
+    // THAY ĐỔI 1: Tăng z-index và giảm padding viền ngoài trên Mobile (p-2 sm:p-4)
+    <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/60 backdrop-blur-sm p-2 sm:p-4 animate-in fade-in duration-200">
+      {/* THAY ĐỔI 2: Đổi thành flex-col và giới hạn max-h-[95vh] để không tràn màn hình */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-2xl w-full max-w-lg flex flex-col max-h-[95vh] overflow-hidden animate-in zoom-in-95 duration-200">
+        {/* HEADER: shrink-0 để giữ nguyên chiều cao không bị bóp */}
+        <div className="px-4 sm:px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-800 shrink-0">
+          <h3 className="font-bold text-base sm:text-lg text-gray-800 dark:text-white flex items-center gap-2">
             <FaUserShield className="text-blue-600 dark:text-blue-400" />
             {editingUser ? "Cập nhật thông tin" : "Cấp tài khoản mới"}
           </h3>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors hover:cursor-pointer"
+            className="text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 p-2 rounded-lg transition-colors hover:cursor-pointer"
           >
-            <FaTimes size={20} />
+            <FaTimes size={18} />
           </button>
         </div>
 
-        <div className="p-6 space-y-4">
+        {/* BODY: flex-1 và overflow-y-auto để cuộn mượt mà khi form dài */}
+        <div className="p-4 sm:p-6 space-y-4 overflow-y-auto flex-1 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600">
           <div className="grid grid-cols-1 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -199,13 +200,13 @@ export default function UserFormModal({
                 Phân quyền:
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {/* Lặp qua các quyền cơ bản (Sếp có thể map() mảng thay vì code tay nếu muốn) */}
                 {[
                   { id: PERMISSIONS.MANAGE_POSTS, label: "Quản lý Bài viết" },
                   { id: PERMISSIONS.VIEW_LEADS, label: "Xem Khách hàng" },
                   {
                     id:
-                      (PERMISSIONS as Record<string, string>).MANAGE_SETTINGS || "MANAGE_SETTINGS",
+                      (PERMISSIONS as Record<string, string>).MANAGE_SETTINGS ||
+                      "MANAGE_SETTINGS",
                     label: "Cấu hình thông tin",
                   },
                 ].map((perm) => (
@@ -219,7 +220,7 @@ export default function UserFormModal({
                     }`}
                   >
                     <div
-                      className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${
+                      className={`w-5 h-5 shrink-0 rounded border flex items-center justify-center transition-colors ${
                         formData.permissions.includes(perm.id)
                           ? "bg-green-500 border-green-500 text-white"
                           : "border-gray-300 dark:border-gray-500 bg-white dark:bg-gray-800"
@@ -229,7 +230,7 @@ export default function UserFormModal({
                         <FaCheck size={12} />
                       )}
                     </div>
-                    <span className="text-sm">{perm.label}</span>
+                    <span className="text-sm font-medium">{perm.label}</span>
                   </div>
                 ))}
               </div>
@@ -237,17 +238,18 @@ export default function UserFormModal({
           )}
         </div>
 
-        <div className="px-6 py-4 bg-gray-50 dark:bg-gray-800/80 border-t border-gray-100 dark:border-gray-700 flex justify-end gap-3">
+        {/* FOOTER: flex-col-reverse trên Mobile để nút Hủy nằm dưới nút Lưu, dàn full ngang cho dễ bấm */}
+        <div className="px-4 sm:px-6 py-4 bg-gray-50 dark:bg-gray-800/80 border-t border-gray-100 dark:border-gray-700 flex flex-col-reverse sm:flex-row justify-end gap-3 shrink-0">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg font-medium transition-colors hover:cursor-pointer"
+            className="w-full sm:w-auto px-4 py-2.5 sm:py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg font-medium transition-colors hover:cursor-pointer text-center"
           >
             Hủy bỏ
           </button>
           <button
             onClick={handleSubmit}
             disabled={submitting}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 shadow-lg shadow-blue-500/30 transition-all disabled:opacity-50 flex items-center gap-2 hover:cursor-pointer disabled:hover:cursor-not-allowed"
+            className="w-full sm:w-auto px-6 py-2.5 sm:py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 shadow-lg shadow-blue-500/30 transition-all disabled:opacity-50 flex items-center justify-center gap-2 hover:cursor-pointer disabled:hover:cursor-not-allowed"
           >
             {submitting && (
               <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
