@@ -142,7 +142,8 @@ const MobileNav = ({ closeNav, showNav, currentUser }: Props) => {
       ],
     },
     { id: 4, label: t("partners"), url: "/partners" },
-    { id: 5, label: t("contact"), url: "/contact" },
+    { id: 5, label: t("blog"), url: "/posts" },
+    { id: 6, label: t("contact"), url: "/contact" },
   ];
 
   return (
@@ -234,7 +235,7 @@ const MobileNav = ({ closeNav, showNav, currentUser }: Props) => {
                                 ))}
                               </div>
                             </div>
-                          )
+                          ),
                         )}
                       </div>
                     ) : (
@@ -260,7 +261,7 @@ const MobileNav = ({ closeNav, showNav, currentUser }: Props) => {
                                 </div>
                               </div>
                             </Link>
-                          )
+                          ),
                         )}
                       </div>
                     )}
