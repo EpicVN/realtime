@@ -6,7 +6,6 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { Toaster } from "sonner";
 import { Roboto } from "next/font/google";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const font = Roboto({
   weight: ["100", "300", "400", "500", "700", "900"],
@@ -46,7 +45,6 @@ export default async function LocaleLayout({
             <Toaster position="top-center" richColors />
           </Provider>
         </NextIntlClientProvider>
-        <SpeedInsights />
       </body>
     </html>
   );
