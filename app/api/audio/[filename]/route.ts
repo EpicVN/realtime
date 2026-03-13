@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 // 🔒 CẤU HÌNH BÍ MẬT (Chỉ Server biết)
-const BACKEND_URL = "http://109.237.69.136:8086/files";
+const BACKEND_URL = "http://103.154.176.65:8086/files";
 
 export async function GET(
   request: NextRequest,
