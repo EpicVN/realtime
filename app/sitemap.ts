@@ -1,8 +1,7 @@
 import { MetadataRoute } from 'next';
 import { prisma } from '@/lib/prisma'; // Đường dẫn tới file prisma của sếp
 
-// Thay bằng domain thật của sếp (VD: https://realtime.vn)
-const BASE_URL = 'https://realtime.vn';
+const BASE_URL = 'http://realtime.vn';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // 1. Lấy tất cả bài viết ĐÃ ĐĂNG (published = true)
