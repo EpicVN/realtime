@@ -4,6 +4,7 @@ export const PERMISSIONS = {
   VIEW_LEADS: "view_leads",
   MANAGE_SETTINGS: "manage_settings",
   MANAGE_USERS: "manage_users",
+  VIEW_LICENSES: "view_licenses", // Thêm quyền mới cho License
 };
 
 // SỬA `any` THÀNH CÁC KIỂU DỮ LIỆU CỤ THỂ DƯỚI ĐÂY:

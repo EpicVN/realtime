@@ -41,6 +41,12 @@ const MENU_GROUPS = [
         icon: <FaAddressBook />,
         requiredPermission: PERMISSIONS.VIEW_LEADS,
       },
+      {
+        name: "License",
+        href: "/admin/licenses",
+        icon: <FaAddressBook />,
+        requiredPermission: PERMISSIONS.VIEW_LICENSES,
+      },
     ],
   },
   {

@@ -69,3 +69,31 @@ model SiteConfig {
   address     String   @default("108/15/18 Đ. Số 1, Phường An Hội Đông, TP.HCM")
   updatedAt   DateTime @updatedAt
 }
+
+// Bảng quản lý Thông tin Doanh nghiệp/Khách hàng
+model Company {
+  id        String    @id @default(cuid())
+  name      String    // Tên công ty (VD: Công ty TNHH Realtime)
+  taxCode   String?   // Mã số thuế (Để xuất hóa đơn)
+  isActive  Boolean   @default(true) // Trạng thái hoạt động của công ty
+  licenses  License[] // Mối quan hệ: 1 Công ty sở hữu nhiều License
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+// Bảng quản lý bản quyền phần mềm (App C++)
+model License {
+  id          String    @id @default(cuid())
+  key         String    @unique @db.VarChar(50) 
+  hardwareId  String?   @db.VarChar(100)        
+  
+  // Khóa ngoại (Foreign Key) trỏ về bảng Company
+  companyId   String
+  company     Company   @relation(fields: [companyId], references: [id])
+  
+  isActive    Boolean   @default(true)          
+  expiresAt   DateTime?                         
+  activatedAt DateTime?                         
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
