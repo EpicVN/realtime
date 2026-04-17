@@ -15,6 +15,7 @@ import {
 } from "react-icons/fa6";
 import { RiFileMusicFill } from "react-icons/ri";
 import { useTranslations } from "next-intl"; // 2. Import hook
+import { IoLogoWhatsapp } from "react-icons/io";
 
 // --- TYPE DEFINITIONS ---
 interface GridColumn {
@@ -112,6 +113,12 @@ const MobileNav = ({ closeNav, showNav, currentUser }: Props) => {
           desc: t("prod_vas_desc"),
           icon: <FaSimCard />,
           url: "/products/voicevas",
+        },
+        {
+          title: "RealtimePhone",
+          desc: t("prod_realtimephone_desc"),
+          icon: <IoLogoWhatsapp size={18} />,
+          url: "/products/realtimephone",
         },
       ],
     },

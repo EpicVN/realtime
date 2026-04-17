@@ -14,6 +14,7 @@ import {
   FaSimCard,
   FaUsersGear,
 } from "react-icons/fa6";
+import { IoLogoWhatsapp } from "react-icons/io";
 import { HiBars3BottomRight } from "react-icons/hi2";
 import { RiFileMusicFill } from "react-icons/ri";
 import LangSwitcher from "@/components/Helper/LangSwitcher";
@@ -121,6 +122,12 @@ const Navbar = ({ openNav, currentUser }: Props) => {
           icon: <FaSimCard />,
           url: "/products/voicevas",
         },
+        {
+          title: "RealtimePhone",
+          desc: t("prod_realtimephone_desc"),
+          icon: <IoLogoWhatsapp size={18}/>,
+          url: "/products/realtimephone",
+        },
       ],
     },
     {
@@ -150,10 +157,10 @@ const Navbar = ({ openNav, currentUser }: Props) => {
       ],
     },
     { id: 4, label: t("partners"), url: "/partners" },
-    
+
     // --- THÊM MỤC BLOG ---
     { id: 5, label: t("blog"), url: "/posts" }, // Nhớ thêm key "blog" vào file ngôn ngữ
-    
+
     { id: 6, label: t("contact"), url: "/contact" },
   ];
 
@@ -220,7 +227,7 @@ const Navbar = ({ openNav, currentUser }: Props) => {
                       }}
                       transition={{ duration: 0.3, ease: "easeOut" }}
                       className={`absolute top-16 left-1/2 -translate-x-1/2 pt-4 ${
-                         // Sửa top-16 cho khớp với chiều cao mới
+                        // Sửa top-16 cho khớp với chiều cao mới
                         link.layout === "grid" ? "w-150" : "w-85"
                       }`}
                     >
@@ -244,7 +251,7 @@ const Navbar = ({ openNav, currentUser }: Props) => {
                                     {column.items.map(
                                       (
                                         item: { title: string; url: string },
-                                        itemIdx: number
+                                        itemIdx: number,
                                       ) => (
                                         <Link
                                           key={itemIdx}
@@ -254,11 +261,11 @@ const Navbar = ({ openNav, currentUser }: Props) => {
                                           <span className="w-1.5 h-1.5 rounded-full bg-gray-300 group-hover:bg-blue-500 transition-colors"></span>
                                           {item.title}
                                         </Link>
-                                      )
+                                      ),
                                     )}
                                   </div>
                                 </div>
-                              )
+                              ),
                             )}
                           </div>
                         ) : (
@@ -282,7 +289,7 @@ const Navbar = ({ openNav, currentUser }: Props) => {
                                     </p>
                                   </div>
                                 </Link>
-                              )
+                              ),
                             )}
                           </div>
                         )}
@@ -319,7 +326,7 @@ const Navbar = ({ openNav, currentUser }: Props) => {
               </span>
             </Link>
           )}
-          
+
           {/* SỬA: Thu nhỏ cụm chức năng phụ */}
           <div className="flex items-center gap-1 sm:gap-2">
             <LangSwitcher />

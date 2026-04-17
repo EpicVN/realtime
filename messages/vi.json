@@ -171,6 +171,7 @@
         "prod_cloud_desc": "Cho thuê máy chủ ảo, server ảo",
         "prod_pbx_desc": "Tổng đài ảo thông minh đa kênh",
         "prod_vas_desc": "Đầu số Telesale, bàn, di động, SMS, ZNS...",
+        "prod_realtimephone_desc": "Ứng dụng softphone trên PC cho cuộc gọi VoIP",
         "sol_heading_industry": "THEO LĨNH VỰC KINH DOANH",
         "sol_collection": "Giải pháp Thu nhắc nợ / Collection",
         "sol_cskh": "Giải pháp tổng đài cho CSKH",
@@ -477,6 +478,96 @@
                 "features_desc": "Kết nối doanh nghiệp với khách hàng qua mọi điểm chạm: Cuộc gọi, Tin nhắn và Zalo.",
                 "stats_title": "Hiệu quả truyền thông thực tế",
                 "stats_desc": "Các giải pháp VAS của Realtime giúp tối ưu hóa tỷ lệ chuyển đổi và giảm chi phí Marketing."
+            }
+        },
+        "RealtimePhone": {
+            "About": {
+                "tag": "Phần mềm Gọi điện trên PC",
+                "tab1": {
+                    "shortTitle": "Softphone",
+                    "title": "RealtimePhone - Softphone chuẩn Doanh nghiệp",
+                    "description": "Ứng dụng gọi VoIP, Video Call và nhắn tin miễn phí trên Windows. Lựa chọn hoàn hảo để tối ưu giao tiếp cho tổng đài ảo, nhân viên làm việc từ xa và Call Center."
+                },
+                "tab2": {
+                    "shortTitle": "Hiệu suất",
+                    "title": "Tối ưu hiệu suất tuyệt đối",
+                    "description": "Phần mềm cực kỳ nhẹ (file cài đặt < 5MB), khởi động tức thì, không gây giật lag hay ảnh hưởng đến các phần mềm làm việc khác trên máy tính của bạn."
+                },
+                "tab3": {
+                    "shortTitle": "Thoại & Video",
+                    "title": "Thoại HD, Video Call & Chat",
+                    "description": "Tương thích với mọi tổng đài chuẩn SIP. Không chỉ cung cấp cuộc gọi thoại (Voice) HD rõ nét, phần mềm còn hỗ trợ gọi Video Call và nhắn tin nội bộ tức thời."
+                },
+                "tab4": {
+                    "shortTitle": "Re-branding",
+                    "title": "Dịch vụ cá nhân hóa (Re-branding)",
+                    "description": "Tùy biến phần mềm mang đậm dấu ấn doanh nghiệp (thay đổi Tên, Logo, Icon, File cài đặt). Khẳng định sự chuyên nghiệp và nâng tầm nhận diện thương hiệu nội bộ."
+                },
+                "buttons": {
+                    "installer": "Tải bản Installer (.exe)",
+                    "portable": "Bản Portable (.zip)"
+                }
+            },
+            "Page": {
+                "Features": {
+                    "sectionTitle": "Tính năng của RealtimePhone",
+                    "sectionDesc": "Mang đến trải nghiệm giao tiếp tối ưu cho doanh nghiệp.",
+                    "items": {
+                        "free_light": {
+                            "title": "Miễn phí & Nhẹ",
+                            "desc": "Không quảng cáo, không phí ẩn, chiếm rất ít tài nguyên hệ thống, hoạt động mượt mà ngay cả trên các máy tính cấu hình yếu."
+                        },
+                        "audio": {
+                            "title": "Chất lượng âm thanh cao",
+                            "desc": "Hỗ trợ nhiều codec âm thanh (như G.722, Opus, Speex) cho cuộc gọi rõ nét."
+                        },
+                        "sip": {
+                            "title": "SIP-based",
+                            "desc": "Hoạt động với các tài khoản SIP (VoIP), cho phép gọi nội bộ hoặc ra số di động/cố định."
+                        },
+                        "multipurpose": {
+                            "title": "Đa năng",
+                            "desc": "Hỗ trợ thoại, video, nhắn tin, nhật ký cuộc gọi và danh bạ."
+                        },
+                        "security": {
+                            "title": "Mã hóa bảo mật",
+                            "desc": "Hỗ trợ bảo mật cuộc gọi thông qua TLS/SRTP."
+                        },
+                        "easy_setup": {
+                            "title": "Dễ thiết lập",
+                            "desc": "Giao diện đơn giản, dễ cài đặt trên Windows."
+                        },
+                        "multilingual": {
+                            "title": "Đa ngôn ngữ",
+                            "desc": "Hỗ trợ nhiều ngôn ngữ khác nhau, bao gồm tiếng Việt."
+                        }
+                    }
+                },
+                "Rebranding": {
+                    "badge": "Dịch vụ Đặc quyền",
+                    "title1": "Bạn muốn một Phần mềm mang đậm",
+                    "title2": "Dấu Ấn Doanh Nghiệp?",
+                    "description": "Hãy tưởng tượng logo, tên công ty và biểu tượng đặc trưng của đơn vị bạn hiển thị trên màn hình máy tính của mọi nhân viên. Đừng dùng phần mềm với tên gọi chung chung, hãy khẳng định sự chuyên nghiệp bằng dịch vụ <strong>Re-branding</strong> từ Realtime Solutions!",
+                    "option1": {
+                        "badge": "Ưu đãi Đặc quyền",
+                        "title": "ĐỐI TÁC CHIẾN LƯỢC",
+                        "subtitle": "Dành cho khách hàng sử dụng RealtimePBX",
+                        "price": "Miễn phí 100%",
+                        "service1": "Tùy chỉnh Icon & Tên phần mềm (Exe/Shortcut)",
+                        "service2": "Thay đổi Logo",
+                        "conditionTitle": "Điều kiện áp dụng:",
+                        "conditionDesc": "Đăng ký hợp đồng Tổng đài PBX từ <highlight>12 tháng</highlight> và quy mô từ <highlight>20 Users</highlight> trở lên."
+                    },
+                    "option2": {
+                        "title": "DỊCH VỤ CUSTOM - CÁ NHÂN HÓA",
+                        "subtitle": "Dành cho khách hàng mới",
+                        "priceValue": "3.000.000",
+                        "priceUnit": "VNĐ / Lần",
+                        "service1": "Tùy chỉnh Icon & Tên phần mềm (Exe/Shortcut)",
+                        "service2": "Thay đổi Logo",
+                        "contactText": "Hoặc liên hệ Hotline dưới chân trang để nhận tư vấn nhanh."
+                    }
+                }
             }
         }
     },

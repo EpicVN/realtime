@@ -171,6 +171,7 @@
         "prod_cloud_desc": "Virtual server rental (VPS)",
         "prod_pbx_desc": "Smart omnichannel virtual PBX",
         "prod_vas_desc": "Telesales numbers, landline, mobile, SMS, ZNS...",
+        "prod_realtimephone_desc": "PC softphone application for VoIP calls",
         "sol_heading_industry": "BY INDUSTRY",
         "sol_collection": "Debt Collection Solution",
         "sol_cskh": "Call Center for Customer Service",
@@ -477,6 +478,96 @@
                 "features_desc": "Connect businesses with customers through every touchpoint: Calls, Messages, and Zalo.",
                 "stats_title": "Real Communication Effectiveness",
                 "stats_desc": "Realtime's VAS solutions help optimize conversion rates and reduce Marketing costs."
+            }
+        },
+        "RealtimePhone": {
+            "About": {
+                "tag": "PC Calling Software",
+                "tab1": {
+                    "shortTitle": "Softphone",
+                    "title": "RealtimePhone - Enterprise Softphone",
+                    "description": "Free VoIP, Video Call, and messaging application for Windows. The perfect choice to optimize communication for virtual PBX, remote workers, and Call Centers."
+                },
+                "tab2": {
+                    "shortTitle": "Performance",
+                    "title": "Absolute Performance Optimization",
+                    "description": "Extremely lightweight software (installer < 5MB), instant startup, causes no lag or interference with other working software on your computer."
+                },
+                "tab3": {
+                    "shortTitle": "Voice & Video",
+                    "title": "HD Voice, Video Call & Chat",
+                    "description": "Compatible with all standard SIP PBXs. Not only provides crystal clear HD Voice calls, but also supports Video Calls and instant internal messaging."
+                },
+                "tab4": {
+                    "shortTitle": "Re-branding",
+                    "title": "Personalization Service (Re-branding)",
+                    "description": "Customize the software with your corporate identity (change Name, Logo, Icon, Installer file). Affirm professionalism and elevate internal brand recognition."
+                },
+                "buttons": {
+                    "installer": "Download Installer (.exe)",
+                    "portable": "Portable Version (.zip)"
+                }
+            },
+            "Page": {
+                "Features": {
+                    "sectionTitle": "RealtimePhone Features",
+                    "sectionDesc": "Delivering an optimal communication experience for businesses.",
+                    "items": {
+                        "free_light": {
+                            "title": "Free & Lightweight",
+                            "desc": "No ads, no hidden fees, consumes very little system resources, runs smoothly even on low-spec computers."
+                        },
+                        "audio": {
+                            "title": "High Audio Quality",
+                            "desc": "Supports multiple audio codecs (like G.722, Opus, Speex) for crystal clear calls."
+                        },
+                        "sip": {
+                            "title": "SIP-based",
+                            "desc": "Works with SIP (VoIP) accounts, allowing internal calls or calls to mobile/landline numbers."
+                        },
+                        "multipurpose": {
+                            "title": "Multipurpose",
+                            "desc": "Supports voice, video, messaging, call logs, and contacts."
+                        },
+                        "security": {
+                            "title": "Security Encryption",
+                            "desc": "Supports call security via TLS/SRTP."
+                        },
+                        "easy_setup": {
+                            "title": "Easy Setup",
+                            "desc": "Simple interface, easy to install on Windows."
+                        },
+                        "multilingual": {
+                            "title": "Multilingual",
+                            "desc": "Supports multiple languages, including Vietnamese."
+                        }
+                    }
+                },
+                "Rebranding": {
+                    "badge": "Exclusive Service",
+                    "title1": "Do you want software with a strong",
+                    "title2": "Corporate Identity?",
+                    "description": "Imagine your company logo, name, and signature symbol proudly displayed on every employee's computer screen. Don't use software with generic names, affirm your professionalism with the <strong>Re-branding</strong> service from Realtime Solutions!",
+                    "option1": {
+                        "badge": "Exclusive Offer",
+                        "title": "STRATEGIC PARTNER",
+                        "subtitle": "For customers using RealtimePBX",
+                        "price": "100% Free",
+                        "service1": "Custom Software Icon & Name (Exe/Shortcut)",
+                        "service2": "Logo Replacement",
+                        "conditionTitle": "Terms and Conditions:",
+                        "conditionDesc": "Sign a PBX contract for <highlight>12 months</highlight> and scale from <highlight>20 Users</highlight> or more."
+                    },
+                    "option2": {
+                        "title": "CUSTOM SERVICE - PERSONALIZATION",
+                        "subtitle": "For new customers",
+                        "priceValue": "3,000,000",
+                        "priceUnit": "VND / Time",
+                        "service1": "Custom Software Icon & Name (Exe/Shortcut)",
+                        "service2": "Logo Replacement",
+                        "contactText": "Or contact the Hotline at the footer for quick consultation."
+                    }
+                }
             }
         }
     },
