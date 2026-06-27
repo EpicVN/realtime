@@ -129,7 +129,7 @@ const AboutRealtimePhone = () => {
 
           <div className="flex flex-wrap gap-4">
             <Link
-              href="http://realtime.vn/huong-dan/RealtimePhone/RealtimePhone_Setup_v1.0.exe"
+              href="https://realtime.vn/huong-dan/RealtimePhone/RealtimePhone_Setup_v1.0.exe"
               className="group inline-flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-3.5 font-bold rounded-lg shadow-lg hover:shadow-blue-500/30 transition-all transform hover:-translate-y-1"
             >
               <FaWindows className="text-2xl" />
