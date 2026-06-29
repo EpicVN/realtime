@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FaFacebookF, FaPaperPlane, FaPhone } from "react-icons/fa6";
+import { FaYoutube } from "react-icons/fa";
 import { ImArrowUp } from "react-icons/im";
 
 interface FloatingContactConfig {
@@ -12,6 +13,7 @@ interface FloatingContactConfig {
   saleName?: string;
   fbLink?: string;
   zaloLink?: string;
+  youtubeLink?: string;
 }
 
 // Component con hiển thị Tooltip (Giữ nguyên của sếp)
@@ -159,6 +161,24 @@ const FloatingContact = ({ config }: { config: FloatingContactConfig }) => {
           </svg>
         </Link>
         <Tooltip text="Zalo" />
+      </motion.div>
+
+      {/* --- YOUTUBE --- */}
+      <motion.div
+        initial={{ opacity: 0, x: 50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 1 }}
+        className="pointer-events-auto relative group"
+      >
+        <Link
+          href={config?.youtubeLink || "#"} // <-- Dùng data động
+          target="_blank"
+          className="flex items-center justify-center w-11 h-11 rounded-full bg-[#FF0000] text-white shadow-lg hover:scale-110 transition-transform relative overflow-hidden"
+        >
+          <FaYoutube className="text-lg z-20" />
+          <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+        </Link>
+        <Tooltip text="YouTube" />
       </motion.div>
 
       {/* --- Contact form --- */}

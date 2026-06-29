@@ -7,9 +7,9 @@ import {
   FaFacebook,
   FaLocationDot,
   FaPhone,
-  FaUser
+  FaUser,
 } from "react-icons/fa6";
-
+import { FaYoutube } from "react-icons/fa";
 import { FaSave } from "react-icons/fa";
 
 import { useFormStatus } from "react-dom";
@@ -21,6 +21,7 @@ interface SiteConfig {
   saleName?: string;
   zaloLink?: string;
   fbLink?: string;
+  youtubeLink?: string;
   email?: string;
   address?: string;
 }
@@ -217,6 +218,23 @@ export default function SettingsForm({ config }: { config: SiteConfig }) {
                 type="url"
                 name="fbLink"
                 defaultValue={config?.fbLink}
+                className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-gray-50 dark:bg-gray-900 outline-none transition-all dark:text-white"
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+              Link YouTube
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-red-600">
+                <FaYoutube />
+              </div>
+              <input
+                type="url"
+                name="youtubeLink"
+                defaultValue={config?.youtubeLink}
                 className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-gray-50 dark:bg-gray-900 outline-none transition-all dark:text-white"
               />
             </div>
