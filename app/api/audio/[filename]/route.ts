@@ -4,8 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 // 🔒 CẤU HÌNH BÍ MẬT (Chỉ Server biết)
-// (Em thấy IP này 103.154.176.65 khác với IP 103.229.42.19 lúc nãy, sếp check lại xem đúng IP mới chưa nhé)
-const BACKEND_URL = "http://103.154.176.65:8086/files";
+const BACKEND_URL = "http://103.229.42.19:8086/files";
 
 export async function GET(
   request: NextRequest,
