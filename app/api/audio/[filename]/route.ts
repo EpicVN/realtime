@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 
+// ⏱️ HÀM TẠO NHỊP THỞ (Chờ Server ghi file)
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 // 🔒 CẤU HÌNH BÍ MẬT (Chỉ Server biết)
+// (Em thấy IP này 103.154.176.65 khác với IP 103.229.42.19 lúc nãy, sếp check lại xem đúng IP mới chưa nhé)
 const BACKEND_URL = "http://103.154.176.65:8086/files";
 
 export async function GET(
@@ -17,8 +21,14 @@ export async function GET(
   try {
     const internalUrl = `${BACKEND_URL}/${filename}`;
     
-    // Gọi sang Backend lấy dữ liệu
-    const response = await fetch(internalUrl);
+    // 🔥 ĐIỂM CHỐT HẠ: Ép code nhịn lại 2 giây để Server gốc ghi xong file .wav 🔥
+    console.log(`Đang chờ 2 giây để file ${filename} được ghi xong...`);
+    await delay(2000);
+    
+    // Gọi sang Backend lấy dữ liệu (Có gắn cầu chì ngắt sau 30 giây để tránh treo Server)
+    const response = await fetch(internalUrl, {
+        signal: AbortSignal.timeout(30000) 
+    });
 
     if (!response.ok) {
       return new NextResponse("Audio not found", { status: 404 });
