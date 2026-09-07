@@ -25,7 +25,7 @@ export async function createSpeech(formData: FormData) {
     //const apiUrl = "http://127.0.0.1:8086/api/tts-create-speak.php";
     //const apiUrl = "http://109.237.69.136:8086/api/tts-create-speak.php";
     // const apiUrl = "http://103.154.176.65:8086/api/tts-create-speak.php";
-    const apiUrl = "http://103.229.42.19:8086/api/tts-create-speak.php"; // s10
+    const apiUrl = "http://103.229.42.193:8086/api/tts-create-speak.php"; // s10
 
     console.log("🚀 Đang gửi POST tới:", apiUrl);
     console.log("📦 Payload:", JSON.stringify(payload));

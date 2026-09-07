@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 // 🔒 CẤU HÌNH BÍ MẬT (Chỉ Server biết)
-const BACKEND_URL = "http://103.229.42.19:8086/files";
+const BACKEND_URL = "http://103.229.42.193:8086/files";
 
 export async function GET(
   request: NextRequest,
