@@ -166,6 +166,7 @@
         "login": "Đăng nhập",
         "prod_cx_desc": "Nền tảng chăm sóc khách hàng đa kênh",
         "prod_autodialer_desc": "Hệ thống gọi tự động hàng loạt",
+        "prod_hachi_desc": "Voicebot agent",
         "prod_tts_desc": "Chuyển văn bản thành giọng nói",
         "prod_bpo_desc": "Thuê nhân sự trực Hotline, Telesales & CSKH",
         "prod_cloud_desc": "Cho thuê máy chủ ảo, server ảo",
@@ -568,6 +569,85 @@
                         "contactText": "Hoặc liên hệ Hotline dưới chân trang để nhận tư vấn nhanh."
                     }
                 }
+            }
+        },
+        "RealtimeHachi": {
+            "About": {
+                "tag": "Voicebot AI Tương tác",
+                "tab1": {
+                    "shortTitle": "Voicebot AI",
+                    "title": "RealtimeHachi - Trợ lý ảo AI giao tiếp như người thật",
+                    "description": "Tự động hóa quy trình chăm sóc khách hàng, telesales và tổng đài với Voicebot thông minh. Ứng dụng công nghệ lõi STT, NLP và TTS do chính Realtime phát triển."
+                },
+                "tab2": {
+                    "shortTitle": "No-Code",
+                    "title": "Thiết kế kịch bản không cần Code",
+                    "description": "Giao diện RealtimeDesign cho phép bạn tạo luồng cuộc gọi phức tạp chỉ bằng thao tác kéo - thả các khối logic, tiết kiệm 90% thời gian triển khai."
+                },
+                "tab3": {
+                    "shortTitle": "Hiểu Ý Định",
+                    "title": "Nhận diện ý định khách hàng chuẩn xác",
+                    "description": "Không chỉ là bot đọc kịch bản. RealtimeHachi có khả năng nghe, bóc tách ý định (Intent) của khách hàng (Đồng ý, Từ chối, Đặt câu hỏi) để rẽ nhánh linh hoạt."
+                },
+                "buttons": {
+                    "consult": "Đăng ký tư vấn",
+                    "demo": "Trải nghiệm ngay"
+                }
+            },
+            "Page": {
+                "features_title": "Sức mạnh của RealtimeHachi & RealtimeDesign",
+                "features_desc": "Hệ sinh thái công cụ toàn diện giúp doanh nghiệp xây dựng tổng đài AI tự động chỉ trong vài phút.",
+                "feat_flow_title": "Thiết kế kịch bản Kéo - Thả",
+                "feat_flow_desc": "Giao diện trực quan. Dễ dàng tạo luồng hội thoại bằng các node mà không cần kiến thức lập trình.",
+                "feat_intent_title": "Hachi AI Agent - Hiểu ý định",
+                "feat_intent_desc": "Tích hợp mô hình NLP RealtimeHachi và STT để bóc tách ý định (Intent), giúp bot hiểu và phản hồi linh hoạt theo câu trả lời của khách.",
+                "feat_dynamic_title": "Cá nhân hóa nội dung",
+                "feat_dynamic_desc": "Gắn biến dữ liệu động (Danh xưng, Tên khách hàng...) kết hợp Text-to-Speech tự nhiên để tạo cảm giác thân thiện như nhân viên thật.", 
+                "feat_routing_title": "Chuyển tiếp thông minh",
+                "feat_routing_desc": "Tính năng Route Agent tự động chuyển cuộc gọi đến đúng nhân viên tư vấn khi khách hàng yêu cầu hoặc khi kịch bản yêu cầu con người xử lý.",
+                "feat_logic_title": "Tích hợp Logic & API",
+                "feat_logic_desc": "Mở rộng sức mạnh kịch bản với các khối Logic (If/Else, Assign) và khối Dữ liệu (Truy vấn Database, gọi API/URL) ngay trong luồng gọi.",
+                "feat_record_title": "Ghi âm & Lưu trữ",
+                "feat_record_desc": "Chủ động ghi âm theo từng đoạn kịch bản hoặc toàn bộ cuộc gọi, phục vụ cho việc giám sát chất lượng.",
+                "stats_title": "Nâng tầm hiệu suất Tổng đài",
+                "stats_desc": "Giải pháp AI Voicebot giúp doanh nghiệp tối ưu chi phí vận hành và nâng cao trải nghiệm khách hàng.",
+                "stat_accuracy": "Độ chính xác NLP",
+                "stat_latency": "Độ trễ phản hồi",
+                "stat_automation": "Tỷ lệ tự động hóa",
+                "stat_concurrent": "Cuộc gọi đồng thời",
+
+                "sim_title": "Giao tiếp tự nhiên như con người",
+                "sim_desc": "Trải nghiệm đoạn hội thoại thực tế giữa RealtimeHachi và Khách hàng.",
+                
+                "sim_user1": "Alo, ai đấy?",
+                "sim_bot1": "Dạ em chào anh Hùng, em là Hachi gọi đến từ bộ phận CSKH Realtime. Xin phép làm phiền anh 1 phút để khảo sát mức độ hài lòng về khóa học trực tuyến vừa qua ạ.",
+                "sim_user2": "À, nói chung là bé nhà anh học cũng ổn, nhưng mà giáo viên thỉnh thoảng hay đổi giờ học quá em ạ.",
+                "sim_bot2": "Dạ em rất tiếc về sự bất tiện này. Hệ thống đã ghi nhận góp ý của anh về vấn đề lịch học của giáo viên và sẽ chuyển ngay cho bộ phận đào tạo xử lý ạ. Cảm ơn anh đã phản hồi!",
+
+                "sim_user3": "Alo, ai đấy?",
+                "sim_bot3": "Xin chào, em gọi đến từ Realtime, đơn vị cung cấp dịch vụ gọi tự động, đây là số điện thoại đăng ký của  anh chị đúng không ạ",
+                "sim_user4": "Không đúng em ạ",
+                "sim_bot4": "Cảm ơn anh chị đã giành thời gian phản hồi. Chúc anh chị ngày mới tốt lành!",
+
+                "usecases_title": "Ứng dụng đa lĩnh vực",
+                "usecases_desc": "Voicebot linh hoạt tùy biến kịch bản cho mọi ngành nghề kinh doanh.",
+                "uc_cskh_title": "Chăm sóc khách hàng",
+                "uc_cskh_desc": "Giải đáp thắc mắc FAQs, tra cứu bảo hành, hỗ trợ kỹ thuật cấp 1 tự động 24/7.",
+                "uc_telesales_title": "Telesales / Marketing",
+                "uc_telesales_desc": "Gọi điện giới thiệu sản phẩm mới, mời tham gia sự kiện, khảo sát mức độ hài lòng.",
+                "uc_booking_title": "Đặt lịch hẹn",
+                "uc_booking_desc": "Tự động gọi xác nhận lịch hẹn phòng khám, spa, nhà hàng và đồng bộ vào Calendar.",
+                "uc_remind_title": "Nhắc hạn thanh toán",
+                "uc_remind_desc": "Nhắc phí tự động, thông báo gia hạn dịch vụ một cách lịch sự, tế nhị.",
+                "pipeline_heading": "Cơ chế xử lý",
+                "pipeline_highlight": "Tự động & Xuyên suốt",
+                "pipeline_desc": "RealtimeHachi mô phỏng hoàn hảo quy trình giao tiếp của não bộ con người.",
+                "pipeline_step1_title": "Nghe (STT)",
+                "pipeline_step1_desc": "Chuyển giọng nói thành văn bản thời gian thực.",
+                "pipeline_step2_title": "Hiểu (NLP & Intent)",
+                "pipeline_step2_desc": "Bóc tách ý định, phân tích ngữ cảnh câu nói.",
+                "pipeline_step3_title": "Trả lời (TTS)",
+                "pipeline_step3_desc": "Sinh phản hồi thành giọng nói AI truyền cảm."
             }
         }
     },

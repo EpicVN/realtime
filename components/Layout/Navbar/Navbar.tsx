@@ -93,6 +93,12 @@ const Navbar = ({ openNav, currentUser }: Props) => {
           url: "/products/autodialer",
         },
         {
+          title: "RealtimeHachi",
+          desc: t("prod_hachi_desc"),
+          icon: <FaRobot />,
+          url: "/products/hachi",
+        },
+        {
           title: "RealtimeAI (Text To Speech)",
           desc: t("prod_tts_desc"),
           icon: <RiFileMusicFill />,

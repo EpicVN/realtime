@@ -166,6 +166,7 @@
         "login": "Login",
         "prod_cx_desc": "Omnichannel customer service platform",
         "prod_autodialer_desc": "Bulk auto-dialing system",
+        "prod_hachi_desc": "Voicebot agent",
         "prod_tts_desc": "Text to speech conversion",
         "prod_bpo_desc": "Outsourcing Hotline, Telesales & CS Agents",
         "prod_cloud_desc": "Virtual server rental (VPS)",
@@ -568,6 +569,77 @@
                         "contactText": "Or contact the Hotline at the footer for quick consultation."
                     }
                 }
+            }
+        },
+        "RealtimeHachi": {
+            "About": {
+                "tag": "Interactive AI Voicebot",
+                "tab1": {
+                    "shortTitle": "Voicebot AI",
+                    "title": "RealtimeHachi - Human-like AI Virtual Assistant",
+                    "description": "Automate customer service, telesales, and call centers with a smart Voicebot. Powered by Realtime's proprietary STT, NLP, and TTS core technologies."
+                },
+                "tab2": {
+                    "shortTitle": "No-Code",
+                    "title": "No-Code Scenario Design",
+                    "description": "The RealtimeDesign interface allows you to build complex call flows using simple drag-and-drop logic blocks, saving 90% of deployment time."
+                },
+                "tab3": {
+                    "shortTitle": "Intent Recognition",
+                    "title": "Accurate Customer Intent Recognition",
+                    "description": "More than just a script-reading bot. RealtimeHachi listens and extracts customer intents (Agree, Reject, Inquire) for flexible conversational branching."
+                },
+                "buttons": {
+                    "consult": "Get a Consultation",
+                    "demo": "Try it Now"
+                }
+            },
+            "Page": {
+                "features_title": "The Power of RealtimeHachi & RealtimeDesign",
+                "features_desc": "A comprehensive ecosystem of tools helping businesses build automated AI call centers in minutes.",
+                "feat_flow_title": "Drag & Drop Builder",
+                "feat_flow_desc": "Intuitive visual interface. Easily create conversational flows using nodes (Start, End, Speak, Audio) without any coding knowledge.",
+                "feat_intent_title": "Hachi AI Agent - Intent Focus",
+                "feat_intent_desc": "Integrates RealtimeHachi NLP and STT models to extract intents, allowing the bot to understand and respond dynamically to customers.",
+                "feat_dynamic_title": "Content Personalization",
+                "feat_dynamic_desc": "Assign dynamic data variables (Title, Customer Name) combined with natural Text-to-Speech to create a human-like, friendly experience.",
+                "feat_routing_title": "Smart Routing",
+                "feat_routing_desc": "The Route Agent feature automatically transfers calls to the right human consultant when requested by the customer or dictated by the scenario.",
+                "feat_logic_title": "Logic & API Integration",
+                "feat_logic_desc": "Extend scenario capabilities with Logic nodes (If/Else, Assign) and Data nodes (Database queries, API/URL calls) directly in the call flow.",
+                "feat_record_title": "Recording & Storage",
+                "feat_record_desc": "Automatically record and store 100% of calls for training and quality control purposes.",
+                "stats_title": "Elevate Call Center Performance",
+                "stats_desc": "AI Voicebot solutions help businesses optimize operational costs and enhance customer experience.",
+                "stat_accuracy": "NLP Accuracy",
+                "stat_latency": "Response Latency",
+                "stat_automation": "Automation Rate",
+                "stat_concurrent": "Concurrent Calls",
+                "sim_title": "Natural, Human-like Conversation",
+                "sim_desc": "Experience a real-time conversation simulation between RealtimeHachi and a customer.",
+                "sim_user1": "Hello, who is calling?",
+                "sim_bot1": "Hello Mr. Hung, I'm Hachi from Realtime's Customer Care. May I take a quick minute to survey your satisfaction with our recent online course?",
+                "sim_user2": "Well, my kid is doing fine overall, but the teacher keeps changing the class schedule out of nowhere.",
+                "sim_bot2": "I sincerely apologize for this inconvenience. I have noted your feedback regarding the teacher's scheduling issue and will immediately escalate it to our academic management team. Thank you for sharing!",
+                "usecases_title": "Multi-Industry Applications",
+                "usecases_desc": "A versatile Voicebot with customizable conversation flows tailored for every business domain.",
+                "uc_cskh_title": "Customer Service",
+                "uc_cskh_desc": "Automate 24/7 FAQ handling, warranty status lookups, and tier-1 technical support inquiries.",
+                "uc_telesales_title": "Telesales & Marketing",
+                "uc_telesales_desc": "Introduce new product campaigns, send event invitations, and conduct customer satisfaction surveys.",
+                "uc_booking_title": "Appointment Scheduling",
+                "uc_booking_desc": "Automatically confirm bookings for clinics, spas, and restaurants while syncing directly to calendars.",
+                "uc_remind_title": "Payment Reminders",
+                "uc_remind_desc": "Automate billing notices and service renewal reminders courteously and professionally.",
+                "pipeline_heading": "Processing Mechanism",
+                "pipeline_highlight": "Automated & Seamless",
+                "pipeline_desc": "RealtimeHachi perfectly simulates the communication process of the human brain.",
+                "pipeline_step1_title": "Listen (STT)",
+                "pipeline_step1_desc": "Convert speech to text in real time.",
+                "pipeline_step2_title": "Understand (NLP & Intent)",
+                "pipeline_step2_desc": "Extract intent and analyze the context of the sentence.",
+                "pipeline_step3_title": "Respond (TTS)",
+                "pipeline_step3_desc": "Generate responses into natural, expressive AI voice."
             }
         }
     },
