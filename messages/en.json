@@ -487,12 +487,12 @@
                 "tab1": {
                     "shortTitle": "Softphone",
                     "title": "RealtimePhone - Enterprise Softphone",
-                    "description": "Free VoIP, Video Call, and messaging application for Windows. The perfect choice to optimize communication for virtual PBX, remote workers, and Call Centers."
+                    "description": "Enterprise VoIP calling, video call, and messaging application for Windows & macOS. An ideal solution to streamline communication for cloud PBX, remote teams, and Call Centers."
                 },
                 "tab2": {
                     "shortTitle": "Performance",
                     "title": "Absolute Performance Optimization",
-                    "description": "Extremely lightweight software (installer < 5MB), instant startup, causes no lag or interference with other working software on your computer."
+                    "description": "Extremely lightweight software (installer < 3MB), instant startup, causes no lag or interference with other working software on your computer."
                 },
                 "tab3": {
                     "shortTitle": "Voice & Video",
@@ -508,7 +508,12 @@
                     "download": "Download RealtimePhone"
                 },
                 "os_support": "Supports Windows 10/11 & macOS (Intel / Apple Silicon)",
-                "badge_highlight": "Free • Quick Setup"
+                "badge_highlight": "Commercial License",
+                "copyright_line": "Copyright (c) 2026 Realtime Solutions. All Rights Reserved.",
+                "copyright_title": "COPYRIGHT NOTICE:",
+                "copyright_body": "This material is proprietary to Realtime Solutions. Any use, reproduction, or distribution requires prior written permission from the owner.",
+                "copyright_contact_label": "Licensing contact:",
+                "copyright_email": "sales@realtime.vn"
             },
             "Page": {
                 "Features": {

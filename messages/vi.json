@@ -487,12 +487,12 @@
                 "tab1": {
                     "shortTitle": "Softphone",
                     "title": "RealtimePhone - Softphone chuẩn Doanh nghiệp",
-                    "description": "Ứng dụng gọi VoIP, Video Call và nhắn tin miễn phí trên Windows. Lựa chọn hoàn hảo để tối ưu giao tiếp cho tổng đài ảo, nhân viên làm việc từ xa và Call Center."
+                    "description": "Ứng dụng gọi VoIP, Video Call và nhắn tin chuẩn doanh nghiệp trên Windows & macOS. Giải pháp tối ưu giúp nâng cao hiệu quả giao tiếp cho tổng đài ảo, nhân viên làm việc từ xa và Call Center."
                 },
                 "tab2": {
                     "shortTitle": "Hiệu suất",
                     "title": "Tối ưu hiệu suất tuyệt đối",
-                    "description": "Phần mềm cực kỳ nhẹ (file cài đặt < 5MB), khởi động tức thì, không gây giật lag hay ảnh hưởng đến các phần mềm làm việc khác trên máy tính của bạn."
+                    "description": "Phần mềm cực kỳ nhẹ (file cài đặt < 3MB), khởi động tức thì, không gây giật lag hay ảnh hưởng đến các phần mềm làm việc khác trên máy tính của bạn."
                 },
                 "tab3": {
                     "shortTitle": "Thoại & Video",
@@ -508,7 +508,12 @@
                     "download": "Tải xuống RealtimePhone"
                 },
                 "os_support": "Hỗ trợ Windows 10/11 & macOS (Intel / Chip M)",
-                "badge_highlight": "Miễn phí • Cài đặt nhanh"
+                "badge_highlight": "Commercial License (Giấy phép thương mại)",
+                "copyright_line": "Copyright (c) 2026 Realtime Solutions. All Rights Reserved.",
+                "copyright_title": "THÔNG BÁO BẢN QUYỀN:",
+                "copyright_body": "Tài liệu và mã nguồn này là tài sản độc quyền của Realtime Solutions. Mọi hành vi sử dụng, sao chép hoặc phân phối đều bắt buộc phải có sự đồng ý bằng văn bản từ chủ sở hữu.",
+                "copyright_contact_label": "Liên hệ cấp phép:",
+                "copyright_email": "sales@realtime.vn"
             },
             "Page": {
                 "Features": {

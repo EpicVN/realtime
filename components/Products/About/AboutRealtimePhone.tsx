@@ -8,14 +8,17 @@ import { useState } from "react";
 import {
   FaApple,
   FaArrowRight,
-  FaCircleCheck,
+  FaCircleInfo,
   FaDownload,
+  FaShieldHalved,
   FaWindows,
+  FaXmark,
 } from "react-icons/fa6";
 
 const AboutRealtimePhone = () => {
   const t = useTranslations("Products.RealtimePhone.About");
   const [activeIndex, setActiveIndex] = useState(0);
+  const [showLicense, setShowLicense] = useState(false);
 
   const TEXTS = [
     {
@@ -55,8 +58,7 @@ const AboutRealtimePhone = () => {
   };
 
   return (
-    <div className="py-20 lg:py-24 min-h-screen bg-white dark:bg-gray-950 overflow-hidden flex items-center">
-      {/* Chia 12 cột: Chữ 5 phần - Ảnh 7 phần để ảnh to và nổi bật hơn */}
+    <div className="pt-8 pb-16 lg:pt-12 lg:pb-20 min-h-[calc(100vh-80px)] bg-white dark:bg-gray-950 overflow-hidden flex items-center">
       <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 items-center gap-12 lg:gap-14">
         {/* --- CỘT TRÁI (5 cột) --- */}
         <div className="lg:col-span-5 flex flex-col justify-center items-start order-2 lg:order-1 relative z-10 w-full">
@@ -66,7 +68,7 @@ const AboutRealtimePhone = () => {
             </span>
           </div>
 
-          <div className="w-full min-h-45 mb-8">
+          <div className="w-full min-h-45 mb-7">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeIndex}
@@ -87,7 +89,7 @@ const AboutRealtimePhone = () => {
           </div>
 
           {/* --- NAV --- */}
-          <div className="w-full grid grid-cols-4 gap-3 sm:gap-4 mb-9 border-b border-gray-100 dark:border-gray-800 pb-6">
+          <div className="w-full grid grid-cols-4 gap-3 sm:gap-4 mb-8 border-b border-gray-100 dark:border-gray-800 pb-5">
             {TEXTS.map((item, index) => {
               const isActive = index === activeIndex;
               return (
@@ -130,29 +132,79 @@ const AboutRealtimePhone = () => {
             })}
           </div>
 
-          {/* --- CTA + GHI CHÚ HỆ ĐIỀU HÀNH --- */}
-          <div className="flex flex-col items-start gap-3">
+          {/* --- CTA + BẢN QUYỀN GỌN 1 DÒNG --- */}
+          <div className="flex flex-col items-start gap-2.5 w-full relative">
             <Link
               href="/products/realtimephone/download"
-              className="group inline-flex items-center justify-center space-x-2.5 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 font-bold rounded-xl shadow-lg shadow-blue-600/25 hover:shadow-blue-600/40 transition-all transform hover:-translate-y-1"
+              className="group inline-flex items-center justify-center space-x-2.5 bg-blue-600 hover:bg-blue-700 text-white px-8 py-3.5 font-bold rounded-xl shadow-lg shadow-blue-600/25 hover:shadow-blue-600/40 transition-all transform hover:-translate-y-1"
             >
               <FaDownload className="text-lg" />
               <span>{t("buttons.download")}</span>
               <FaArrowRight className="text-sm group-hover:translate-x-1 transition-transform" />
             </Link>
 
-            <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 pl-1">
-              <FaWindows className="text-blue-500 text-sm" />
-              <FaApple className="text-gray-700 dark:text-gray-300 text-sm" />
+            <div className="flex items-center gap-2 text-xs font-medium text-gray-600 dark:text-gray-300 pl-1 pt-0.5">
+              <FaWindows className="text-blue-500 text-sm shrink-0" />
+              <FaApple className="text-gray-800 dark:text-gray-200 text-sm shrink-0" />
               <span>{t("os_support")}</span>
+            </div>
+
+            {/* Dòng Copyright gọn + Popover chi tiết */}
+            <div className="relative pl-1">
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-gray-500 dark:text-gray-400">
+                <span>{t("copyright_line")}</span>
+                <button
+                  type="button"
+                  onClick={() => setShowLicense((prev) => !prev)}
+                  className="inline-flex items-center gap-1 font-semibold text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
+                >
+                  <FaCircleInfo className="text-[11px]" />
+                  <span>{t("copyright_title").replace(":", "")}</span>
+                </button>
+              </div>
+
+              <AnimatePresence>
+                {showLicense && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 8, scale: 0.98 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute bottom-full left-0 mb-3 w-[320px] sm:w-[420px] z-30 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-2xl p-4 text-xs text-gray-600 dark:text-gray-300 leading-relaxed"
+                  >
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="font-bold text-gray-900 dark:text-white">
+                        {t("copyright_title")}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setShowLicense(false)}
+                        className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 p-1 cursor-pointer"
+                        aria-label="Close"
+                      >
+                        <FaXmark />
+                      </button>
+                    </div>
+                    <p className="mb-2">{t("copyright_body")}</p>
+                    <p className="text-gray-500 dark:text-gray-400">
+                      {t("copyright_contact_label")}{" "}
+                      <a
+                        href={`mailto:${t("copyright_email")}`}
+                        className="font-semibold text-blue-600 dark:text-blue-400 hover:underline"
+                      >
+                        {t("copyright_email")}
+                      </a>
+                    </p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </div>
         </div>
 
-        {/* --- CỘT PHẢI (7 cột - Tăng chiều cao, giảm padding) --- */}
+        {/* --- CỘT PHẢI (7 cột) --- */}
         <div className="lg:col-span-7 w-full order-1 lg:order-2">
-          <div className="relative w-full h-95 sm:h-120 lg:h-135 rounded-3xl overflow-hidden border border-blue-100/80 dark:border-gray-800 bg-linear-to-br from-blue-50 via-indigo-50/60 to-sky-100/80 dark:from-gray-900 dark:via-blue-950/40 dark:to-gray-900 shadow-2xl shadow-blue-900/10 dark:shadow-none flex items-center justify-center p-3 sm:p-5">
-            {/* Họa tiết chấm bi nhẹ */}
+          <div className="relative w-full h-[380px] sm:h-[480px] lg:h-[520px] rounded-3xl overflow-hidden border border-blue-100/80 dark:border-gray-800 bg-gradient-to-br from-blue-50 via-indigo-50/60 to-sky-100/80 dark:from-gray-900 dark:via-blue-950/40 dark:to-gray-900 shadow-2xl shadow-blue-900/10 dark:shadow-none flex items-center justify-center p-3 sm:p-5">
             <div
               className="absolute inset-0 opacity-35 dark:opacity-20 pointer-events-none"
               style={{
@@ -162,16 +214,13 @@ const AboutRealtimePhone = () => {
               }}
             />
 
-            {/* Ánh sáng glow mềm phía sau app */}
             <div className="absolute w-80 h-80 bg-blue-400/20 dark:bg-blue-500/20 rounded-full blur-3xl pointer-events-none" />
 
-            {/* Badge thân thiện với khách hàng ở góc trên trái (có thể xóa khối này nếu muốn sạch hẳn) */}
-            <div className="absolute top-4 left-4 z-20 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-md border border-white/70 dark:border-gray-700 shadow-sm text-xs font-semibold text-gray-700 dark:text-gray-200">
-              <FaCircleCheck className="text-emerald-500 text-sm" />
+            <div className="absolute top-4 left-4 z-20 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-md border border-blue-100 dark:border-gray-700 shadow-sm text-xs font-semibold text-gray-800 dark:text-gray-200">
+              <FaShieldHalved className="text-blue-600 dark:text-blue-400 text-sm shrink-0" />
               <span>{t("badge_highlight")}</span>
             </div>
 
-            {/* Ảnh App phóng to tối đa trong khung */}
             <div className="relative z-10 w-full h-full">
               <AnimatePresence mode="wait">
                 <motion.div
