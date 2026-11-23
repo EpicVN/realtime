@@ -505,9 +505,10 @@
                     "description": "Tùy biến phần mềm mang đậm dấu ấn doanh nghiệp (thay đổi Tên, Logo, Icon, File cài đặt). Khẳng định sự chuyên nghiệp và nâng tầm nhận diện thương hiệu nội bộ."
                 },
                 "buttons": {
-                    "installer": "Tải bản Installer (.exe)",
-                    "portable": "Bản Portable (.zip)"
-                }
+                    "download": "Tải xuống RealtimePhone"
+                },
+                "os_support": "Hỗ trợ Windows 10/11 & macOS (Intel / Chip M)",
+                "badge_highlight": "Miễn phí • Cài đặt nhanh"
             },
             "Page": {
                 "Features": {
@@ -569,6 +570,43 @@
                         "contactText": "Hoặc liên hệ Hotline dưới chân trang để nhận tư vấn nhanh."
                     }
                 }
+            },
+            "Download": {
+                "backBtn": "Quay lại trang RealtimePhone",
+                "badge": "Trung tâm tải xuống",
+                "title": "Tải xuống RealtimePhone",
+                "description": "Chọn đúng phiên bản tương thích với hệ điều hành và dòng chip trên máy tính của bạn để bắt đầu trải nghiệm gọi VoIP chuẩn doanh nghiệp.",
+                "downloadBtn": "Tải về (.zip)",
+                "cards": {
+                    "win": {
+                        "badge": "Phổ biến nhất",
+                        "title": "Windows",
+                        "subtitle": "Dành cho máy tính PC / Laptop Windows",
+                        "req1": "Hỗ trợ Windows 10, Windows 11 (64-bit)",
+                        "req2": "Định dạng đóng gói .zip gọn nhẹ",
+                        "req3": "Giải nén và sử dụng nhanh chóng"
+                    },
+                    "macArm": {
+                        "badge": "Apple Silicon",
+                        "title": "macOS (Chip M)",
+                        "subtitle": "Dành cho MacBook / iMac chip M1, M2, M3, M4",
+                        "req1": "Tối ưu hiệu suất gốc cho kiến trúc ARM64",
+                        "req2": "Hoạt động mượt mà, tiết kiệm pin",
+                        "req3": "Hỗ trợ macOS 12 trở lên"
+                    },
+                    "macIntel": {
+                        "badge": "Chip Intel",
+                        "title": "macOS (Intel)",
+                        "subtitle": "Dành cho các dòng máy Mac dùng chip Intel",
+                        "req1": "Tương thích kiến trúc Intel x86_64",
+                        "req2": "Ổn định trên các dòng Mac đời trước",
+                        "req3": "Hỗ trợ macOS 11 trở lên"
+                    }
+                },
+                "macGuide": {
+                    "title": "Làm sao biết máy Mac của bạn dùng chip Apple Silicon hay Intel?",
+                    "desc": "Nhấn vào biểu tượng quả táo ở góc trên cùng bên trái màn hình và chọn \"Giới thiệu về máy Mac này\" (About This Mac). Nếu mục Chip hiển thị Apple M1/M2/M3/M4, hãy tải bản macOS (Chip M). Nếu hiển thị Bộ xử lý Intel, hãy tải bản macOS (Intel)."
+                }
             }
         },
         "RealtimeHachi": {
@@ -602,7 +640,7 @@
                 "feat_intent_title": "Hachi AI Agent - Hiểu ý định",
                 "feat_intent_desc": "Tích hợp mô hình NLP RealtimeHachi và STT để bóc tách ý định (Intent), giúp bot hiểu và phản hồi linh hoạt theo câu trả lời của khách.",
                 "feat_dynamic_title": "Cá nhân hóa nội dung",
-                "feat_dynamic_desc": "Gắn biến dữ liệu động (Danh xưng, Tên khách hàng...) kết hợp Text-to-Speech tự nhiên để tạo cảm giác thân thiện như nhân viên thật.", 
+                "feat_dynamic_desc": "Gắn biến dữ liệu động (Danh xưng, Tên khách hàng...) kết hợp Text-to-Speech tự nhiên để tạo cảm giác thân thiện như nhân viên thật.",
                 "feat_routing_title": "Chuyển tiếp thông minh",
                 "feat_routing_desc": "Tính năng Route Agent tự động chuyển cuộc gọi đến đúng nhân viên tư vấn khi khách hàng yêu cầu hoặc khi kịch bản yêu cầu con người xử lý.",
                 "feat_logic_title": "Tích hợp Logic & API",
@@ -615,20 +653,16 @@
                 "stat_latency": "Độ trễ phản hồi",
                 "stat_automation": "Tỷ lệ tự động hóa",
                 "stat_concurrent": "Cuộc gọi đồng thời",
-
                 "sim_title": "Giao tiếp tự nhiên như con người",
                 "sim_desc": "Trải nghiệm đoạn hội thoại thực tế giữa RealtimeHachi và Khách hàng.",
-                
                 "sim_user1": "Alo, ai đấy?",
                 "sim_bot1": "Dạ em chào anh Hùng, em là Hachi gọi đến từ bộ phận CSKH Realtime. Xin phép làm phiền anh 1 phút để khảo sát mức độ hài lòng về khóa học trực tuyến vừa qua ạ.",
                 "sim_user2": "À, nói chung là bé nhà anh học cũng ổn, nhưng mà giáo viên thỉnh thoảng hay đổi giờ học quá em ạ.",
                 "sim_bot2": "Dạ em rất tiếc về sự bất tiện này. Hệ thống đã ghi nhận góp ý của anh về vấn đề lịch học của giáo viên và sẽ chuyển ngay cho bộ phận đào tạo xử lý ạ. Cảm ơn anh đã phản hồi!",
-
                 "sim_user3": "Alo, ai đấy?",
                 "sim_bot3": "Xin chào, em gọi đến từ Realtime, đơn vị cung cấp dịch vụ gọi tự động, đây là số điện thoại đăng ký của  anh chị đúng không ạ",
                 "sim_user4": "Không đúng em ạ",
                 "sim_bot4": "Cảm ơn anh chị đã giành thời gian phản hồi. Chúc anh chị ngày mới tốt lành!",
-
                 "usecases_title": "Ứng dụng đa lĩnh vực",
                 "usecases_desc": "Voicebot linh hoạt tùy biến kịch bản cho mọi ngành nghề kinh doanh.",
                 "uc_cskh_title": "Chăm sóc khách hàng",

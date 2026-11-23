@@ -39,7 +39,7 @@ interface NavLink {
   id: number;
   label: string;
   url: string;
-  layout?: "simple" | "grid";
+  layout?: "simple" | "grid" | "mega";
   submenu?: NavSubmenu[];
 }
 
@@ -78,7 +78,7 @@ const Navbar = ({ openNav, currentUser }: Props) => {
       id: 2,
       label: t("products"),
       url: "#",
-      layout: "simple",
+      layout: "mega",
       submenu: [
         {
           title: "RealtimeCX",
@@ -131,7 +131,7 @@ const Navbar = ({ openNav, currentUser }: Props) => {
         {
           title: "RealtimePhone",
           desc: t("prod_realtimephone_desc"),
-          icon: <IoLogoWhatsapp size={18}/>,
+          icon: <IoLogoWhatsapp size={18} />,
           url: "/products/realtimephone",
         },
       ],
@@ -233,8 +233,11 @@ const Navbar = ({ openNav, currentUser }: Props) => {
                       }}
                       transition={{ duration: 0.3, ease: "easeOut" }}
                       className={`absolute top-16 left-1/2 -translate-x-1/2 pt-4 ${
-                        // Sửa top-16 cho khớp với chiều cao mới
-                        link.layout === "grid" ? "w-150" : "w-85"
+                        link.layout === "mega"
+                          ? "w-160 xl:w-215"
+                          : link.layout === "grid"
+                            ? "w-150"
+                            : "w-85"
                       }`}
                     >
                       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl border-t-4 border-blue-500 overflow-hidden relative">
@@ -243,7 +246,7 @@ const Navbar = ({ openNav, currentUser }: Props) => {
 
                         {/* RENDER LOGIC */}
                         {link.layout === "grid" ? (
-                          <div className="grid grid-cols-2 gap-8 p-6">
+                          <div className="grid grid-cols-2 gap-8 p-6 max-h-[calc(100vh-110px)] overflow-y-auto">
                             {(link.submenu as GridColumn[]).map(
                               (column: GridColumn, colIdx: number) => (
                                 <div
@@ -254,43 +257,46 @@ const Navbar = ({ openNav, currentUser }: Props) => {
                                     {column.heading}
                                   </h4>
                                   <div className="flex flex-col gap-1">
-                                    {column.items.map(
-                                      (
-                                        item: { title: string; url: string },
-                                        itemIdx: number,
-                                      ) => (
-                                        <Link
-                                          key={itemIdx}
-                                          href={item.url}
-                                          className="text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-blue-400 py-1.5 transition-colors flex items-center gap-2 hover:translate-x-1 transform duration-200"
-                                        >
-                                          <span className="w-1.5 h-1.5 rounded-full bg-gray-300 group-hover:bg-blue-500 transition-colors"></span>
-                                          {item.title}
-                                        </Link>
-                                      ),
-                                    )}
+                                    {column.items.map((item, itemIdx) => (
+                                      <Link
+                                        key={itemIdx}
+                                        href={item.url}
+                                        onClick={() => setHoveredIndex(null)}
+                                        className="text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-blue-400 py-1.5 transition-colors flex items-center gap-2 hover:translate-x-1 transform duration-200"
+                                      >
+                                        <span className="w-1.5 h-1.5 rounded-full bg-gray-300 group-hover:bg-blue-500 transition-colors"></span>
+                                        {item.title}
+                                      </Link>
+                                    ))}
                                   </div>
                                 </div>
                               ),
                             )}
                           </div>
                         ) : (
-                          <div className="p-2 flex flex-col gap-1 relative z-10">
+                          <div
+                            className={`p-3 relative z-10 max-h-[calc(100vh-110px)] overflow-y-auto ${
+                              link.layout === "mega"
+                                ? "grid grid-cols-2 xl:grid-cols-3 gap-2"
+                                : "flex flex-col gap-1"
+                            }`}
+                          >
                             {(link.submenu as SimpleMenuItem[]).map(
                               (subItem: SimpleMenuItem, idx: number) => (
                                 <Link
                                   key={idx}
                                   href={subItem.url}
-                                  className="flex items-start gap-4 p-3 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors group/item"
+                                  onClick={() => setHoveredIndex(null)}
+                                  className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors group/item"
                                 >
-                                  <div className="mt-1 p-2.5 bg-blue-100 dark:bg-blue-900/30 text-primary dark:text-primary-light rounded-lg group-hover/item:bg-blue-600 group-hover/item:text-white transition-all shadow-sm">
+                                  <div className="mt-0.5 p-2.5 shrink-0 bg-blue-100 dark:bg-blue-900/30 text-primary dark:text-primary-light rounded-lg group-hover/item:bg-blue-600 group-hover/item:text-white transition-all shadow-sm">
                                     {subItem.icon}
                                   </div>
-                                  <div>
-                                    <h4 className="font-bold text-gray-800 dark:text-gray-100 text-[15px] group-hover/item:text-primary transition-colors">
+                                  <div className="min-w-0">
+                                    <h4 className="font-bold text-gray-800 dark:text-gray-100 text-sm group-hover/item:text-primary transition-colors truncate">
                                       {subItem.title}
                                     </h4>
-                                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-1">
+                                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-2">
                                       {subItem.desc}
                                     </p>
                                   </div>

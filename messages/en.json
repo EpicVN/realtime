@@ -505,9 +505,10 @@
                     "description": "Customize the software with your corporate identity (change Name, Logo, Icon, Installer file). Affirm professionalism and elevate internal brand recognition."
                 },
                 "buttons": {
-                    "installer": "Download Installer (.exe)",
-                    "portable": "Portable Version (.zip)"
-                }
+                    "download": "Download RealtimePhone"
+                },
+                "os_support": "Supports Windows 10/11 & macOS (Intel / Apple Silicon)",
+                "badge_highlight": "Free • Quick Setup"
             },
             "Page": {
                 "Features": {
@@ -568,6 +569,43 @@
                         "service2": "Logo Replacement",
                         "contactText": "Or contact the Hotline at the footer for quick consultation."
                     }
+                }
+            },
+            "Download": {
+                "backBtn": "Back to RealtimePhone",
+                "badge": "Download Center",
+                "title": "Download RealtimePhone",
+                "description": "Select the version that matches your operating system and processor architecture to get started with enterprise VoIP calling.",
+                "downloadBtn": "Download (.zip)",
+                "cards": {
+                    "win": {
+                        "badge": "Most Popular",
+                        "title": "Windows",
+                        "subtitle": "For Windows PCs and Laptops",
+                        "req1": "Supports Windows 10 & Windows 11 (64-bit)",
+                        "req2": "Lightweight .zip archive package",
+                        "req3": "Quick extraction and setup"
+                    },
+                    "macArm": {
+                        "badge": "Apple Silicon",
+                        "title": "macOS (M-Series)",
+                        "subtitle": "For MacBook / iMac with M1, M2, M3, M4 chips",
+                        "req1": "Native performance for ARM64 architecture",
+                        "req2": "Smooth operation & power efficient",
+                        "req3": "Requires macOS 12 or later"
+                    },
+                    "macIntel": {
+                        "badge": "Intel Chip",
+                        "title": "macOS (Intel)",
+                        "subtitle": "For Intel-based Mac computers",
+                        "req1": "Compatible with Intel x86_64 architecture",
+                        "req2": "Stable performance on Intel Mac models",
+                        "req3": "Requires macOS 11 or later"
+                    }
+                },
+                "macGuide": {
+                    "title": "Not sure whether your Mac uses Apple Silicon or Intel?",
+                    "desc": "Click the Apple menu in the top-left corner of your screen and choose \"About This Mac\". If you see an Apple M1/M2/M3/M4 chip listed, choose macOS (M-Series). If you see an Intel processor, choose macOS (Intel)."
                 }
             }
         },
