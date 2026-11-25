@@ -14,7 +14,7 @@ import {
 } from "react-icons/fa6";
 
 // Đổi đường dẫn thư mục chứa file zip trên server của bạn tại đây
-const DOWNLOAD_BASE_URL = "http://realtime.vn/huong-dan/RealtimePhone";
+const DOWNLOAD_BASE_URL = "https://realtime.vn/huong-dan/RealtimePhone";
 
 const RealtimePhoneDownloadPage = () => {
   const t = useTranslations("Products.RealtimePhone.Download");
